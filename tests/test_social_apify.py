@@ -102,6 +102,23 @@ def test_facebook_keyword_input_and_parser() -> None:
     assert posts[0].shares == 2
 
 
+def test_facebook_parser_supports_actor_user_and_page_objects() -> None:
+    posts = parse_social_items("facebook", [{
+        "postId": "28484036627928046",
+        "text": "Sepatu lokal Bandung nyaman",
+        "url": "https://www.facebook.com/example/posts/1",
+        "user": {"id": "100002452675154", "name": "Warung Bandung"},
+        "pageName": {"id": "100002452675154", "name": "Warung Bandung"},
+        "likes": 11, "comments": 15, "shares": 1,
+        "time": "2026-10-01T05:50:54.000Z",
+    }], topic())
+    assert len(posts) == 1
+    assert posts[0].post_id == "28484036627928046"
+    assert posts[0].author_name == "Warung Bandung"
+    assert posts[0].author_url == "https://www.facebook.com/100002452675154"
+    assert posts[0].mentions_product is True
+
+
 @pytest.mark.asyncio
 async def test_social_sentiment_is_persisted_and_aggregated(tmp_path: Path) -> None:
     db = Database(tmp_path / "social-sentiment.db")

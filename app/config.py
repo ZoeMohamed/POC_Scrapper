@@ -73,10 +73,12 @@ class Settings(BaseSettings):
     social_max_queries_per_topic: int = 3
     social_lookback_days: int = 30
     social_refresh_hours: float = 12.0
-    # Three social platforms share this budget. Eighteen runs cover one daily
-    # refresh for six active topics without silently starving Facebook.
-    social_daily_run_cap: int = 18
-    social_monthly_run_cap: int = 450
+    # Every platform has its own reservation so TikTok/Instagram cannot starve
+    # Facebook. Aggregate limits are retained for dashboard compatibility.
+    social_daily_run_cap: int = 30
+    social_monthly_run_cap: int = 600
+    social_platform_daily_run_cap: int = 10
+    social_platform_monthly_run_cap: int = 200
     social_sentiment_enabled: bool = True
 
     # Marketplace discovery is intentionally one keyword run per topic. This
@@ -84,8 +86,8 @@ class Settings(BaseSettings):
     shopee_actor_id: str = "xtracto~shopee-scraper"
     marketplace_results_per_query: int = 30
     marketplace_refresh_hours: float = 12.0
-    marketplace_daily_run_cap: int = 8
-    marketplace_monthly_run_cap: int = 200
+    marketplace_daily_run_cap: int = 20
+    marketplace_monthly_run_cap: int = 400
 
     demo_mode: bool = False
     demo_stats_interval_seconds: float = 120.0
@@ -110,6 +112,9 @@ class Settings(BaseSettings):
     # Schema changes are deployed through Supabase migrations. Keep runtime DDL
     # disabled on serverless to avoid concurrent catalog updates on cold starts.
     database_auto_migrate: bool = False
+    # Server-only credential for bounded operational refreshes. When blank,
+    # the internal endpoint behaves as if it does not exist.
+    internal_refresh_token: str = ""
     topics_path: Path = Path("config/topics.json")
     max_comment_chars: int = 800
     log_level: str = "INFO"
@@ -131,6 +136,7 @@ class Settings(BaseSettings):
         "maps_daily_request_cap", "maps_monthly_request_cap", "maps_content_ttl_days",
         "social_results_per_query", "social_max_queries_per_topic",
         "social_lookback_days", "social_daily_run_cap", "social_monthly_run_cap",
+        "social_platform_daily_run_cap", "social_platform_monthly_run_cap",
         "marketplace_results_per_query", "marketplace_daily_run_cap", "marketplace_monthly_run_cap",
         "demo_budget_units", "max_active_topics", "gemini_rpm", "batch_size",
         "max_gemini_failures", "max_comment_chars",

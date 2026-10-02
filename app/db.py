@@ -904,6 +904,21 @@ class Database:
             cursor = await self._conn().execute("SELECT * FROM api_usage ORDER BY day DESC,api")
         return [dict(row) for row in await cursor.fetchall()]
 
+    async def usage_summary(self, prefix: str, day: str) -> list[dict[str, Any]]:
+        """Return daily/monthly totals per API using one bounded query."""
+
+        cursor = await self._conn().execute(
+            """SELECT api,
+                      COALESCE(SUM(CASE WHEN day=? THEN units ELSE 0 END),0) AS today_units,
+                      COALESCE(SUM(CASE WHEN day LIKE ? THEN units ELSE 0 END),0) AS month_units
+               FROM api_usage
+               WHERE api LIKE ?
+               GROUP BY api
+               ORDER BY api""",
+            (day, f"{day[:7]}%", f"{prefix}%"),
+        )
+        return [dict(row) for row in await cursor.fetchall()]
+
     # --- Compatibility helpers for v2 analyzer and bridge tests. ---
     async def insert_comment(self, item: CommentIn, *, max_comment_chars: int = 800) -> bool:
         now_dt = datetime.now(timezone.utc)

@@ -17,6 +17,12 @@ os.environ.setdefault("SOURCES", "youtube_trend,maps,tiktok,instagram,facebook,s
 os.environ.setdefault("AI_MODE", "lexicon")
 os.environ.setdefault("DATABASE_PATH", "/tmp/umkm-poc.db")
 
-from app.main import app  # noqa: E402  (runtime defaults must be set first)
+from app.main import create_app  # noqa: E402  (runtime defaults must be set first)
+
+# A serverless request must not spawn an endless scheduler. Multiple Vercel
+# instances previously ran the same refresh concurrently, causing Supabase
+# row locks and duplicate Apify spend. Topic creation and the authenticated
+# bounded refresh endpoint still perform explicit collection work.
+app = create_app(start_background=False)
 
 __all__ = ["app"]

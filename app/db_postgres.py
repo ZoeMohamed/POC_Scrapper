@@ -9,10 +9,14 @@ from __future__ import annotations
 
 import asyncio
 import importlib
+import logging
 import re
 from typing import Any, Iterable, Sequence
 
 from app.db import Database
+
+
+logger = logging.getLogger(__name__)
 
 
 POSTGRES_SCHEMA = """
@@ -285,17 +289,35 @@ class _PoolConnection:
             raise RuntimeError("Operasi database harus berjalan di dalam asyncio task")
         return task
 
+    async def _acquire(self) -> Any:
+        try:
+            return await self.pool.acquire(timeout=10)
+        except TypeError:  # Lightweight test pools do not expose asyncpg's timeout argument.
+            return await self.pool.acquire()
+
+    async def _release(self, connection: Any) -> None:
+        try:
+            try:
+                await self.pool.release(connection, timeout=10)
+            except TypeError:  # Lightweight test pools do not expose asyncpg's timeout argument.
+                await self.pool.release(connection)
+        except asyncio.TimeoutError:
+            # asyncpg terminates a connection whose reset exceeded the release
+            # timeout. The completed query result must not be discarded merely
+            # because Supavisor was slow while returning that connection.
+            logger.warning("Supabase lambat melepas koneksi; koneksi dihentikan oleh pool")
+
     async def _write_session(self) -> tuple[Any, Any]:
         task = self._task()
         existing = self._sessions.get(task)
         if existing is not None:
             return existing
-        connection = await self.pool.acquire()
+        connection = await self._acquire()
         transaction = connection.transaction()
         try:
             await transaction.start()
         except Exception:
-            await self.pool.release(connection)
+            await self._release(connection)
             raise
         session = (connection, transaction)
         self._sessions[task] = session
@@ -309,7 +331,7 @@ class _PoolConnection:
         try:
             await transaction.rollback()
         finally:
-            await self.pool.release(connection)
+            await self._release(connection)
 
     async def execute(self, sql: str, params: Iterable[Any] = ()) -> _Cursor:
         query = _postgres_query(sql)
@@ -319,8 +341,11 @@ class _PoolConnection:
             if session is not None:
                 rows = await session[0].fetch(query, *values)
             else:
-                async with self.pool.acquire() as connection:
+                connection = await self._acquire()
+                try:
                     rows = await connection.fetch(query, *values)
+                finally:
+                    await self._release(connection)
             return _Cursor(rows, rowcount=len(rows))
         task = self._task()
         connection, _ = await self._write_session()
@@ -351,7 +376,7 @@ class _PoolConnection:
         try:
             await transaction.commit()
         finally:
-            await self.pool.release(connection)
+            await self._release(connection)
 
     async def close(self) -> None:
         for task in list(self._sessions):
@@ -388,8 +413,10 @@ class PostgresDatabase(Database):
         self._pool = await asyncpg.create_pool(
             dsn=self._dsn,
             min_size=0,
-            max_size=3,
+            max_size=1,
+            timeout=10,
             command_timeout=30,
+            max_inactive_connection_lifetime=30,
             statement_cache_size=0,
             server_settings={
                 "search_path": "scraper,public",

@@ -32,8 +32,8 @@ async def run(product: str, platform: str) -> int:
     if platform not in {"tiktok", "instagram", "facebook"}:
         print("platform harus tiktok, instagram, atau facebook")
         return 2
-    if not settings.apify_token:
-        print("APIFY_TOKEN belum diisi; tidak ada request yang dikirim")
+    if not settings.apify_social_token_value:
+        print("APIFY_SOCIAL_TOKEN atau APIFY_TOKEN belum diisi; tidak ada request yang dikirim")
         return 2
     topic = Topic(
         id="social-probe", name=product, category="umum", keywords=[product],
@@ -45,6 +45,8 @@ async def run(product: str, platform: str) -> int:
     usage = SocialUsageTracker(
         database, daily_cap=settings.social_daily_run_cap,
         monthly_cap=settings.social_monthly_run_cap,
+        platform_daily_cap=settings.social_platform_daily_run_cap,
+        platform_monthly_cap=settings.social_platform_monthly_run_cap,
     )
     client = SocialApifyClient(settings, usage)
     try:

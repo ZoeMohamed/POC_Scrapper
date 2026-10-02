@@ -27,9 +27,9 @@ class MarketplaceUsageTracker:
         if platform != "shopee":
             raise ValueError("Platform marketplace tidak valid")
         day = self.day(now)
-        rows = await self.database.usage_rows("marketplace_")
-        daily = sum(int(row["units"]) for row in rows if row["day"] == day)
-        monthly = sum(int(row["units"]) for row in rows if str(row["day"]).startswith(day[:7]))
+        rows = await self.database.usage_summary("marketplace_", day)
+        daily = sum(int(row["today_units"]) for row in rows)
+        monthly = sum(int(row["month_units"]) for row in rows)
         if daily >= self.daily_cap:
             raise MarketplaceBudgetExceededError("Batas run marketplace hari ini tercapai")
         if monthly >= self.monthly_cap:
@@ -46,14 +46,15 @@ class MarketplaceUsageTracker:
 
     async def status(self, *, now: datetime | None = None) -> dict[str, Any]:
         day = self.day(now)
-        rows = await self.database.usage_rows("marketplace_")
-        daily_rows = [row for row in rows if row["day"] == day]
-        monthly_rows = [row for row in rows if str(row["day"]).startswith(day[:7])]
+        rows = await self.database.usage_summary("marketplace_", day)
         by_platform = {
-            "shopee": sum(int(row["units"]) for row in daily_rows if row["api"] == "marketplace_shopee_run")
+            "shopee": next(
+                (int(row["today_units"]) for row in rows if row["api"] == "marketplace_shopee_run"),
+                0,
+            )
         }
-        daily = sum(int(row["units"]) for row in daily_rows)
-        monthly = sum(int(row["units"]) for row in monthly_rows)
+        daily = sum(int(row["today_units"]) for row in rows)
+        monthly = sum(int(row["month_units"]) for row in rows)
         return {
             "day": day, "month": day[:7], "today": daily, "by_platform_today": by_platform,
             "daily_limit": self.daily_cap, "this_month": monthly, "monthly_limit": self.monthly_cap,

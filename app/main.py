@@ -18,6 +18,7 @@ from app.analyzer.worker import AnalyzerWorker
 from app.api.routes_feed import create_feed_router
 from app.api.routes_health import create_health_router
 from app.api.routes_ingest import create_ingest_router
+from app.api.routes_internal import create_internal_refresh_router
 from app.api.routes_products import create_products_router
 from app.api.routes_stats import create_stats_router
 from app.api.routes_stream import create_stream_router
@@ -101,6 +102,8 @@ def create_app(
         database,
         daily_cap=runtime.social_daily_run_cap,
         monthly_cap=runtime.social_monthly_run_cap,
+        platform_daily_cap=runtime.social_platform_daily_run_cap,
+        platform_monthly_cap=runtime.social_platform_monthly_run_cap,
     )
     marketplace_usage = MarketplaceUsageTracker(
         database,
@@ -237,7 +240,7 @@ def create_app(
         CORSMiddleware,
         allow_origin_regex=r"^(chrome-extension://[a-p]{32}|https?://(localhost|127\.0\.0\.1)(:\d+)?)$",
         allow_methods=["GET", "POST", "DELETE", "OPTIONS"],
-        allow_headers=["Accept", "Content-Type", "X-Ingest-Token"],
+        allow_headers=["Accept", "Content-Type", "X-Ingest-Token", "X-Refresh-Token"],
     )
 
     @application.middleware("http")
@@ -265,6 +268,14 @@ def create_app(
     application.include_router(create_places_compat_router(database))
     application.include_router(create_social_router(database))
     application.include_router(create_marketplace_router(database))
+    application.include_router(
+        create_internal_refresh_router(
+            database,
+            social_collector,
+            marketplace_collector,
+            runtime.internal_refresh_token,
+        )
+    )
     application.include_router(create_stream_router(broker))
 
     # Transitional v2 endpoints remain available while Maps opinion work starts at M4.

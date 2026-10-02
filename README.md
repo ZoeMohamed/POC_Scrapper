@@ -30,6 +30,8 @@ Buka [http://127.0.0.1:8000](http://127.0.0.1:8000). Tiga topik awal tersedia: C
 
 Vercel mengenali `index.py` sebagai entrypoint FastAPI. Deploy dari root repo dengan `npx vercel --prod`, lalu isi Environment Variables `APIFY_MAPS_TOKEN`, `APIFY_SOCIAL_TOKEN`, `APIFY_MARKETPLACE_TOKEN`, `SOURCES=youtube_trend,maps,tiktok,instagram,facebook,shopee`, dan `SUPABASE_DB_URL` pada project Vercel. `APIFY_TOKEN` tetap dapat dipakai sebagai fallback tunggal. Gunakan connection string Supavisor/session pooler yang server-side. Jika database URL kosong, aplikasi kembali memakai SQLite `/tmp` yang bersifat sementara.
 
+`index.py` sengaja tidak menjalankan loop scheduler permanen di function serverless. Refresh otomatis untuk topik yang baru dibuat tetap dijalankan sebagai background task terbatas; retry operasional Facebook/Shopee memakai `POST /api/internal/refresh` dengan header `X-Refresh-Token`. Ini mencegah beberapa cold start menulis row dan membelanjakan run Apify yang sama secara bersamaan.
+
 ### Supabase MCP
 
 Repo ini menyertakan `.mcp.json` untuk Supabase MCP yang dibatasi ke project `itbzozqigakvotvadreb`. OAuth MCP sudah dikonfigurasi lewat Codex CLI; muat ulang sesi agar tools Supabase muncul. Konfigurasi tidak menyimpan API key, password database, atau service-role secret.
@@ -113,14 +115,19 @@ Semua key hanya dibaca dari `.env`; jangan masukkan key ke source code atau comm
 | `SOCIAL_RESULTS_PER_QUERY` | `50` | Post per keyword/hashtag |
 | `SOCIAL_MAX_QUERIES_PER_TOPIC` | `3` | Keyword/hashtag per run |
 | `SOCIAL_LOOKBACK_DAYS` | `30` | Window post yang disimpan |
-| `SOCIAL_REFRESH_HOURS` | `12` | Interval refresh TikTok/Instagram |
-| `SOCIAL_DAILY_RUN_CAP` | `18` | Cap Actor run sosial per hari (TikTok, Instagram, Facebook bersama) |
-| `SOCIAL_MONTHLY_RUN_CAP` | `450` | Cap Actor run sosial per bulan |
+| `SOCIAL_REFRESH_HOURS` | `12` | Interval refresh TikTok/Instagram/Facebook |
+| `SOCIAL_DAILY_RUN_CAP` | `30` | Cap agregat run sosial per hari untuk indikator UI |
+| `SOCIAL_MONTHLY_RUN_CAP` | `600` | Cap agregat run sosial per bulan untuk indikator UI |
+| `SOCIAL_PLATFORM_DAILY_RUN_CAP` | `10` | Cap terpisah per platform per hari agar Facebook tidak kehabisan jatah |
+| `SOCIAL_PLATFORM_MONTHLY_RUN_CAP` | `200` | Cap terpisah per platform per bulan |
+| `MARKETPLACE_DAILY_RUN_CAP` | `20` | Cap run Shopee per hari |
+| `MARKETPLACE_MONTHLY_RUN_CAP` | `400` | Cap run Shopee per bulan |
 | `SOCIAL_SENTIMENT_ENABLED` | `true` | Analisis sentimen caption sosial yang relevan |
 | `MAX_ACTIVE_TOPICS` | `20` | Batas topik aktif |
 | `DATABASE_BACKEND` | `auto` | Memakai Postgres bila `SUPABASE_DB_URL` tersedia, selain itu SQLite |
 | `SUPABASE_DB_URL` | kosong | Connection string Supabase server-side untuk data persisten |
 | `DATABASE_AUTO_MIGRATE` | `false` | Bootstrap schema dari aplikasi; wajib false pada serverless production |
+| `INTERNAL_REFRESH_TOKEN` | kosong | Token server-only untuk refresh operasional Facebook/Shopee; endpoint nonaktif bila kosong |
 | `DATABASE_PATH` | `data/app.db` | SQLite lokal |
 
 Saat `VIDEO_CLASSIFIER=auto` dan `GEMINI_API_KEY` tersedia, maksimal 50 judul diklasifikasikan per request menjadi `review`, `resep`, `ide_usaha`, atau `lainnya`. Judul diperlakukan sebagai data, request melewati rate limiter bersama, dan kegagalan selalu jatuh ke aturan lokal.

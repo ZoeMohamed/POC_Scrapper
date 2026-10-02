@@ -1,5 +1,7 @@
 from __future__ import annotations
 
+import asyncio
+
 from app.config import Settings
 import pytest
 
@@ -90,3 +92,22 @@ async def test_postgres_writes_share_transaction_until_commit() -> None:
     await adapter.commit()
     assert pool.connection.tx.committed is True
     assert pool.releases == 1
+
+
+@pytest.mark.asyncio
+async def test_select_keeps_result_when_pool_release_times_out() -> None:
+    class Connection:
+        async def fetch(self, query: str, *values: object) -> list[dict[str, object]]:
+            return [{"value": 7}]
+
+    class Pool:
+        connection = Connection()
+
+        async def acquire(self, *, timeout: int) -> Connection:
+            return self.connection
+
+        async def release(self, connection: Connection, *, timeout: int) -> None:
+            raise asyncio.TimeoutError
+
+    cursor = await _PoolConnection(Pool()).execute("SELECT ? AS value", (7,))
+    assert await cursor.fetchone() == {"value": 7}
