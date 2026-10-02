@@ -693,7 +693,7 @@ class Database:
                    sentiment_status=CASE WHEN ? AND sentiment_attempts+1 >= 3
                        THEN 'failed' ELSE COALESCE(sentiment_status, 'pending') END
                WHERE platform=? AND post_id=? AND topic_id=?""",
-            (int(failed), platform, post_id, topic_id),
+            (failed, platform, post_id, topic_id),
         )
         await self._conn().commit()
 

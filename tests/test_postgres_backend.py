@@ -5,7 +5,14 @@ import asyncio
 from app.config import Settings
 import pytest
 
-from app.db_postgres import POSTGRES_SCHEMA, _PoolConnection, _postgres_query, _rowcount
+from app.db_postgres import (
+    POSTGRES_SCHEMA,
+    PostgresDatabase,
+    _Cursor,
+    _PoolConnection,
+    _postgres_query,
+    _rowcount,
+)
 
 
 def test_postgres_query_converts_qmark_placeholders() -> None:
@@ -111,3 +118,24 @@ async def test_select_keeps_result_when_pool_release_times_out() -> None:
 
     cursor = await _PoolConnection(Pool()).execute("SELECT ? AS value", (7,))
     assert await cursor.fetchone() == {"value": 7}
+
+
+@pytest.mark.asyncio
+async def test_social_failure_condition_is_bound_as_boolean() -> None:
+    class Adapter:
+        params: tuple[object, ...] = ()
+
+        async def execute(self, sql: str, params: tuple[object, ...]) -> _Cursor:
+            self.params = params
+            return _Cursor(rowcount=1)
+
+        async def commit(self) -> None:
+            pass
+
+    database = PostgresDatabase("postgresql://example.invalid/postgres")
+    adapter = Adapter()
+    database._adapter = adapter
+    await database.mark_social_sentiment_attempt(
+        platform="facebook", post_id="post-1", topic_id="topik", failed=True
+    )
+    assert adapter.params[0] is True
