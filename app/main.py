@@ -150,7 +150,7 @@ def create_app(
             else PublicYouTubeClient(timeout=runtime.youtube_http_timeout_seconds)
         )
     gemini_title_classifier = None
-    if runtime.video_classifier == "auto" and runtime.gemini_api_key:
+    if runtime.video_classifier == "auto" and runtime.gemini_api_key_values:
         try:
             gemini_title_classifier = GeminiTitleClassifier(runtime, worker.limiter)
         except (ImportError, RuntimeError, ValueError):

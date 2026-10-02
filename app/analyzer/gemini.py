@@ -8,6 +8,7 @@ from typing import Any, Literal
 from pydantic import BaseModel, Field, ValidationError
 
 from .base import AnalyzerError, BaseAnalyzer, RateLimitedError, SentimentResult
+from .gemini_pool import GeminiClientPool, GeminiPoolExhaustedError
 
 SYSTEM_PROMPT = """Kamu adalah analis sentimen yang memahami Bahasa Indonesia sehari-hari,
 bahasa gaul, slang, ejaan tidak baku, emoji, konteks promosi, dan negasi retoris.
@@ -119,17 +120,12 @@ class GeminiAnalyzer(BaseAnalyzer):
         client: Any | None = None,
     ) -> None:
         self.model = model or getattr(settings, "gemini_model", "gemini-3.1-flash-lite")
-        if client is not None:
-            self.client = client
-            return
-        key = api_key or getattr(settings, "gemini_api_key", None)
-        if not key:
-            raise ValueError("GEMINI_API_KEY wajib diisi untuk mode gemini")
-        try:
-            from google import genai
-        except ImportError as exc:  # pragma: no cover - bergantung instalasi opsional
-            raise RuntimeError("Paket google-genai belum terpasang") from exc
-        self.client = genai.Client(api_key=key)
+        keys = [api_key] if api_key else getattr(settings, "gemini_api_key_values", [])
+        self.pool = GeminiClientPool(keys, client=client)
+
+    @property
+    def key_count(self) -> int:
+        return self.pool.size
 
     async def analyze(
         self, items: list[tuple[str, str]]
@@ -147,7 +143,7 @@ class GeminiAnalyzer(BaseAnalyzer):
         prompt = json.dumps(compact, ensure_ascii=False, separators=(",", ":"))
         try:
             from google.genai import types
-            response = await self.client.aio.models.generate_content(
+            response = await self.pool.generate_content(
                 model=self.model,
                 contents=prompt,
                 config=types.GenerateContentConfig(
@@ -157,6 +153,8 @@ class GeminiAnalyzer(BaseAnalyzer):
                     response_schema=list[BatchItem],
                 ),
             )
+        except GeminiPoolExhaustedError as exc:
+            raise RateLimitedError("Kuota Gemini sementara habis") from exc
         except Exception as exc:
             code = getattr(exc, "code", None) or getattr(exc, "status_code", None)
             if code == 429 or "resource exhausted" in str(exc).lower():

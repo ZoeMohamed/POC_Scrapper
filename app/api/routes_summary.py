@@ -14,6 +14,7 @@ from fastapi import APIRouter
 from pydantic import BaseModel, Field
 
 from app.config import Settings
+from app.analyzer.gemini_pool import GeminiClientPool
 from app.db import Database
 from app.models import Comment, Summary
 
@@ -83,6 +84,10 @@ class SummaryService:
         self.worker = worker
         self.limiter = limiter
         self.generator = generator
+        self._gemini_pool = (
+            GeminiClientPool(settings.gemini_api_key_values)
+            if generator is None and settings.gemini_api_key_values else None
+        )
         self.cache_seconds = cache_seconds
         self.refresh_seconds = refresh_seconds
         self._cache: dict[str, tuple[float, Summary]] = {}
@@ -125,19 +130,16 @@ class SummaryService:
             return _template_summary(comments)
 
     async def _gemini_generate(self, comments: list[Comment]) -> GeminiSummaryPayload:
-        if not self.settings.gemini_api_key:
-            raise RuntimeError("GEMINI_API_KEY belum diisi")
-        from google import genai
+        if self._gemini_pool is None:
+            raise RuntimeError("GEMINI_API_KEY atau GEMINI_API_KEYS belum diisi")
         from google.genai import types
-
-        client = genai.Client(api_key=self.settings.gemini_api_key)
         compact = [{"s": c.sentiment, "t": c.text, "tp": c.topics} for c in comments]
         prompt = (
             "Ringkas opini produk UMKM berikut dalam Bahasa Indonesia. Berikan 2-3 kalimat, "
             "maksimal 3 pujian, 3 keluhan, dan 3 ide inovasi konkret. Data: "
             + json.dumps(compact, ensure_ascii=False, separators=(",", ":"))
         )
-        response = await client.aio.models.generate_content(
+        response = await self._gemini_pool.generate_content(
             model=self.settings.gemini_model, contents=prompt,
             config=types.GenerateContentConfig(
                 temperature=0, response_mime_type="application/json",

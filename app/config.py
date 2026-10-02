@@ -4,6 +4,7 @@ from __future__ import annotations
 
 from functools import lru_cache
 from pathlib import Path
+import re
 from typing import Literal
 
 from pydantic import field_validator
@@ -96,6 +97,7 @@ class Settings(BaseSettings):
 
     ai_mode: Literal["mock", "lexicon", "gemini"] = "mock"
     gemini_api_key: str = ""
+    gemini_api_keys: str = ""
     gemini_model: str = "gemini-3.8-flash"
     gemini_rpm: int = 8
     batch_size: int = 25
@@ -201,6 +203,11 @@ class Settings(BaseSettings):
     @property
     def apify_marketplace_token_value(self) -> str:
         return self.apify_marketplace_token or self.apify_token
+
+    @property
+    def gemini_api_key_values(self) -> list[str]:
+        values = [self.gemini_api_key, *re.split(r"[\s,;]+", self.gemini_api_keys)]
+        return list(dict.fromkeys(value.strip() for value in values if value.strip()))
 
 
 @lru_cache

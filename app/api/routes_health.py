@@ -37,7 +37,7 @@ def create_health_router(
         analyzer = _state_from(worker) or {
             "ai_mode": settings.ai_mode,
             "active_analyzer": settings.ai_mode,
-            "gemini_healthy": settings.ai_mode != "gemini" or bool(settings.gemini_api_key),
+            "gemini_healthy": settings.ai_mode != "gemini" or bool(settings.gemini_api_key_values),
             "cooldown_until": None,
             "last_error": None,
             "pending_count": 0,
@@ -81,6 +81,7 @@ def create_health_router(
             "marketplace_monthly_run_cap": settings.marketplace_monthly_run_cap,
             "social_sentiment_enabled": settings.social_sentiment_enabled,
             "social_sentiment_analyzer": analyzer.get("active_analyzer", settings.ai_mode),
+            "gemini_key_pool_size": len(settings.gemini_api_key_values),
             "yt_comments_enabled": settings.yt_comments_enabled,
             "demo_mode": settings.demo_mode,
             "analyzer": analyzer,

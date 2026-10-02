@@ -9,6 +9,7 @@ from typing import Any
 from pydantic import BaseModel
 
 from app.analyzer.rate_limiter import AsyncRateLimiter
+from app.analyzer.gemini_pool import GeminiClientPool
 from app.config import Settings
 from app.models import ContentType
 from app.nlp.preprocess import normalize
@@ -55,11 +56,7 @@ class GeminiTitleClassifier:
     ) -> None:
         self.model = settings.gemini_model
         self.limiter = limiter
-        if client is not None:
-            self.client = client
-        else:
-            from google import genai
-            self.client = genai.Client(api_key=settings.gemini_api_key)
+        self.pool = GeminiClientPool(settings.gemini_api_key_values, client=client)
 
     async def __call__(self, items: list[tuple[str, str]]) -> dict[str, str]:
         if not items:
@@ -74,7 +71,7 @@ class GeminiTitleClassifier:
         ]
         await self.limiter.acquire()
         from google.genai import types
-        response = await self.client.aio.models.generate_content(
+        response = await self.pool.generate_content(
             model=self.model,
             contents=json.dumps(payload, ensure_ascii=False, separators=(",", ":")),
             config=types.GenerateContentConfig(

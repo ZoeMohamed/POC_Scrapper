@@ -95,6 +95,7 @@ Semua key hanya dibaca dari `.env`; jangan masukkan key ke source code atau comm
 | `YT_EXCLUDE_TERMS` | `upin ipin,...` | Istilah hiburan/noise yang dikeluarkan dari feed YouTube |
 | `VIDEO_CLASSIFIER` | `auto` | Gemini bila tersedia, lalu fallback aturan |
 | `GEMINI_API_KEY` | kosong | Klasifikasi judul dan fitur AI tahap lanjut |
+| `GEMINI_API_KEYS` | kosong | Pool key Gemini server-side; diputar otomatis saat quota/rate-limit |
 | `GEMINI_MODEL` | `gemini-3.8-flash` | Model Gemini; fallback leksikon tetap dipakai bila API sibuk/gagal |
 | `MAPS_PROVIDER` | `apify` | Provider Maps POC (`apify` atau `places` untuk integrasi berikutnya) |
 | `APIFY_TOKEN` | kosong | Token server Apify; jangan pernah dikirim ke browser |
@@ -130,7 +131,7 @@ Semua key hanya dibaca dari `.env`; jangan masukkan key ke source code atau comm
 | `INTERNAL_REFRESH_TOKEN` | kosong | Token server-only untuk refresh operasional Facebook/Shopee; endpoint nonaktif bila kosong |
 | `DATABASE_PATH` | `data/app.db` | SQLite lokal |
 
-Saat `VIDEO_CLASSIFIER=auto` dan `GEMINI_API_KEY` tersedia, maksimal 50 judul diklasifikasikan per request menjadi `review`, `resep`, `ide_usaha`, atau `lainnya`. Judul diperlakukan sebagai data, request melewati rate limiter bersama, dan kegagalan selalu jatuh ke aturan lokal.
+Saat `VIDEO_CLASSIFIER=auto` dan `GEMINI_API_KEY` atau `GEMINI_API_KEYS` tersedia, maksimal 50 judul diklasifikasikan per request menjadi `review`, `resep`, `ide_usaha`, atau `lainnya`. Judul diperlakukan sebagai data, request melewati rate limiter bersama, key diputar saat quota/rate-limit, dan kegagalan selalu jatuh ke aturan lokal.
 
 ## Setup key dan Apify
 
