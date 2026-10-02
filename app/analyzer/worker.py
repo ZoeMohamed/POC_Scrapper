@@ -206,7 +206,11 @@ class AnalyzerWorker(WorkerIO):
             else:
                 self.last_error = str(exc)
             results = []
-        if failed and self.ai_mode == "gemini" and self.gemini_failures >= self.max_failures:
+        # Social refreshes are request-scoped on Vercel, so a failure counter
+        # cannot reliably survive until the next cold start. Fall back in the
+        # same bounded request and leave captions analyzed without another
+        # Gemini or Apify call.
+        if failed and self.ai_mode == "gemini":
             selected = self.fallback
             results = await selected.analyze(items)
         if not failed or results:

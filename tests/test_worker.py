@@ -102,3 +102,17 @@ async def test_rate_limit_sets_cooldown_and_next_batch_uses_fallback() -> None:
     assert result[0].sentiment == "positif"
     assert worker.state["active_analyzer"] == "lexicon"
     assert gemini.calls == 1
+
+
+@pytest.mark.asyncio
+async def test_social_text_rate_limit_falls_back_in_same_request() -> None:
+    gemini = FailingGemini(rate_limited=True)
+    worker = AnalyzerWorker(
+        _settings(ai_mode="gemini"), FakeDB(), FakeBroker(),
+        analyzer=gemini, limiter=NoWaitLimiter(),  # type: ignore[arg-type]
+    )
+    result = await worker.analyze_texts([("facebook:post-1", "rasanya enak")])
+    assert result[0].sentiment == "positif"
+    assert worker.state["active_analyzer"] == "lexicon"
+    assert worker.state["gemini_healthy"] is False
+    assert gemini.calls == 1

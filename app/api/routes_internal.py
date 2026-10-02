@@ -13,12 +13,12 @@ from app.marketplace.collector import MarketplaceCollector
 from app.social.collector import SocialCollector
 
 
-RefreshSource = Literal["facebook", "shopee"]
+RefreshSource = Literal["facebook", "shopee", "sentiment"]
 
 
 class RefreshRequest(BaseModel):
     topic_id: str = Field(min_length=1, max_length=100)
-    sources: list[RefreshSource] = Field(min_length=1, max_length=2)
+    sources: list[RefreshSource] = Field(min_length=1, max_length=3)
 
 
 def create_internal_refresh_router(
@@ -49,10 +49,14 @@ def create_internal_refresh_router(
                     if social is None:
                         raise RuntimeError("Kolektor Facebook tidak dikonfigurasi")
                     counts = await social.refresh_platform(topic, "facebook")
-                else:
+                elif source == "shopee":
                     if marketplace is None:
                         raise RuntimeError("Kolektor Shopee tidak dikonfigurasi")
                     counts = await marketplace.refresh_topic(topic)
+                else:
+                    if social is None:
+                        raise RuntimeError("Analisis sentimen sosial tidak dikonfigurasi")
+                    counts = await social.analyze_pending(topic.id)
                 results[source] = {"ok": True, "stored": counts}
             except Exception as exc:
                 results[source] = {"ok": False, "error": str(exc)[:300]}
