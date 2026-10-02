@@ -68,6 +68,3 @@ class PlayStoreCollector(BaseCollector):
         except (KeyError, TypeError, ValueError) as exc:
             logger.warning("Ulasan Play Store tidak valid dilewati: %s", exc)
             return None
-
-
-PlaystoreCollector = PlayStoreCollector

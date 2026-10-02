@@ -25,10 +25,6 @@ class MapsUsageTracker:
             value = value.replace(tzinfo=timezone.utc)
         return value.astimezone(timezone.utc).date().isoformat()
 
-    async def _month_used(self, month: str) -> int:
-        rows = await self.database.usage_rows("maps_")
-        return sum(int(row["units"]) for row in rows if str(row["day"]).startswith(month))
-
     async def consume(self, api: str, units: int = 1, *, now: datetime | None = None) -> int:
         if not api.startswith("maps_") or units < 1:
             raise ValueError("Nama API atau unit Maps tidak valid")

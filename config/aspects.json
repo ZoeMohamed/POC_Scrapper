@@ -1,6 +1,0 @@
-{
-  "makanan_minuman": ["rasa", "manis", "porsi", "harga", "bahan", "tekstur", "kemasan", "kebersihan", "pelayanan", "suasana", "kecepatan", "lokasi"],
-  "kecantikan": ["harga", "kualitas", "hasil", "efek samping", "tekstur", "aroma", "kemasan", "ketahanan", "kecocokan kulit"],
-  "fashion": ["harga", "kualitas", "ukuran", "kenyamanan", "bahan", "desain", "jahitan", "ketahanan"],
-  "umum": ["harga", "kualitas", "desain", "ketahanan", "kemasan", "pelayanan", "lokasi"]
-}

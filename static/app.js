@@ -1,12 +1,18 @@
 import { api } from "./api.js";
 import { state } from "./state.js";
-import { renderHealth, renderLoading, renderMarketplace, renderMaps, renderMetrics, renderSocial, renderTopics, renderUsage, renderVideos, renderSourceNavigation, renderActiveSource, renderSourceProgress, setConnection, showBanner, showToast } from "./ui.js";
+import { renderHealth, renderMarketplace, renderMaps, renderMetrics, renderSocial, renderTopics, renderUsage, renderVideos, renderSourceNavigation, renderActiveSource, renderSourceProgress, setConnection, showBanner, showToast } from "./ui.js";
 
 const $ = (id) => document.getElementById(id);
 let stream;
 let topicRefreshTimer;
-let usageRefreshTimer;
-let trendRequestId = 0;
+const sourceRequestIds = { youtube: 0, maps: 0, social: 0, marketplace: 0 };
+const sourceLabels = { youtube: "YouTube", maps: "Google Maps", social: "TikTok, Instagram & Facebook", marketplace: "Shopee" };
+const sourceRenderers = {
+  youtube: () => { renderMetrics(); renderVideos(); },
+  maps: renderMaps,
+  social: renderSocial,
+  marketplace: renderMarketplace,
+};
 
 async function refreshUsage() {
   try { state.usage = await api.usage(); renderUsage(); } catch { /* live usage is supplementary to the dashboard */ }
@@ -18,30 +24,55 @@ async function loadTopics(preferredId = "") {
   state.activeTopicId = preferredId || (available ? state.activeTopicId : state.topics[0]?.id || "");
   renderTopics(); renderSourceNavigation(); return state.activeTopicId;
 }
-async function refreshTrend({ quiet = false } = {}) {
-  const requestId = ++trendRequestId;
+function newSourceStates(loading = false) {
+  return Object.fromEntries(Object.keys(sourceRequestIds).map((key) => [key, { loading, loaded: false, error: "" }]));
+}
+function clearTopicData() {
+  state.metrics = null; state.videos = []; state.mapsPlaces = []; state.mapsFeed = [];
+  state.socialPosts = []; state.socialStats = null; state.marketplaceProducts = []; state.marketplaceStats = null;
+}
+function renderAllData() {
+  renderMetrics(); renderVideos(); renderMaps(); renderSocial(); renderMarketplace(); renderSourceNavigation(); renderSourceProgress();
+}
+async function loadSource(key, work, apply) {
   const topicId = state.activeTopicId;
-  const videoSort = state.videoSort;
-  const videoType = state.videoType;
-  const resetGroup = (key) => { state.sourceStates[key] = { loading: Boolean(topicId), loaded: false, error: "" }; };
-  ["youtube", "maps", "social", "marketplace"].forEach(resetGroup);
-  if (!topicId) { state.metrics = null; state.videos = []; state.mapsPlaces = []; state.mapsFeed = []; state.socialPosts = []; state.socialStats = null; state.marketplaceProducts = []; state.marketplaceStats = null; renderMetrics(); renderVideos(); renderMaps(); renderSocial(); renderMarketplace(); renderSourceNavigation(); renderSourceProgress(); renderLoading(false); return; }
-  state.metrics = null; state.videos = []; state.mapsPlaces = []; state.mapsFeed = []; state.socialPosts = []; state.socialStats = null; state.marketplaceProducts = []; state.marketplaceStats = null;
-  renderLoading(true); renderMetrics(); renderVideos(); renderMaps(); renderSocial(); renderSourceNavigation(); renderSourceProgress();
-  const stillCurrent = () => requestId === trendRequestId && topicId === state.activeTopicId;
-  const complete = (key, error = "") => { if (!stillCurrent()) return false; state.sourceStates[key] = { loading: false, loaded: !error, error }; renderSourceNavigation(); renderSourceProgress(); return true; };
-  const loadGroup = async (key, work, apply) => {
-    try { const result = await work(); if (!stillCurrent()) return; apply(result); complete(key); if (key === "youtube") { renderMetrics(); renderVideos(); } else if (key === "maps") renderMaps(); else if (key === "social") renderSocial(); else renderMarketplace(); renderSourceNavigation(); renderSourceProgress(); }
-    catch (error) { if (complete(key, error.message)) showToast(`${key === "social" ? "TikTok, Instagram & Facebook" : key === "maps" ? "Google Maps" : key === "marketplace" ? "Shopee" : "YouTube"} belum dapat dimuat: ${error.message}`); }
-  };
-  // Groups settle independently, so the first cached result can paint while slower sources refresh.
-  await Promise.allSettled([
-    loadGroup("youtube", () => Promise.all([api.trend(topicId), api.videos(topicId, videoSort, videoType)]), ([metrics, videoPayload]) => { state.metrics = metrics; state.videos = videoPayload.items || []; }),
-    loadGroup("maps", () => Promise.all([api.mapsPlaces(topicId), api.mapsFeed(topicId)]), ([placesPayload, feedPayload]) => { state.mapsPlaces = placesPayload.items || []; state.mapsFeed = feedPayload.items || []; }),
-    loadGroup("social", () => Promise.all([api.socialFeed(topicId), api.socialStats(topicId)]), ([socialPayload, socialStats]) => { state.socialPosts = socialPayload.items || []; state.socialStats = socialStats; }),
-    loadGroup("marketplace", () => Promise.all([api.marketplaceProducts(topicId), api.marketplaceStats(topicId)]), ([productPayload, stats]) => { state.marketplaceProducts = productPayload.items || []; state.marketplaceStats = stats; }),
-  ]);
-  if (stillCurrent()) { renderLoading(false); renderSourceNavigation(); renderSourceProgress(); }
+  if (!topicId) return;
+  const requestId = ++sourceRequestIds[key];
+  const previous = state.sourceStates[key] || {};
+  state.sourceStates[key] = { loading: true, loaded: Boolean(previous.loaded), error: "" };
+  renderSourceNavigation(); renderSourceProgress();
+  const stillCurrent = () => requestId === sourceRequestIds[key] && topicId === state.activeTopicId;
+  try {
+    const result = await work(topicId);
+    if (!stillCurrent()) return;
+    apply(result); state.sourceStates[key] = { loading: false, loaded: true, error: "" };
+    sourceRenderers[key](); renderSourceNavigation(); renderSourceProgress();
+  } catch (error) {
+    if (!stillCurrent()) return;
+    state.sourceStates[key] = { loading: false, loaded: Boolean(previous.loaded), error: error.message };
+    renderSourceNavigation(); renderSourceProgress();
+    showToast(`${sourceLabels[key]} belum dapat dimuat: ${error.message}`);
+  }
+}
+function loadYouTube() {
+  return loadSource("youtube", (topicId) => Promise.all([api.trend(topicId), api.videos(topicId, state.videoSort, state.videoType)]), ([metrics, videoPayload]) => { state.metrics = metrics; state.videos = videoPayload.items || []; });
+}
+function loadVideos() {
+  return loadSource("youtube", (topicId) => api.videos(topicId, state.videoSort, state.videoType), (payload) => { state.videos = payload.items || []; });
+}
+function loadMaps() {
+  return loadSource("maps", (topicId) => Promise.all([api.mapsPlaces(topicId), api.mapsFeed(topicId)]), ([placesPayload, feedPayload]) => { state.mapsPlaces = placesPayload.items || []; state.mapsFeed = feedPayload.items || []; });
+}
+function loadSocial() {
+  return loadSource("social", (topicId) => Promise.all([api.socialFeed(topicId), api.socialStats(topicId)]), ([socialPayload, stats]) => { state.socialPosts = socialPayload.items || []; state.socialStats = stats; });
+}
+function loadMarketplace() {
+  return loadSource("marketplace", (topicId) => Promise.all([api.marketplaceProducts(topicId), api.marketplaceStats(topicId)]), ([productPayload, stats]) => { state.marketplaceProducts = productPayload.items || []; state.marketplaceStats = stats; });
+}
+async function refreshTrend({ clear = true } = {}) {
+  if (!state.activeTopicId) { clearTopicData(); state.sourceStates = newSourceStates(); renderAllData(); return; }
+  if (clear) { clearTopicData(); state.sourceStates = newSourceStates(true); renderAllData(); }
+  await Promise.allSettled([loadYouTube(), loadMaps(), loadSocial(), loadMarketplace()]);
 }
 async function selectTopic(id) {
   if (!id || id === state.activeTopicId) return;
@@ -70,35 +101,39 @@ async function createTopic(event) {
   const save = $("save-topic"); save.disabled = true; save.textContent = "Mengaktifkan…";
   const payload = { name: $("topic-name").value.trim(), keywords: state.suggestion.keywords, product_terms: state.suggestion.product_terms, exclude_terms: state.suggestion.exclude_terms || [], category: $("topic-category").value, cities: [$("topic-city").value.trim()] };
   try {
-    const topic = await api.createTopic(payload); closeDialog(); await loadTopics(topic.id); renderTopics();
-    state.metrics = null; state.videos = []; state.mapsPlaces = []; state.mapsFeed = []; state.socialPosts = []; state.socialStats = null; state.marketplaceProducts = []; state.marketplaceStats = null; state.sourceStates = { youtube: { loading: true, loaded: false, error: "" }, maps: { loading: true, loaded: false, error: "" }, social: { loading: true, loaded: false, error: "" }, marketplace: { loading: true, loaded: false, error: "" } };
-    renderMetrics(); renderVideos(); renderMaps(); renderSocial(); renderMarketplace(); renderSourceNavigation(); renderSourceProgress(); renderActiveSource();
+    const topic = await api.createTopic(payload); closeDialog(); await loadTopics(topic.id);
+    clearTopicData(); state.sourceStates = newSourceStates(true); renderAllData(); renderActiveSource();
     showBanner("discovering", `Menyiapkan sumber untuk “${topic.name}”. Data akan masuk bertahap tanpa mengosongkan dashboard.`);
-    clearTimeout(topicRefreshTimer); topicRefreshTimer = setTimeout(async () => { await loadTopics(topic.id); await refreshTrend({ quiet: true }); }, 5000);
+    clearTimeout(topicRefreshTimer); topicRefreshTimer = setTimeout(async () => { await loadTopics(topic.id); await refreshTrend({ clear: false }); }, 5000);
   } catch (error) { $("topic-error").textContent = error.message; $("topic-error").hidden = false; }
   finally { save.disabled = false; save.textContent = "Mulai pantau"; }
 }
 function connectStream() {
   stream?.close(); stream = new EventSource("/api/stream");
-  stream.onopen = () => { state.streamConnected = true; setConnection(true); };
-  stream.onerror = () => { state.streamConnected = false; setConnection(false); };
-  stream.addEventListener("trend_tick", (event) => { const tick = JSON.parse(event.data); if (tick.topic_id !== state.activeTopicId) return; $("live-ticker").textContent = `+${new Intl.NumberFormat("id-ID").format(tick.views_gain_since_last || 0)} sejak snapshot`; refreshTrend({ quiet: true }); });
-  stream.addEventListener("topic_status", async (event) => { const update = JSON.parse(event.data); await loadTopics(update.topic_id === state.activeTopicId ? update.topic_id : ""); if (update.topic_id === state.activeTopicId) { showBanner(update.status, update.message); await refreshTrend({ quiet: true }); } });
-  stream.addEventListener("social_sentiment_updated", async (event) => { const update = JSON.parse(event.data); if (update.topic_id === state.activeTopicId) await refreshTrend({ quiet: true }); else await loadTopics(); });
+  stream.onopen = () => setConnection(true);
+  stream.onerror = () => setConnection(false);
+  stream.addEventListener("trend_tick", (event) => { const tick = JSON.parse(event.data); if (tick.topic_id !== state.activeTopicId) return; $("live-ticker").textContent = `+${new Intl.NumberFormat("id-ID").format(tick.views_gain_since_last || 0)} sejak snapshot`; loadYouTube(); });
+  stream.addEventListener("topic_status", async (event) => { const update = JSON.parse(event.data); await loadTopics(update.topic_id === state.activeTopicId ? update.topic_id : ""); if (update.topic_id === state.activeTopicId) { showBanner(update.status, update.message); await refreshTrend({ clear: false }); } });
+  stream.addEventListener("social_sentiment_updated", async (event) => { const update = JSON.parse(event.data); if (update.topic_id === state.activeTopicId) await loadSocial(); else await loadTopics(); });
+}
+function chooseSource(source) {
+  state.activeSource = source; renderActiveSource();
+  if (["tiktok", "instagram", "facebook"].includes(source)) renderSocial();
+  renderSourceNavigation(); renderSourceProgress();
 }
 function bindControls() {
   $("topic-tabs").addEventListener("click", (event) => { const button = event.target.closest("button[data-topic-id]"); if (button) selectTopic(button.dataset.topicId); });
-  $("source-nav").addEventListener("click", (event) => { const button = event.target.closest("button[data-source]"); if (!button) return; state.activeSource = button.dataset.source; renderActiveSource(); renderSocial(); renderMarketplace(); renderSourceNavigation(); renderSourceProgress(); });
-  $("overview-view").addEventListener("click", (event) => { const button = event.target.closest("button[data-source-jump]"); if (!button) return; state.activeSource = button.dataset.sourceJump; renderActiveSource(); renderSocial(); renderMarketplace(); renderSourceNavigation(); renderSourceProgress(); });
+  $("source-nav").addEventListener("click", (event) => { const button = event.target.closest("button[data-source]"); if (button) chooseSource(button.dataset.source); });
+  $("overview-view").addEventListener("click", (event) => { const button = event.target.closest("button[data-source-jump]"); if (button) chooseSource(button.dataset.sourceJump); });
   $("add-topic-button").addEventListener("click", openDialog); $("close-dialog").addEventListener("click", closeDialog); $("cancel-topic").addEventListener("click", closeDialog); $("suggest-button").addEventListener("click", suggestTopic);
   $("topic-name").addEventListener("input", () => { state.suggestion = null; $("suggestion-box").hidden = true; $("save-topic").disabled = true; });
   $("topic-form").addEventListener("submit", createTopic); $("topic-dialog").addEventListener("click", (event) => { if (event.target === $("topic-dialog")) closeDialog(); });
-  $("type-filters").addEventListener("click", async (event) => { const button = event.target.closest("button[data-type]"); if (!button) return; state.videoType = button.dataset.type; document.querySelectorAll("#type-filters button").forEach((item) => item.classList.toggle("active", item === button)); await refreshTrend({ quiet: true }); });
-  $("video-sort").addEventListener("change", async (event) => { state.videoSort = event.target.value; await refreshTrend({ quiet: true }); });
+  $("type-filters").addEventListener("click", async (event) => { const button = event.target.closest("button[data-type]"); if (!button) return; state.videoType = button.dataset.type; document.querySelectorAll("#type-filters button").forEach((item) => item.classList.toggle("active", item === button)); await loadVideos(); });
+  $("video-sort").addEventListener("change", async (event) => { state.videoSort = event.target.value; await loadVideos(); });
 }
 async function init() {
   bindControls();
-  try { const [health, usage] = await Promise.all([api.health(), api.usage()]); state.health = health; state.usage = usage; renderHealth(); renderUsage(); renderActiveSource(); await loadTopics(); await refreshTrend(); usageRefreshTimer = window.setInterval(refreshUsage, 30000); }
+  try { const [health, usage] = await Promise.all([api.health(), api.usage()]); state.health = health; state.usage = usage; renderHealth(); renderUsage(); renderActiveSource(); await loadTopics(); await refreshTrend(); window.setInterval(refreshUsage, 30000); }
   catch (error) { showToast(`Aplikasi belum siap: ${error.message}`); }
   connectStream();
 }

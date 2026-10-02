@@ -1,0 +1,15 @@
+.git/
+.github/
+.playwright-cli/
+.pytest_cache/
+.venv/
+design/
+docs/
+integrations/
+scripts/
+supabase/
+tests/
+*.md
+.mcp.json
+.env*
+data/*.db*

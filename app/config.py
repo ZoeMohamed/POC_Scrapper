@@ -9,8 +9,6 @@ from typing import Literal
 from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
-Window = Literal["1h", "24h", "7d", "30d", "90d", "all"]
-
 
 class Settings(BaseSettings):
     """Runtime settings for the v3 trend and opinion architecture."""
@@ -42,7 +40,6 @@ class Settings(BaseSettings):
     youtube_http_timeout_seconds: float = 10.0
 
     google_maps_api_key: str = ""
-    google_maps_embed_key: str = ""
     # Apify is the POC provider for Google Maps reviews. The token is only
     # read by the server and is never sent to the browser.
     maps_provider: Literal["apify", "places"] = "apify"
@@ -51,8 +48,6 @@ class Settings(BaseSettings):
     apify_poll_interval_seconds: float = 5.0
     apify_poll_timeout_seconds: float = 600.0
     maps_language: str = "id"
-    maps_region: str = "ID"
-    maps_max_pages: int = 2
     maps_max_places_per_search: int = 3
     maps_max_reviews_per_place: int = 10
     maps_refresh_hours: float = 8.0
@@ -77,7 +72,6 @@ class Settings(BaseSettings):
     # refresh for six active topics without silently starving Facebook.
     social_daily_run_cap: int = 18
     social_monthly_run_cap: int = 450
-    social_comments_enabled: bool = False
     social_sentiment_enabled: bool = True
 
     # Marketplace discovery is intentionally one keyword run per topic. This
@@ -101,7 +95,6 @@ class Settings(BaseSettings):
     batch_max_wait_seconds: float = 10.0
     max_gemini_failures: int = 3
     video_classifier: Literal["auto", "rules"] = "auto"
-    summary_min_reviews: int = 10
 
     database_path: Path = Path("data/app.db")
     # ``auto`` keeps local development on SQLite and selects Supabase Postgres
@@ -113,10 +106,7 @@ class Settings(BaseSettings):
     # disabled on serverless to avoid concurrent catalog updates on cold starts.
     database_auto_migrate: bool = False
     topics_path: Path = Path("config/topics.json")
-    aspects_path: Path = Path("config/aspects.json")
-    replay_reviews_path: Path = Path("data/replay_reviews.csv")
     max_comment_chars: int = 800
-    default_window: Window = "90d"
     log_level: str = "INFO"
 
     # Compatibility-only settings retained while the v2 modules remain importable.
@@ -131,14 +121,14 @@ class Settings(BaseSettings):
 
     @field_validator(
         "youtube_daily_quota", "yt_search_reserve_units", "yt_trend_lookback_days",
-        "yt_search_date_pages", "yt_max_videos_per_topic", "maps_max_pages",
+        "yt_search_date_pages", "yt_max_videos_per_topic",
         "maps_max_places_per_search", "maps_max_reviews_per_place",
         "maps_daily_request_cap", "maps_monthly_request_cap", "maps_content_ttl_days",
         "social_results_per_query", "social_max_queries_per_topic",
         "social_lookback_days", "social_daily_run_cap", "social_monthly_run_cap",
         "marketplace_results_per_query", "marketplace_daily_run_cap", "marketplace_monthly_run_cap",
         "demo_budget_units", "max_active_topics", "gemini_rpm", "batch_size",
-        "max_gemini_failures", "summary_min_reviews", "max_comment_chars",
+        "max_gemini_failures", "max_comment_chars",
         "comment_max_age_days",
     )
     @classmethod
@@ -180,10 +170,6 @@ class Settings(BaseSettings):
             if part.strip()
         )
         return list(dict.fromkeys(values))
-
-    @property
-    def sources_list(self) -> list[str]:
-        return self.active_sources
 
     @property
     def youtube_exclude_terms(self) -> list[str]:

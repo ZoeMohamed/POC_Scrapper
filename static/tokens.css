@@ -2,7 +2,6 @@
   color-scheme: light;
   --ink: #09110f;
   --ink-2: #111c18;
-  --ink-3: #1b2823;
   --paper: #f5f2e9;
   --paper-2: #ebe8de;
   --card: #fffef9;
@@ -15,7 +14,6 @@
   --amber: #efb75d;
   --red: #e97867;
   --radius: 18px;
-  --radius-sm: 12px;
   --shadow: 0 20px 55px rgb(0 0 0 / 16%);
   --font: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
 }
@@ -32,5 +30,4 @@ svg { display: block; }
 .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; }
 .skip-link { position: fixed; top: -70px; left: 20px; z-index: 100; border-radius: 9px; background: var(--mint); color: var(--ink); padding: 12px 16px; font-weight: 800; transition: top .2s; }
 .skip-link:focus { top: 20px; }
-.page-glow { position: fixed; top: -28vw; left: 28vw; width: 58vw; height: 48vw; pointer-events: none; background: radial-gradient(circle, rgb(67 194 117 / 12%), transparent 68%); }
 .app-shell { position: relative; width: min(1480px, calc(100% - 48px)); margin: 0 auto; padding: 34px 0 60px; }

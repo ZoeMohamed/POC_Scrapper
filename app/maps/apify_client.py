@@ -17,7 +17,6 @@ from urllib.parse import quote
 import httpx
 
 from app.config import Settings
-from app.db import to_utc_iso
 from app.maps.errors import (
     MapsBadRequestError,
     MapsPermissionError,
@@ -64,10 +63,6 @@ class ApifyMapsClient:
     @property
     def actor_id(self) -> str:
         return self.settings.apify_actor_id
-
-    @property
-    def actor_label(self) -> str:
-        return self.actor_id.replace("~", "/")
 
     def _headers(self) -> dict[str, str]:
         return {

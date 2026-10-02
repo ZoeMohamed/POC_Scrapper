@@ -354,7 +354,3 @@ class YouTubeCollector(BaseCollector):
     async def close(self) -> None:
         if self._owns_client:
             await self._client.aclose()
-
-
-# Conventional spelling kept as a compatibility alias for extensions/tests.
-YoutubeCollector = YouTubeCollector

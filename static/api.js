@@ -12,7 +12,6 @@ export const api = {
   health: () => request("/api/health"), usage: () => request("/api/usage"), topics: () => request("/api/topics"),
   suggestTopic: (name) => request("/api/topics/suggest", { method: "POST", body: JSON.stringify({ name }) }),
   createTopic: (payload) => request("/api/topics", { method: "POST", body: JSON.stringify(payload) }),
-  removeTopic: (id) => request(`/api/topics/${encodeURIComponent(id)}`, { method: "DELETE" }),
   trend: (topicId) => request(`/api/trend?${query({ topic_id: topicId })}`),
   videos: (topicId, sort, type) => request(`/api/trend/videos?${query({ topic_id: topicId, sort, type })}`),
   mapsPlaces: (topicId) => request(`/api/maps/places?${query({ topic_id: topicId })}`),

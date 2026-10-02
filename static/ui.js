@@ -24,9 +24,7 @@ export function setConnection(connected) {
   element.querySelector(".connection-label").textContent = connected ? "LIVE" : "Menyambung…";
 }
 export function renderHealth() {
-  const health = state.health || {}; const sources = health.sources_active || []; const youtube = health.youtube_mode === "api" ? "YouTube API" : "YouTube publik"; const mapsActive = Boolean(health.maps_configured);
-  const tiktokActive = Boolean(health.tiktok_configured); const instagramActive = Boolean(health.instagram_configured); const facebookActive = Boolean(health.facebook_configured); const shopeeActive = Boolean(health.shopee_configured);
-  $("source-status").innerHTML = `${sources.includes("youtube_trend") ? `<span class="source-chip is-on"><i></i>${youtube}</span>` : ""}${sources.includes("maps") ? `<span class="source-chip ${mapsActive ? "is-on" : "is-off"}"><i></i>Google Maps</span>` : ""}${sources.includes("tiktok") ? `<span class="source-chip ${tiktokActive ? "is-on" : "is-off"}"><i></i>TikTok</span>` : ""}${sources.includes("instagram") ? `<span class="source-chip ${instagramActive ? "is-on" : "is-off"}"><i></i>Instagram</span>` : ""}${sources.includes("facebook") ? `<span class="source-chip ${facebookActive ? "is-on" : "is-off"}"><i></i>Facebook</span>` : ""}${sources.includes("shopee") ? `<span class="source-chip ${shopeeActive ? "is-on" : "is-off"}"><i></i>Shopee</span>` : ""}`;
+  const health = state.health || {}; const mapsActive = Boolean(health.maps_configured);
   $("maps-status-badge").className = `source-chip ${mapsActive ? "is-on" : "is-off"}`; $("maps-status-badge").textContent = mapsActive ? `${health.maps_provider === "apify" ? "Apify aktif" : "Places aktif"}` : "Belum dikonfigurasi";
   $("maps-status-copy").textContent = mapsActive ? "Server menjalankan pencarian tempat dan ulasan terbaru melalui Apify." : "Google Maps belum dikonfigurasi di server; data tersimpan tetap aman dan tidak dihapus.";
   renderSourceNavigation();
@@ -104,8 +102,6 @@ export function showBanner(status, message) {
   const banner = $("topic-banner"); banner.className = `topic-banner ${status === "limited" ? "is-warning" : "is-loading"}`;
   banner.innerHTML = `<span class="banner-spinner"></span>${escapeHtml(message)}`; banner.hidden = false;
 }
-export function renderLoading(loading) { $("trend-main").classList.toggle("is-loading", loading); $("source-progress")?.classList.toggle("is-loading", loading); }
-
 function chart(id, configuration) {
   if (!window.Chart) return null;
   state.charts[id]?.destroy(); const context = $(id).getContext("2d"); state.charts[id] = new window.Chart(context, configuration); return state.charts[id];

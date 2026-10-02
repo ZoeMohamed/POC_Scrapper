@@ -78,9 +78,6 @@ class AnalyzerWorker(WorkerIO):
             "pending_count": getattr(self, "pending_count", 0),
         }
 
-    def get_state(self) -> dict[str, Any]:
-        return self.state.copy()
-
     def should_process(self, pending: list[Any], now: datetime | None = None) -> bool:
         if not pending:
             return False
@@ -91,8 +88,6 @@ class AnalyzerWorker(WorkerIO):
             return True
         age = (now or datetime.now(timezone.utc)) - as_utc(collected_at)
         return age.total_seconds() >= self.max_wait
-
-    _should_process = should_process
 
     async def run(self) -> None:
         self._stop.clear()
@@ -226,12 +221,3 @@ class AnalyzerWorker(WorkerIO):
         if rate_limited:
             seconds = min(60, 15 * (2 ** (self.gemini_failures - 1)))
             self.cooldown_until = datetime.now(timezone.utc) + timedelta(seconds=seconds)
-
-
-async def run_analyzer_worker(worker: AnalyzerWorker) -> None:
-    """Entry point eksplisit untuk dipakai lifespan FastAPI."""
-
-    await worker.run()
-
-
-Worker = AnalyzerWorker

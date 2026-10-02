@@ -1,11 +1,13 @@
 """Lifecycle dan orkestrasi collector latar belakang."""
 
+from __future__ import annotations
+
 import asyncio
 import inspect
 import logging
 from collections.abc import Sequence
 from datetime import datetime, timezone
-from typing import Any, Awaitable, Callable
+from typing import TYPE_CHECKING, Any, Awaitable, Callable
 
 from app.config import Settings
 from app.db import Database
@@ -13,12 +15,10 @@ from app.events import EventBroker
 from app.models import Comment, CommentIn, Product
 from app.products import ProductCatalog
 
-from .base import BaseCollector
 from .filters import is_comment_within_age
-from .inbox import InboxCollector
-from .playstore import PlayStoreCollector
-from .replay import ReplayCollector
-from .youtube import YouTubeCollector
+
+if TYPE_CHECKING:
+    from .base import BaseCollector
 
 logger = logging.getLogger(__name__)
 
@@ -28,12 +28,16 @@ def build_collectors(settings: Settings, products: Sequence[Product]) -> list[Ba
     collectors: list[BaseCollector] = []
     for source in settings.active_sources:
         if source == "replay":
+            from .replay import ReplayCollector
+
             collectors.append(
                 ReplayCollector(
                     settings.seed_comments_path, settings.replay_interval_seconds
                 )
             )
         elif source in {"youtube", "youtube_trend"}:
+            from .youtube import YouTubeCollector
+
             if not settings.youtube_api_key:
                 logger.warning(
                     "YOUTUBE_API_KEY belum diisi; YouTube memakai fallback halaman publik"
@@ -47,6 +51,8 @@ def build_collectors(settings: Settings, products: Sequence[Product]) -> list[Ba
                 )
             )
         elif source == "playstore":
+            from .playstore import PlayStoreCollector
+
             if not any(product.playstore_app_ids for product in products):
                 logger.warning(
                     "Play Store aktif tetapi tidak ada playstore_app_ids; sumber dilewati"
@@ -54,6 +60,8 @@ def build_collectors(settings: Settings, products: Sequence[Product]) -> list[Ba
                 continue
             collectors.append(PlayStoreCollector(settings.collect_interval_seconds))
         elif source == "inbox":
+            from .inbox import InboxCollector
+
             collectors.append(
                 InboxCollector(settings.inbox_path, settings.collect_interval_seconds)
             )
@@ -202,14 +210,3 @@ class CollectorRunner:
                 # Defensive: collect_once already isolates ordinary source failures.
                 logger.exception("Loop collector %s pulih dari error", collector.name)
                 await asyncio.sleep(collector.interval_seconds)
-
-
-async def collect_and_save(
-    collector: BaseCollector,
-    products: list[Product],
-    database: Database,
-    max_comment_chars: int = 500,
-) -> list[Comment]:
-    """Compatibility helper for one-shot scripts and integrations."""
-    items: list[CommentIn] = await collector.collect(products)
-    return await database.insert_comments(items, max_comment_chars=max_comment_chars)

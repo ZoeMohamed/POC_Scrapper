@@ -107,10 +107,6 @@ def parse_response(
     return results
 
 
-parse_gemini_response = parse_response
-parse_batch_response = parse_response
-
-
 class GeminiAnalyzer(BaseAnalyzer):
     name = "gemini"
 

@@ -24,10 +24,6 @@ class EventBroker:
         self._subscribers: set[asyncio.Queue[Event]] = set()
         self._lock = asyncio.Lock()
 
-    @property
-    def subscriber_count(self) -> int:
-        return len(self._subscribers)
-
     @asynccontextmanager
     async def subscribe(self) -> AsyncIterator[asyncio.Queue[Event]]:
         queue: asyncio.Queue[Event] = asyncio.Queue(maxsize=self.queue_size)
@@ -49,6 +45,3 @@ class EventBroker:
                 queue.put_nowait(Event(name=name, data=data))
             except asyncio.QueueFull:
                 continue
-
-
-broker = EventBroker()

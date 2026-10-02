@@ -39,8 +39,3 @@ class AsyncRateLimiter:
                     return
                 delay = (1.0 - self.tokens) / self.refill_per_second
             await asyncio.sleep(delay)
-
-
-RateLimiter = AsyncRateLimiter
-TokenBucketRateLimiter = AsyncRateLimiter
-TokenBucket = AsyncRateLimiter

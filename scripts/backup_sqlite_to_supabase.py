@@ -35,6 +35,8 @@ TABLES = (
     "social_posts",
     "social_post_stats",
     "social_refreshes",
+    "marketplace_products",
+    "marketplace_refreshes",
     "api_usage",
 )
 

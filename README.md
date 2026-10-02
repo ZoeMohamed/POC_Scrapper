@@ -1,5 +1,7 @@
 # Pemantau Tren & Opini UMKM
 
+Dokumen implementasi utama: [SRS v4](SRS.md). Pembagian rebuild lima orang dan kepemilikan file tersedia di [docs/REBUILD_ASSIGNMENTS.md](docs/REBUILD_ASSIGNMENTS.md).
+
 POC v3 membantu UMKM membaca dua sinyal yang berbeda:
 
 - **YouTube untuk tren produk** — pasokan video, pertumbuhan views, format konten, dan sinyal persaingan.
@@ -16,7 +18,7 @@ Butuh Python 3.11 atau lebih baru.
 ```bash
 python3.11 -m venv .venv
 source .venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements-dev.txt
 cp .env.example .env
 python scripts/reset_db.py
 uvicorn app.main:app --reload
@@ -100,7 +102,6 @@ Semua key hanya dibaca dari `.env`; jangan masukkan key ke source code atau comm
 | `MAPS_MAX_PLACES_PER_SEARCH` | `3` | Cap tempat per kota pada POC |
 | `MAPS_MAX_REVIEWS_PER_PLACE` | `10` | Cap ulasan terbaru yang tersedia per tempat; tidak dibatasi hanya 7 hari terakhir |
 | `GOOGLE_MAPS_API_KEY` | kosong | Disimpan untuk provider Places API langsung di tahap berikutnya |
-| `GOOGLE_MAPS_EMBED_KEY` | kosong | Key browser terpisah dan opsional |
 | `MAPS_DAILY_REQUEST_CAP` | `30` | Hard cap request Maps per hari |
 | `MAPS_MONTHLY_REQUEST_CAP` | `800` | Hard cap request Maps per bulan |
 | `DEFAULT_CITY` | `Bandung` | Kota awal untuk topik baru |
@@ -112,7 +113,6 @@ Semua key hanya dibaca dari `.env`; jangan masukkan key ke source code atau comm
 | `SOCIAL_REFRESH_HOURS` | `12` | Interval refresh TikTok/Instagram |
 | `SOCIAL_DAILY_RUN_CAP` | `18` | Cap Actor run sosial per hari (TikTok, Instagram, Facebook bersama) |
 | `SOCIAL_MONTHLY_RUN_CAP` | `450` | Cap Actor run sosial per bulan |
-| `SOCIAL_COMMENTS_ENABLED` | `false` | Komentar sengaja nonaktif untuk efisiensi |
 | `SOCIAL_SENTIMENT_ENABLED` | `true` | Analisis sentimen caption sosial yang relevan |
 | `MAX_ACTIVE_TOPICS` | `20` | Batas topik aktif |
 | `DATABASE_BACKEND` | `auto` | Memakai Postgres bila `SUPABASE_DB_URL` tersedia, selain itu SQLite |
@@ -231,7 +231,7 @@ app/marketplace/   Shopee Apify client, parser, collector, budget guard
 app/topics/        layanan watchlist produk
 app/api/           endpoint topics, trend, usage, health, SSE
 static/            dashboard P3 responsif
-config/            seed topik dan aspek
+config/            seed topik dan katalog kompatibilitas
 scripts/           reset database dan probe sumber
 tests/             unit/integrasi tanpa API eksternal
 ```

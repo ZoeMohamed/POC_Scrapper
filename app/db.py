@@ -292,9 +292,6 @@ class Database:
             "ON social_posts(topic_id, sentiment_status, published_at DESC)"
         )
 
-    async def initialize(self) -> None:
-        await self.init()
-
     async def close(self) -> None:
         if self._connection is not None:
             await self._connection.close()
@@ -1036,9 +1033,3 @@ class Database:
             f"SELECT * FROM comments WHERE {' AND '.join(clauses)}", params
         )
         return [_row_to_comment(row) for row in await cursor.fetchall()]
-
-
-async def init_db(path: str | Path, *, comment_max_age_days: int = 180) -> Database:
-    database = Database(path, comment_max_age_days=comment_max_age_days)
-    await database.init()
-    return database
