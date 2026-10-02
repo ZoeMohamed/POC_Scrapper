@@ -9,7 +9,7 @@ POC v3 membantu UMKM membaca dua sinyal yang berbeda:
 - **TikTok + Instagram untuk sinyal konten** — post publik, caption, engagement, dan creator signal dari keyword/hashtag.
 - **Facebook + Shopee untuk variasi sinyal UMKM** — post publik Facebook untuk sentimen dan katalog produk Shopee Indonesia untuk harga, rating, serta sold count bila tersedia.
 
-Implementasi saat ini mencakup **P3/M3 + Maps/Social/Marketplace POC**: fondasi data dan kuota, discovery YouTube, snapshot metrik, live ticker SSE, dashboard tren, kolektor opini Google Maps, discovery TikTok/Instagram/Facebook, serta discovery Shopee melalui Apify. Tanpa `APIFY_TOKEN`, aplikasi tidak melakukan request dan secara jujur menampilkan sumber Apify belum dikonfigurasi.
+Implementasi saat ini mencakup **P3/M3 + Maps/Social/Marketplace POC**: fondasi data dan kuota, discovery YouTube, snapshot metrik, live ticker SSE, dashboard tren, kolektor opini Google Maps, discovery TikTok/Instagram/Facebook, serta discovery Shopee melalui Apify. Token Apify dapat dipisah per layanan atau memakai satu `APIFY_TOKEN` sebagai fallback; sumber tanpa token secara jujur ditampilkan belum dikonfigurasi.
 
 ## Jalankan dalam kurang dari 10 menit
 
@@ -28,7 +28,7 @@ Buka [http://127.0.0.1:8000](http://127.0.0.1:8000). Tiga topik awal tersedia: C
 
 ### Deploy ke Vercel (POC)
 
-Vercel mengenali `index.py` sebagai entrypoint FastAPI. Deploy dari root repo dengan `npx vercel --prod`, lalu isi Environment Variables `APIFY_TOKEN`, `SOURCES=youtube_trend,maps,tiktok,instagram,facebook,shopee`, dan `SUPABASE_DB_URL` pada project Vercel. Gunakan connection string Supavisor/session pooler yang server-side. Jika variabel tersebut kosong, aplikasi kembali memakai SQLite `/tmp` yang bersifat sementara.
+Vercel mengenali `index.py` sebagai entrypoint FastAPI. Deploy dari root repo dengan `npx vercel --prod`, lalu isi Environment Variables `APIFY_MAPS_TOKEN`, `APIFY_SOCIAL_TOKEN`, `APIFY_MARKETPLACE_TOKEN`, `SOURCES=youtube_trend,maps,tiktok,instagram,facebook,shopee`, dan `SUPABASE_DB_URL` pada project Vercel. `APIFY_TOKEN` tetap dapat dipakai sebagai fallback tunggal. Gunakan connection string Supavisor/session pooler yang server-side. Jika database URL kosong, aplikasi kembali memakai SQLite `/tmp` yang bersifat sementara.
 
 ### Supabase MCP
 
@@ -96,6 +96,9 @@ Semua key hanya dibaca dari `.env`; jangan masukkan key ke source code atau comm
 | `GEMINI_MODEL` | `gemini-3.8-flash` | Model Gemini; fallback leksikon tetap dipakai bila API sibuk/gagal |
 | `MAPS_PROVIDER` | `apify` | Provider Maps POC (`apify` atau `places` untuk integrasi berikutnya) |
 | `APIFY_TOKEN` | kosong | Token server Apify; jangan pernah dikirim ke browser |
+| `APIFY_MAPS_TOKEN` | kosong | Token khusus Google Maps; fallback ke `APIFY_TOKEN` |
+| `APIFY_SOCIAL_TOKEN` | kosong | Token khusus TikTok, Instagram, dan Facebook; fallback ke `APIFY_TOKEN` |
+| `APIFY_MARKETPLACE_TOKEN` | kosong | Token khusus Shopee; fallback ke `APIFY_TOKEN` |
 | `APIFY_ACTOR_ID` | `compass~crawler-google-places` | Actor Google Maps yang dijalankan |
 | `APIFY_POLL_INTERVAL_SECONDS` | `5` | Jeda polling status run |
 | `APIFY_POLL_TIMEOUT_SECONDS` | `600` | Batas waktu satu run |
@@ -128,7 +131,7 @@ Untuk mode API resmi:
 
 1. Buat project Google Cloud.
 2. Aktifkan **YouTube Data API v3**.
-3. Buat token Apify dengan scope minimum yang diperlukan, lalu isi `APIFY_TOKEN` di `.env` (server saja).
+3. Buat token Apify dengan scope minimum yang diperlukan. Isi token per layanan (`APIFY_MAPS_TOKEN`, `APIFY_SOCIAL_TOKEN`, `APIFY_MARKETPLACE_TOKEN`) atau gunakan satu `APIFY_TOKEN` sebagai fallback (server saja).
 4. Biarkan `MAPS_PROVIDER=apify`; aplikasi memakai Actor `compass~crawler-google-places` dan cap lokal `MAPS_*`.
 5. Jika kelak memakai provider Places langsung, baru isi `GOOGLE_MAPS_API_KEY` dan ubah `MAPS_PROVIDER=places`.
 6. Jika memakai Maps Embed, buat key browser berbeda yang hanya mengizinkan Maps Embed API dan referrer aplikasi.
@@ -136,7 +139,7 @@ Untuk mode API resmi:
 
 Referensi Actor: [input schema Google Maps Scraper](https://apify.com/compass/crawler-google-places/input-schema) dan [API Actor](https://apify.com/compass/crawler-google-places/api).
 
-Referensi sosial: [TikTok Scraper input](https://apify.com/clockworks/tiktok-scraper/input-schema), [TikTok API](https://apify.com/clockworks/tiktok-scraper/api), [Instagram Scraper input](https://apify.com/apify/instagram-scraper/input-schema), [Instagram API](https://apify.com/apify/instagram-scraper/api), dan [Facebook Search Scraper input](https://apify.com/apify/facebook-search-scraper/input-schema). Referensi marketplace: [Shopee Scraper input](https://apify.com/xtracto/shopee-scraper/input-schema) dan [Shopee Scraper API](https://apify.com/xtracto/shopee-scraper/api). Satu token Apify berlaku untuk semua Actor; token hanya dipakai server.
+Referensi sosial: [TikTok Scraper input](https://apify.com/clockworks/tiktok-scraper/input-schema), [TikTok API](https://apify.com/clockworks/tiktok-scraper/api), [Instagram Scraper input](https://apify.com/apify/instagram-scraper/input-schema), [Instagram API](https://apify.com/apify/instagram-scraper/api), dan [Facebook Search Scraper input](https://apify.com/apify/facebook-search-scraper/input-schema). Referensi marketplace: [Shopee Scraper input](https://apify.com/xtracto/shopee-scraper/input-schema) dan [Shopee Scraper API](https://apify.com/xtracto/shopee-scraper/api). Token hanya dipakai server; pemisahan per layanan membuat budget dan rotasi credential lebih aman.
 
 Restart server setelah mengubah `.env`. Jangan pernah menggunakan key server di JavaScript browser.
 

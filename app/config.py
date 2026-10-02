@@ -44,6 +44,11 @@ class Settings(BaseSettings):
     # read by the server and is never sent to the browser.
     maps_provider: Literal["apify", "places"] = "apify"
     apify_token: str = ""
+    # Optional per-service credentials isolate provider budgets. Each source
+    # falls back to APIFY_TOKEN so existing deployments remain compatible.
+    apify_maps_token: str = ""
+    apify_social_token: str = ""
+    apify_marketplace_token: str = ""
     apify_actor_id: str = "compass~crawler-google-places"
     apify_poll_interval_seconds: float = 5.0
     apify_poll_timeout_seconds: float = 600.0
@@ -178,6 +183,18 @@ class Settings(BaseSettings):
         return list(dict.fromkeys(
             term.strip() for term in self.yt_exclude_terms.split(",") if term.strip()
         ))
+
+    @property
+    def apify_maps_token_value(self) -> str:
+        return self.apify_maps_token or self.apify_token
+
+    @property
+    def apify_social_token_value(self) -> str:
+        return self.apify_social_token or self.apify_token
+
+    @property
+    def apify_marketplace_token_value(self) -> str:
+        return self.apify_marketplace_token or self.apify_token
 
 
 @lru_cache

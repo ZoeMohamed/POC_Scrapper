@@ -51,9 +51,10 @@ class ApifyMapsClient:
         *,
         client: httpx.AsyncClient | None = None,
     ) -> None:
-        if not settings.apify_token:
-            raise ValueError("APIFY_TOKEN belum diisi")
+        if not settings.apify_maps_token_value:
+            raise ValueError("APIFY_MAPS_TOKEN atau APIFY_TOKEN belum diisi")
         self.settings = settings
+        self.token = settings.apify_maps_token_value
         self.usage = usage
         self._client = client or httpx.AsyncClient(
             timeout=httpx.Timeout(settings.youtube_http_timeout_seconds)
@@ -66,7 +67,7 @@ class ApifyMapsClient:
 
     def _headers(self) -> dict[str, str]:
         return {
-            "Authorization": f"Bearer {self.settings.apify_token}",
+            "Authorization": f"Bearer {self.token}",
             "Accept": "application/json",
             "Content-Type": "application/json",
             "User-Agent": "umkm-trend-poc/3.1",

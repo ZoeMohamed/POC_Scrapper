@@ -112,7 +112,7 @@ def create_app(
     if (
         "maps" in runtime.active_sources
         and runtime.maps_provider == "apify"
-        and runtime.apify_token
+        and runtime.apify_maps_token_value
     ):
         maps_client = ApifyMapsClient(runtime, maps_usage)
         maps_collector = MapsCollector(database, maps_client, runtime, broker)
@@ -124,7 +124,7 @@ def create_app(
         batch_size=runtime.batch_size,
     )
     if (
-        runtime.apify_token
+        runtime.apify_social_token_value
         and {"tiktok", "instagram", "facebook"}.intersection(runtime.active_sources)
     ):
         social_client = SocialApifyClient(runtime, social_usage)
@@ -133,7 +133,7 @@ def create_app(
         )
     marketplace_client: ShopeeApifyClient | None = None
     marketplace_collector: MarketplaceCollector | None = None
-    if runtime.apify_token and "shopee" in runtime.active_sources:
+    if runtime.apify_marketplace_token_value and "shopee" in runtime.active_sources:
         marketplace_client = ShopeeApifyClient(runtime, marketplace_usage)
         marketplace_collector = MarketplaceCollector(database, marketplace_client, runtime, broker)
     youtube_client: YouTubeClient | PublicYouTubeClient | None = None
