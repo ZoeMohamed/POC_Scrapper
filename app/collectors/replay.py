@@ -18,7 +18,7 @@ class ReplayCollector(BaseCollector):
 
     def __init__(
         self,
-        csv_path: str | Path = "data/seed_comments.csv",
+        csv_path: str | Path = "tests/fixtures/replay_comments.csv",
         interval_seconds: float = 3.0,
         *,
         random_seed: int | None = None,

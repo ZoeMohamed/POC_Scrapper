@@ -24,7 +24,7 @@ def settings(tmp_path: Path) -> Settings:
         sources="replay",
         database_path=tmp_path / "test.db",
         products_path=PROJECT_ROOT / "config" / "products.json",
-        seed_comments_path=PROJECT_ROOT / "data" / "seed_comments.csv",
+        seed_comments_path=PROJECT_ROOT / "tests" / "fixtures" / "replay_comments.csv",
     )
 
 

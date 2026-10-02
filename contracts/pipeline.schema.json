@@ -1,0 +1,318 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://poc-scrapper.local/contracts/pipeline.schema.json",
+  "title": "POC Scrapper Pipeline Contract",
+  "type": "object",
+  "$defs": {
+    "source": {
+      "type": "string",
+      "enum": [
+        "youtube",
+        "maps",
+        "tiktok",
+        "instagram",
+        "facebook",
+        "shopee"
+      ]
+    },
+    "runStatus": {
+      "type": "string",
+      "enum": [
+        "disabled",
+        "misconfigured",
+        "queued",
+        "running",
+        "fresh",
+        "empty",
+        "stale",
+        "budget_exhausted",
+        "error"
+      ]
+    },
+    "evidence": {
+      "type": "object",
+      "additionalProperties": true,
+      "required": [
+        "source",
+        "topic_id",
+        "external_id",
+        "url",
+        "collected_at"
+      ],
+      "properties": {
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "topic_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "external_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "provider_run_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "title": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "text": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "url": {
+          "type": "string",
+          "format": "uri"
+        },
+        "published_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        },
+        "collected_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "relevance": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "raw_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "relevant_count": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "anyOf": [
+        {
+          "required": [
+            "title"
+          ]
+        },
+        {
+          "required": [
+            "text"
+          ]
+        }
+      ]
+    },
+    "sourceRun": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "source",
+        "topic_id",
+        "status",
+        "started_at"
+      ],
+      "properties": {
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "topic_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "status": {
+          "$ref": "#/$defs/runStatus"
+        },
+        "trigger": {
+          "type": "string",
+          "enum": [
+            "manual",
+            "scheduled",
+            "startup"
+          ]
+        },
+        "provider_run_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "raw_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "relevant_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "inserted_count": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "error_code": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "enum": [
+            null,
+            "not_configured",
+            "provider_timeout",
+            "provider_permission",
+            "invalid_payload",
+            "database_timeout",
+            "budget_exhausted"
+          ]
+        },
+        "started_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "finished_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        }
+      }
+    },
+    "analysis": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "label",
+        "score",
+        "confidence",
+        "aspects",
+        "analyzer"
+      ],
+      "properties": {
+        "evidence_id": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "label": {
+          "type": "string",
+          "enum": [
+            "positif",
+            "negatif",
+            "netral",
+            "pending"
+          ]
+        },
+        "score": {
+          "type": "number",
+          "minimum": -1,
+          "maximum": 1
+        },
+        "confidence": {
+          "type": "number",
+          "minimum": 0,
+          "maximum": 1
+        },
+        "aspects": {
+          "type": "array",
+          "items": {
+            "type": "string"
+          },
+          "uniqueItems": true
+        },
+        "analyzer": {
+          "type": "string",
+          "enum": [
+            "gemini",
+            "lexicon",
+            "mock",
+            "pending"
+          ]
+        },
+        "analyzed_at": {
+          "type": [
+            "string",
+            "null"
+          ],
+          "format": "date-time"
+        }
+      }
+    },
+    "streamEvent": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "event",
+        "topic_id",
+        "source",
+        "status",
+        "updated_at"
+      ],
+      "properties": {
+        "event": {
+          "type": "string",
+          "enum": [
+            "source_status",
+            "progress",
+            "evidence_new",
+            "analysis_updated",
+            "error"
+          ]
+        },
+        "topic_id": {
+          "type": "string",
+          "minLength": 1
+        },
+        "source": {
+          "$ref": "#/$defs/source"
+        },
+        "status": {
+          "$ref": "#/$defs/runStatus"
+        },
+        "progress": {
+          "type": [
+            "number",
+            "null"
+          ],
+          "minimum": 0,
+          "maximum": 1
+        },
+        "message": {
+          "type": [
+            "string",
+            "null"
+          ]
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        }
+      }
+    }
+  },
+  "properties": {
+    "evidence": {
+      "$ref": "#/$defs/evidence"
+    },
+    "source_run": {
+      "$ref": "#/$defs/sourceRun"
+    },
+    "analysis": {
+      "$ref": "#/$defs/analysis"
+    },
+    "stream_event": {
+      "$ref": "#/$defs/streamEvent"
+    }
+  }
+}

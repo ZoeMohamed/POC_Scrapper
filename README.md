@@ -1,6 +1,6 @@
 # Pemantau Tren & Opini UMKM
 
-Dokumen implementasi utama: [SRS v4](SRS.md). Pembagian rebuild lima orang dan kepemilikan file tersedia di [docs/REBUILD_ASSIGNMENTS.md](docs/REBUILD_ASSIGNMENTS.md).
+Dokumen implementasi utama: [SRS v4](SRS.md). Context kerja AI dan pembagian empat orang tersedia di [docs/TEAM_CONTEXT_4_ORANG.md](docs/TEAM_CONTEXT_4_ORANG.md).
 
 POC v3 membantu UMKM membaca dua sinyal yang berbeda:
 
@@ -247,4 +247,4 @@ scripts/           reset database dan probe sumber
 tests/             unit/integrasi tanpa API eksternal
 ```
 
-Spesifikasi implementasi lengkap ada di [SPEC.md](SPEC.md).
+Spesifikasi implementasi lengkap ada di [SRS.md](SRS.md). Context kerja ringkas ada di [docs/TEAM_CONTEXT_4_ORANG.md](docs/TEAM_CONTEXT_4_ORANG.md).

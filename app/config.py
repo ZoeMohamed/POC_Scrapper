@@ -124,7 +124,8 @@ class Settings(BaseSettings):
     # Compatibility-only settings retained while the v2 modules remain importable.
     products_path: Path = Path("config/products.json")
     inbox_path: Path = Path("data/inbox")
-    seed_comments_path: Path = Path("data/seed_comments.csv")
+    # Compatibility-only replay fixture; production sources do not use it.
+    seed_comments_path: Path = Path("tests/fixtures/replay_comments.csv")
     collect_interval_seconds: float = 90.0
     youtube_videos_per_product: int = 5
     youtube_search_refresh_minutes: int = 60

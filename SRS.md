@@ -12,7 +12,7 @@
 | Frontend | HTML, CSS, dan JavaScript tanpa build step |
 | Sumber production | YouTube, Google Maps, TikTok, Instagram, Facebook, Shopee |
 
-Dokumen ini menggantikan cakupan produk pada `SPEC.md` untuk pekerjaan berikutnya. `SPEC.md` tetap disimpan sebagai riwayat keputusan v3. Implementasi baru wajib mempertahankan fitur yang sudah tersedia dan memperbaiki status sumber yang saat ini hanya membedakan “dikonfigurasi” dan “tidak dikonfigurasi”.
+Dokumen ini adalah sumber kebenaran requirement untuk pekerjaan berikutnya. Implementasi baru wajib mempertahankan fitur yang sudah tersedia dan memperbaiki status sumber yang saat ini hanya membedakan “dikonfigurasi” dan “tidak dikonfigurasi”. Context operasional ringkas ada di `docs/TEAM_CONTEXT_4_ORANG.md`.
 
 ## 1. Tujuan produk
 
@@ -432,4 +432,4 @@ Release diterima jika:
 7. Deploy migration, backend, lalu frontend.
 8. Jalankan production smoke dan catat evidence release.
 
-Pembagian kepemilikan file, urutan PR, dan output setiap orang dijelaskan dalam [docs/REBUILD_ASSIGNMENTS.md](docs/REBUILD_ASSIGNMENTS.md).
+Pembagian kepemilikan file, urutan PR, dan output setiap orang dijelaskan dalam [docs/TEAM_CONTEXT_4_ORANG.md](docs/TEAM_CONTEXT_4_ORANG.md).
