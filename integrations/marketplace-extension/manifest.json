@@ -1,0 +1,21 @@
+{
+  "manifest_version": 3,
+  "name": "UMKM Review Bridge",
+  "description": "Kirim ulasan Tokopedia, Shopee, dan TikTok Shop yang sedang tampil ke Pemantau Sentimen UMKM.",
+  "version": "0.1.0",
+  "permissions": ["activeTab", "scripting", "storage"],
+  "host_permissions": [
+    "http://127.0.0.1/*",
+    "http://localhost/*",
+    "https://*.tokopedia.com/*",
+    "https://shopee.co.id/*",
+    "https://*.shopee.co.id/*",
+    "https://*.tiktok.com/*",
+    "https://*.tiktokshop.com/*",
+    "https://*.tiktokglobalshop.com/*"
+  ],
+  "action": {
+    "default_title": "Tangkap ulasan UMKM",
+    "default_popup": "popup.html"
+  }
+}

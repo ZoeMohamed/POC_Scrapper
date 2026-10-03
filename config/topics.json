@@ -1,0 +1,29 @@
+[
+  {
+    "name": "Cappuccino Cincau",
+    "category": "makanan_minuman",
+    "keywords": ["cappuccino cincau", "capucino cincau", "es cappuccino cincau"],
+    "product_terms": ["cappuccino", "capucino", "cincau"],
+    "exclude_terms": [],
+    "cities": ["Bandung"],
+    "own_place_id": null
+  },
+  {
+    "name": "Kopi Susu Gula Aren",
+    "category": "makanan_minuman",
+    "keywords": ["kopi susu gula aren", "es kopi susu aren"],
+    "product_terms": ["kopi susu", "gula aren", "aren"],
+    "exclude_terms": [],
+    "cities": ["Bandung"],
+    "own_place_id": null
+  },
+  {
+    "name": "Seblak",
+    "category": "makanan_minuman",
+    "keywords": ["seblak"],
+    "product_terms": ["seblak", "kerupuk", "kencur", "pedas", "level"],
+    "exclude_terms": [],
+    "cities": ["Bandung"],
+    "own_place_id": null
+  }
+]

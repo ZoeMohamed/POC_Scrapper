@@ -1,0 +1,2 @@
+"""YouTube trend collection package."""
+

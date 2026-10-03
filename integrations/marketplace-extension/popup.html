@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="id">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>UMKM Review Bridge</title>
+    <link rel="stylesheet" href="popup.css">
+  </head>
+  <body>
+    <main>
+      <header>
+        <span class="eyebrow">LIVE SOURCE</span>
+        <h1>Review Bridge</h1>
+        <p>Ambil ulasan Tokopedia, Shopee, atau TikTok Shop yang tampil di halaman produk aktif.</p>
+      </header>
+
+      <form id="capture-form">
+        <label>
+          <span>Backend lokal</span>
+          <input id="backend-url" type="url" value="http://127.0.0.1:8000" required>
+        </label>
+        <label>
+          <span>Produk dashboard</span>
+          <select id="product-id" required>
+            <option value="">Memuat produk…</option>
+          </select>
+        </label>
+        <label>
+          <span>Token ingest <small>opsional untuk localhost</small></span>
+          <input id="ingest-token" type="password" autocomplete="off" placeholder="Sama dengan .env">
+        </label>
+
+        <div class="privacy-note">
+          <strong>Privasi bawaan</strong>
+          <span>Nama akun tidak dibaca atau dikirim.</span>
+        </div>
+
+        <button id="capture-button" type="submit">Tangkap &amp; kirim ulasan</button>
+      </form>
+      <p id="status" class="status" role="status" aria-live="polite">Buka produk, tampilkan bagian ulasan, lalu tekan tombol.</p>
+    </main>
+    <script src="popup.js"></script>
+  </body>
+</html>

@@ -1,0 +1,215 @@
+/* Design Tokens matching docs/tren_opini_intelijen_pasar_umkm.html */
+:root {
+  color-scheme: light;
+
+  /* Primary Yellow / Accent */
+  --primary: #725c00;
+  --primary-container: #ffd21f;
+  --on-primary: #ffffff;
+  --on-primary-container: #705b00;
+  --primary-fixed: #ffe080;
+  --primary-fixed-dim: #edc200;
+
+  /* Secondary Red / Urgent Alerts */
+  --secondary: #bb0013;
+  --secondary-container: #e12728;
+  --on-secondary: #ffffff;
+  --secondary-fixed: #ffdad6;
+  --secondary-fixed-dim: #ffb4ab;
+
+  /* Tertiary Green / Live Status & High Positivity */
+  --tertiary: #1b6d24;
+  --tertiary-container: #97ea91;
+  --on-tertiary: #ffffff;
+  --on-tertiary-container: #196b22;
+  --tertiary-fixed: #a3f69c;
+  --tertiary-fixed-dim: #88d982;
+
+  /* Surfaces & Backgrounds */
+  --surface: #fcf9f8;
+  --on-surface: #1c1b1b;
+  --border-dark: #111111;
+  --surface-variant: #e5e2e1;
+  --on-surface-variant: #4d4632;
+  --surface-container-lowest: #ffffff;
+  --surface-container-low: #f6f3f2;
+  --surface-container: #f0edec;
+  --surface-container-high: #ebe7e7;
+  --surface-container-highest: #e5e2e1;
+  --background: #fcf9f8;
+  --outline: #7f7660;
+  --outline-variant: #d1c6ab;
+  --error: #ba1a1a;
+  --error-container: #ffdad6;
+
+  /* Legacy variable mappings for safety */
+  --ink: #111111;
+  --ink-2: #1c1b1b;
+  --paper: #fcf9f8;
+  --paper-2: #f0edec;
+  --card: #ffffff;
+  --text: #1c1b1b;
+  --muted: #5e5745;
+  --line: #111111;
+  --mint: #97ea91;
+  --mint-strong: #1b6d24;
+  --mint-ink: #196b22;
+  --amber: #ffd21f;
+  --red: #bb0013;
+
+  /* Typography */
+  --font-display: 'Space Grotesk', -apple-system, sans-serif;
+  --font-body: 'Inter', -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', monospace;
+  --font: var(--font-body);
+
+  /* Neo-Brutalist Geometry */
+  --radius: 2px;
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --neo-shadow-sm: 2px 2px 0px #111111;
+  --neo-shadow: 3px 3px 0px #111111;
+  --neo-shadow-md: 4px 4px 0px #111111;
+  --neo-shadow-lg: 5px 5px 0px #111111;
+  --shadow: var(--neo-shadow);
+}
+
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+
+html {
+  min-width: 320px;
+  min-height: 100%;
+  background: var(--surface);
+  color: var(--on-surface);
+}
+
+body {
+  margin: 0;
+  min-height: 100vh;
+  overflow-x: hidden;
+  background: var(--surface);
+  color: var(--on-surface);
+  font-family: var(--font-body);
+  font-size: 14px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+}
+
+::selection {
+  background: var(--primary-container);
+  color: var(--on-surface);
+}
+
+/* Material Symbols Outlined font support */
+.material-symbols-outlined {
+  font-family: 'Material Symbols Outlined';
+  font-weight: normal;
+  font-style: normal;
+  font-size: 20px;
+  line-height: 1;
+  display: inline-block;
+  white-space: nowrap;
+  vertical-align: middle;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Neo-Brutalist utilities matching reference */
+.neo-box {
+  border: 2.5px solid var(--border-dark);
+  box-shadow: var(--neo-shadow);
+  border-radius: var(--radius);
+}
+
+.neo-box-sm {
+  border: 1.5px solid var(--border-dark);
+  box-shadow: var(--neo-shadow-sm);
+  border-radius: var(--radius);
+}
+
+.neo-box-lg {
+  border: 3px solid var(--border-dark);
+  box-shadow: var(--neo-shadow-lg);
+  border-radius: var(--radius);
+}
+
+.neo-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  border: 2px solid var(--border-dark);
+  box-shadow: 2.5px 2.5px 0px #111111;
+  border-radius: var(--radius);
+  font-family: var(--font-display);
+  font-weight: 700;
+  transition: all 0.1s ease-in-out;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.neo-btn:hover {
+  transform: translate(-1.5px, -1.5px);
+  box-shadow: 4px 4px 0px #111111;
+}
+
+.neo-btn:active {
+  transform: translate(1.5px, 1.5px);
+  box-shadow: 1px 1px 0px #111111;
+}
+
+button, input, select, textarea {
+  font: inherit;
+}
+
+button, select {
+  cursor: pointer;
+}
+
+button:focus-visible, input:focus-visible, select:focus-visible, a:focus-visible, textarea:focus-visible {
+  outline: 2.5px solid var(--primary-container);
+  outline-offset: 2px;
+}
+
+h1, h2, h3, h4, h5, h6, p {
+  margin: 0;
+}
+
+ul {
+  margin: 0;
+  padding: 0;
+}
+
+svg {
+  display: block;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+}
+
+.skip-link {
+  position: fixed;
+  top: -70px;
+  left: 20px;
+  z-index: 100;
+  border: 2px solid #111111;
+  box-shadow: var(--neo-shadow);
+  background: var(--primary-container);
+  color: var(--on-surface);
+  padding: 10px 16px;
+  font-family: var(--font-mono);
+  font-weight: 800;
+  transition: top .2s;
+}
+
+.skip-link:focus {
+  top: 20px;
+}

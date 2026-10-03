@@ -1,0 +1,20 @@
+[
+  {
+    "id": "kopi-aren",
+    "name": "Kopi Susu Gula Aren",
+    "keywords": ["kopi susu gula aren", "kopi aren"],
+    "playstore_app_ids": []
+  },
+  {
+    "id": "batik-tulis",
+    "name": "Batik Tulis",
+    "keywords": ["batik tulis", "batik lokal"],
+    "playstore_app_ids": []
+  },
+  {
+    "id": "sepatu-lokal",
+    "name": "Sepatu Lokal",
+    "keywords": ["sepatu lokal", "sneakers lokal"],
+    "playstore_app_ids": []
+  }
+]
