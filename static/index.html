@@ -50,42 +50,56 @@
         <div class="sidebar-section-label">[MODUL SUMBER DATA]</div>
         <nav id="source-nav" class="source-nav" aria-label="Navigasi sumber data">
           <button class="source-nav-item active" type="button" data-source="overview" aria-current="page">
-            <span class="source-nav-icon material-symbols-outlined">dashboard</span>
+            <span class="source-nav-icon icon-overview">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M3 3h8v8H3zm10 0h8v8h-8zM3 13h8v8H3zm10 0h8v8h-8z"/></svg>
+            </span>
             <span><strong>Beranda</strong><small>Semua sumber terpadu</small></span>
             <i id="source-status-overview" class="source-status-dot"></i>
           </button>
           <button class="source-nav-item" type="button" data-source="tiktok">
-            <span class="source-nav-icon">TT</span>
+            <span class="source-nav-icon icon-tiktok">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 3 15.68 6.34 6.34 0 0 0 9.35 22a6.33 6.33 0 0 0 6.33-6.32V9.12a8.2 8.2 0 0 0 4.91 1.6V7.27a4.91 4.91 0 0 1-1-.58z"/></svg>
+            </span>
             <span><strong>TikTok</strong><small>Video &amp; tren viral</small></span>
             <b id="source-count-tiktok" class="source-count">—</b>
             <i id="source-status-tiktok" class="source-status-dot"></i>
           </button>
           <button class="source-nav-item" type="button" data-source="instagram">
-            <span class="source-nav-icon">IG</span>
+            <span class="source-nav-icon icon-instagram">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a3.999 3.999 0 1 1 0-7.998 3.999 3.999 0 0 1 0 7.998zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+            </span>
             <span><strong>Instagram</strong><small>Caption &amp; sentimen</small></span>
             <b id="source-count-instagram" class="source-count">—</b>
             <i id="source-status-instagram" class="source-status-dot"></i>
           </button>
           <button class="source-nav-item" type="button" data-source="facebook">
-            <span class="source-nav-icon">f</span>
+            <span class="source-nav-icon icon-facebook">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+            </span>
             <span><strong>Facebook</strong><small>Post komunitas publik</small></span>
             <b id="source-count-facebook" class="source-count">—</b>
             <i id="source-status-facebook" class="source-status-dot"></i>
           </button>
           <button class="source-nav-item" type="button" data-source="maps">
-            <span class="source-nav-icon material-symbols-outlined">pin_drop</span>
+            <span class="source-nav-icon icon-maps">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
+            </span>
             <span><strong>Google Maps</strong><small>Gerai &amp; ulasan</small></span>
             <b id="source-count-maps" class="source-count">—</b>
             <i id="source-status-maps" class="source-status-dot"></i>
           </button>
           <button class="source-nav-item" type="button" data-source="youtube">
-            <span class="source-nav-icon material-symbols-outlined">smart_display</span>
+            <span class="source-nav-icon icon-youtube">
+              <svg viewBox="0 0 24 24" width="15" height="15" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+            </span>
             <span><strong>YouTube</strong><small>Review &amp; resep</small></span>
             <b id="source-count-youtube" class="source-count">—</b>
             <i id="source-status-youtube" class="source-status-dot"></i>
           </button>
           <button class="source-nav-item" type="button" data-source="shopee">
-            <span class="source-nav-icon material-symbols-outlined">shopping_bag</span>
+            <span class="source-nav-icon icon-shopee">
+              <svg viewBox="0 0 24 24" width="14" height="14" fill="currentColor" aria-hidden="true"><path d="M19 6h-3V5a4 4 0 0 0-8 0v1H5a2 2 0 0 0-2 2l1.6 12.3A2 2 0 0 0 6.6 23h10.8a2 2 0 0 0 2-1.7L21 8a2 2 0 0 0-2-2zM10 5a2 2 0 0 1 4 0v1h-4V5zm2.8 13.5c-2.1 0-3.2-1-3.2-2.2 0-1.8 2-2.2 3.1-2.5 1-.2 1.8-.4 1.8-1 0-.6-.5-1-1.4-1-.9 0-1.8.4-2.2.7l-.6-1.3c.7-.5 1.8-.8 2.8-.8 2 0 3 1.1 3 2.3 0 1.6-1.7 2.1-2.9 2.4-1.1.3-2 .5-2 1.1 0 .6.6 1 1.6 1 .9 0 1.9-.4 2.4-.8l.5 1.3c-.7.6-1.8 1-2.9 1z"/></svg>
+            </span>
             <span><strong>Shopee</strong><small>Harga &amp; kompetitor</small></span>
             <b id="source-count-shopee" class="source-count">—</b>
             <i id="source-status-shopee" class="source-status-dot"></i>
@@ -205,8 +219,10 @@
 
             <!-- 6 Source Cards -->
             <div class="source-summary-grid">
-              <button class="source-summary-card is-social" type="button" data-source-jump="tiktok">
-                <span class="summary-icon">TT</span>
+              <button class="source-summary-card is-social is-tiktok" type="button" data-source-jump="tiktok">
+                <span class="summary-icon icon-tiktok">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M19.59 6.69a4.83 4.83 0 0 1-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 0 1-5.2 1.74 2.89 2.89 0 0 1 2.31-4.64 2.93 2.93 0 0 1 .88.13V9.4a6.84 6.84 0 0 0-1-.05A6.33 6.33 0 0 0 3 15.68 6.34 6.34 0 0 0 9.35 22a6.33 6.33 0 0 0 6.33-6.32V9.12a8.2 8.2 0 0 0 4.91 1.6V7.27a4.91 4.91 0 0 1-1-.58z"/></svg>
+                </span>
                 <span>
                   <small>TIKTOK VIRAL</small>
                   <strong id="overview-tiktok-count">—</strong>
@@ -214,8 +230,10 @@
                 </span>
                 <b>↗</b>
               </button>
-              <button class="source-summary-card is-social" type="button" data-source-jump="instagram">
-                <span class="summary-icon">IG</span>
+              <button class="source-summary-card is-social is-instagram" type="button" data-source-jump="instagram">
+                <span class="summary-icon icon-instagram">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zm0 10.162a3.999 3.999 0 1 1 0-7.998 3.999 3.999 0 0 1 0 7.998zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
+                </span>
                 <span>
                   <small>INSTAGRAM REELS</small>
                   <strong id="overview-instagram-count">—</strong>
@@ -223,8 +241,10 @@
                 </span>
                 <b>↗</b>
               </button>
-              <button class="source-summary-card is-social" type="button" data-source-jump="facebook">
-                <span class="summary-icon">f</span>
+              <button class="source-summary-card is-social is-facebook" type="button" data-source-jump="facebook">
+                <span class="summary-icon icon-facebook">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                </span>
                 <span>
                   <small>FACEBOOK POSTS</small>
                   <strong id="overview-facebook-count">—</strong>
@@ -233,7 +253,9 @@
                 <b>↗</b>
               </button>
               <button class="source-summary-card is-maps" type="button" data-source-jump="maps">
-                <span class="summary-icon material-symbols-outlined">pin_drop</span>
+                <span class="summary-icon icon-maps">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5a2.5 2.5 0 0 1 0-5 2.5 2.5 0 0 1 0 5z"/></svg>
+                </span>
                 <span>
                   <small>GOOGLE MAPS</small>
                   <strong id="overview-maps-count">—</strong>
@@ -242,7 +264,9 @@
                 <b>↗</b>
               </button>
               <button class="source-summary-card is-youtube" type="button" data-source-jump="youtube">
-                <span class="summary-icon material-symbols-outlined">smart_display</span>
+                <span class="summary-icon icon-youtube">
+                  <svg viewBox="0 0 24 24" width="22" height="22" fill="currentColor" aria-hidden="true"><path d="M23.498 6.186a3.016 3.016 0 0 0-2.122-2.136C19.505 3.545 12 3.545 12 3.545s-7.505 0-9.377.505A3.017 3.017 0 0 0 .502 6.186C0 8.07 0 12 0 12s0 3.93.502 5.814a3.016 3.016 0 0 0 2.122 2.136c1.871.505 9.376.505 9.376.505s7.505 0 9.377-.505a3.015 3.015 0 0 0 2.122-2.136C24 15.93 24 12 24 12s0-3.93-.502-5.814zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/></svg>
+                </span>
                 <span>
                   <small>YOUTUBE TREN</small>
                   <strong id="overview-youtube-count">—</strong>
@@ -250,8 +274,10 @@
                 </span>
                 <b>↗</b>
               </button>
-              <button class="source-summary-card is-marketplace" type="button" data-source-jump="shopee">
-                <span class="summary-icon material-symbols-outlined">shopping_bag</span>
+              <button class="source-summary-card is-marketplace is-shopee" type="button" data-source-jump="shopee">
+                <span class="summary-icon icon-shopee">
+                  <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor" aria-hidden="true"><path d="M19 6h-3V5a4 4 0 0 0-8 0v1H5a2 2 0 0 0-2 2l1.6 12.3A2 2 0 0 0 6.6 23h10.8a2 2 0 0 0 2-1.7L21 8a2 2 0 0 0-2-2zM10 5a2 2 0 0 1 4 0v1h-4V5zm2.8 13.5c-2.1 0-3.2-1-3.2-2.2 0-1.8 2-2.2 3.1-2.5 1-.2 1.8-.4 1.8-1 0-.6-.5-1-1.4-1-.9 0-1.8.4-2.2.7l-.6-1.3c.7-.5 1.8-.8 2.8-.8 2 0 3 1.1 3 2.3 0 1.6-1.7 2.1-2.9 2.4-1.1.3-2 .5-2 1.1 0 .6.6 1 1.6 1 .9 0 1.9-.4 2.4-.8l.5 1.3c-.7.6-1.8 1-2.9 1z"/></svg>
+                </span>
                 <span>
                   <small>SHOPEE KATALOG</small>
                   <strong id="overview-shopee-count">—</strong>

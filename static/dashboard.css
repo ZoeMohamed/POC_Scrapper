@@ -200,21 +200,64 @@ html, body {
 }
 
 .source-nav-icon {
-  display: grid;
-  width: 26px;
-  height: 26px;
-  place-items: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 28px;
+  height: 28px;
+  flex-shrink: 0;
   border-radius: var(--radius);
   background: var(--surface-container-lowest);
   border: 1.5px solid var(--border-dark);
+  box-shadow: 1px 1px 0px #111111;
   color: var(--on-surface);
-  font-size: 11px;
-  font-weight: 800;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.source-nav-icon svg {
+  display: block;
+  flex-shrink: 0;
+}
+
+.source-nav-icon.icon-overview {
+  background: var(--surface-container-highest);
+  color: var(--on-surface);
+}
+
+.source-nav-icon.icon-tiktok {
+  background: #111111;
+  color: #ffffff;
+}
+
+.source-nav-icon.icon-instagram {
+  background: linear-gradient(135deg, #f09433 0%, #dc2743 55%, #bc1888 100%);
+  color: #ffffff;
+}
+
+.source-nav-icon.icon-facebook {
+  background: #1877F2;
+  color: #ffffff;
+}
+
+.source-nav-icon.icon-maps {
+  background: var(--primary-container);
+  color: #111111;
+}
+
+.source-nav-icon.icon-youtube {
+  background: #FF0000;
+  color: #ffffff;
+}
+
+.source-nav-icon.icon-shopee {
+  background: #EE4D2D;
+  color: #ffffff;
 }
 
 .source-nav-item.active .source-nav-icon {
-  background: var(--on-surface);
-  color: var(--surface);
+  border-color: #111111;
+  box-shadow: 1.5px 1.5px 0px #111111;
 }
 
 .source-nav-item strong {
@@ -601,19 +644,20 @@ html, body {
 
 .source-summary-card {
   display: grid;
-  grid-template-columns: 38px minmax(0, 1fr) auto;
+  grid-template-columns: 44px minmax(0, 1fr) auto;
   align-items: center;
-  gap: 12px;
+  gap: 16px;
   min-height: 104px;
   border: 2.5px solid var(--border-dark);
   box-shadow: var(--neo-shadow);
   border-radius: var(--radius);
   background: var(--surface-container-lowest);
   color: var(--on-surface);
-  padding: 16px;
+  padding: 16px 18px;
   text-align: left;
   transition: transform .1s ease-in-out, box-shadow .1s ease-in-out;
   cursor: pointer;
+  box-sizing: border-box;
 }
 
 .source-summary-card:hover {
@@ -623,31 +667,57 @@ html, body {
 }
 
 .source-summary-card .summary-icon {
-  display: grid;
-  width: 36px;
-  height: 36px;
-  place-items: center;
-  border: 1.5px solid var(--border-dark);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  flex-shrink: 0;
+  border: 2px solid var(--border-dark);
   border-radius: var(--radius);
-  background: var(--on-surface);
-  color: var(--surface);
-  font-family: var(--font-mono);
-  font-size: 12px;
-  font-weight: 900;
+  box-shadow: 2px 2px 0px #111111;
+  box-sizing: border-box;
+  overflow: hidden;
 }
 
+.source-summary-card .summary-icon svg {
+  display: block;
+  flex-shrink: 0;
+}
+
+.source-summary-card .summary-icon.icon-tiktok,
+.source-summary-card.is-tiktok .summary-icon {
+  background: #111111;
+  color: #ffffff;
+}
+
+.source-summary-card .summary-icon.icon-instagram,
+.source-summary-card.is-instagram .summary-icon {
+  background: linear-gradient(135deg, #f09433 0%, #dc2743 55%, #bc1888 100%);
+  color: #ffffff;
+}
+
+.source-summary-card .summary-icon.icon-facebook,
+.source-summary-card.is-facebook .summary-icon {
+  background: #1877F2;
+  color: #ffffff;
+}
+
+.source-summary-card .summary-icon.icon-maps,
 .source-summary-card.is-maps .summary-icon {
   background: var(--primary-container);
-  color: var(--on-surface);
+  color: #111111;
 }
 
+.source-summary-card .summary-icon.icon-youtube,
 .source-summary-card.is-youtube .summary-icon {
-  background: var(--secondary);
-  color: var(--on-secondary);
+  background: #FF0000;
+  color: #ffffff;
 }
 
+.source-summary-card .summary-icon.icon-shopee,
 .source-summary-card.is-marketplace .summary-icon {
-  background: #e65100;
+  background: #EE4D2D;
   color: #ffffff;
 }
 
@@ -655,7 +725,7 @@ html, body {
   display: block;
   color: var(--on-surface-variant);
   font-family: var(--font-mono);
-  font-size: 9px;
+  font-size: 10px;
   font-weight: 800;
   letter-spacing: .08em;
   text-transform: uppercase;
@@ -663,30 +733,40 @@ html, body {
 
 .source-summary-card strong {
   display: block;
-  margin-top: 3px;
+  margin-top: 4px;
   font-family: var(--font-display);
-  font-size: 24px;
+  font-size: 26px;
   font-weight: 800;
   letter-spacing: -.02em;
+  line-height: 1.1;
+  color: var(--on-surface);
 }
 
 .source-summary-card em {
   display: block;
-  margin-top: 2px;
-  overflow: hidden;
-  color: var(--on-surface-variant);
+  margin-top: 4px;
   font-family: var(--font-mono);
-  font-size: 10px;
   font-style: normal;
-  text-overflow: ellipsis;
+  font-size: 11px;
+  color: var(--on-surface-variant);
   white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .source-summary-card > b {
-  align-self: start;
+  font-family: var(--font-mono);
   font-size: 16px;
+  font-weight: 800;
+  color: var(--on-surface-variant);
+  transition: transform .1s ease-in-out, color .1s ease-in-out;
+  margin-left: auto;
+  align-self: flex-start;
+}
+
+.source-summary-card:hover > b {
   color: var(--on-surface);
-  font-weight: 900;
+  transform: translate(2px, -2px);
 }
 
 .overview-note {

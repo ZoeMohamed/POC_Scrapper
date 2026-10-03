@@ -104,7 +104,7 @@ body {
 
 /* Material Symbols Outlined font support */
 .material-symbols-outlined {
-  font-family: 'Material Symbols Outlined';
+  font-family: 'Material Symbols Outlined' !important;
   font-weight: normal;
   font-style: normal;
   font-size: 20px;
