@@ -1,0 +1,1825 @@
+<!DOCTYPE html>
+<html lang="id" class="">
+<head>
+  <meta charset="utf-8"/>
+  <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+  <title>TREN & OPINI // Intelijen Pasar UMKM</title>
+
+  <!-- Material Symbols Outlined (Exact link constraint) -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+
+  <!-- Google Fonts: Space Grotesk, Inter, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin=""/>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet"/>
+
+  <!-- Tailwind CSS CDN with plugins -->
+  <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+
+  <!-- Tailwind Configuration Verbatim from System Requirements -->
+  <script id="tailwind-config">
+    tailwind.config = {
+      darkMode: "class",
+      theme: {
+        extend: {
+          colors: {
+            "primary": "#725c00",
+            "primary-container": "#ffd21f",
+            "on-primary": "#ffffff",
+            "on-primary-container": "#705b00",
+            "primary-fixed": "#ffe080",
+            "primary-fixed-dim": "#edc200",
+            "secondary": "#bb0013",
+            "secondary-container": "#e12728",
+            "on-secondary": "#ffffff",
+            "secondary-fixed": "#ffdad6",
+            "secondary-fixed-dim": "#ffb4ab",
+            "tertiary": "#1b6d24",
+            "tertiary-container": "#97ea91",
+            "on-tertiary": "#ffffff",
+            "on-tertiary-container": "#196b22",
+            "tertiary-fixed": "#a3f69c",
+            "tertiary-fixed-dim": "#88d982",
+            "surface": "#fcf9f8",
+            "on-surface": "#1c1b1b",
+            "surface-variant": "#e5e2e1",
+            "on-surface-variant": "#4d4632",
+            "surface-container": "#f0edec",
+            "surface-container-low": "#f6f3f2",
+            "surface-container-high": "#ebe7e7",
+            "surface-container-highest": "#e5e2e1",
+            "surface-container-lowest": "#ffffff",
+            "background": "#fcf9f8",
+            "outline": "#7f7660",
+            "outline-variant": "#d1c6ab",
+            "error": "#ba1a1a",
+            "error-container": "#ffdad6"
+          },
+          borderRadius: {
+            "DEFAULT": "0.125rem",
+            "sm": "0.125rem",
+            "lg": "0.25rem",
+            "xl": "0.5rem",
+            "full": "0.75rem"
+          },
+          fontFamily: {
+            "display-hero": ["Space Grotesk"],
+            "headline-lg": ["Space Grotesk"],
+            "headline-md": ["Space Grotesk"],
+            "headline-sm": ["Space Grotesk"],
+            "body-lg": ["Inter"],
+            "body-md": ["Inter"],
+            "body-sm": ["Inter"],
+            "label-data-lg": ["JetBrains Mono"],
+            "label-data-md": ["JetBrains Mono"],
+            "label-data-sm": ["JetBrains Mono"]
+          }
+        }
+      }
+    };
+  </script>
+
+  <style>
+    .material-symbols-outlined {
+      font-family: 'Material Symbols Outlined';
+      font-weight: normal;
+      font-style: normal;
+      font-size: 20px;
+      line-height: 1;
+      display: inline-block;
+      white-space: nowrap;
+      vertical-align: middle;
+      -webkit-font-smoothing: antialiased;
+    }
+    .neo-box {
+      border: 2.5px solid #111111;
+      box-shadow: 3px 3px 0px #111111;
+    }
+    .neo-box-sm {
+      border: 1.5px solid #111111;
+      box-shadow: 2px 2px 0px #111111;
+    }
+    .neo-box-lg {
+      border: 3px solid #111111;
+      box-shadow: 5px 5px 0px #111111;
+    }
+    .neo-btn {
+      transition: all 0.1s ease-in-out;
+      border: 2px solid #111111;
+      box-shadow: 2.5px 2.5px 0px #111111;
+    }
+    .neo-btn:hover {
+      transform: translate(-1.5px, -1.5px);
+      box-shadow: 4px 4px 0px #111111;
+    }
+    .neo-btn:active {
+      transform: translate(1.5px, 1.5px);
+      box-shadow: 1px 1px 0px #111111;
+    }
+    .receipt-perforation {
+      background-image: radial-gradient(#111111 1.5px, transparent 1.5px);
+      background-size: 8px 8px;
+    }
+  </style>
+
+  <!-- Required Scripts Constraint -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/history@5/umd/history.development.js"></script>
+  <script src="https://unpkg.com/react-router@6.3.0/umd/react-router.development.js"></script>
+  <script src="https://unpkg.com/react-router-dom@6.3.0/umd/react-router-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+</head>
+<body class="bg-surface text-on-surface font-body-md antialiased min-h-screen selection:bg-primary-container selection:text-on-surface">
+  <div id="root"></div>
+
+  <script type="text/babel">
+    // Variable Access Constraints (verbatim required)
+    const { useState, useEffect } = React;
+    const { createRoot } = ReactDOM;
+    const { MemoryRouter, Routes, Route, Link, useNavigate, useLocation } = ReactRouterDOM;
+
+    // --- SHARED SIDEBAR COMPONENT ---
+    function SideNav() {
+      const location = useLocation();
+      const currentPath = location.pathname;
+
+      const navItems = [
+        { path: '/', label: 'Beranda', icon: 'dashboard', badge: '3 Sinyal', badgeClass: 'bg-on-surface text-surface' },
+        { path: '/suara-pasar', label: 'Suara Pasar', icon: 'record_voice_over', badge: 'TikTok/IG', badgeClass: 'bg-surface-container-highest border border-on-surface' },
+        { path: '/google-maps', label: 'Google Maps', icon: 'pin_drop', badge: '⭐ 4.8', badgeClass: 'bg-surface-container-highest border border-on-surface' },
+        { path: '/tren-youtube', label: 'Tren YouTube', icon: 'smart_display', badge: 'Live', badgeClass: 'bg-secondary text-on-secondary' },
+        { path: '/snapshot', label: 'Snapshot', icon: 'receipt_long', badge: 'Arsip (14)', badgeClass: 'bg-surface-container-highest border border-on-surface' },
+      ];
+
+      return (
+        <aside class="fixed top-0 left-0 bottom-0 w-72 flex flex-col justify-between p-4 z-40 overflow-y-auto bg-surface border-r-[2.5px] border-on-surface select-none">
+          <div className="space-y-4">
+            {/* Brand Header */}
+            <div className="p-3 bg-surface-container-lowest border-[2px] border-on-surface neo-box-sm">
+              <div className="flex items-center gap-2.5 mb-1.5">
+                <div className="w-8 h-8 bg-primary-container border-[2px] border-on-surface flex items-center justify-center font-display-hero text-headline-sm font-bold shadow-[1.5px_1.5px_0_#111111]">
+                  TO
+                </div>
+                <div>
+                  <h1 className="text-headline-sm font-headline-sm text-on-surface tracking-tight uppercase leading-none">
+                    TREN & OPINI
+                  </h1>
+                  <span className="text-label-data-sm font-label-data-sm text-on-surface-variant block mt-0.5">
+                    Badan Intelijen UMKM
+                  </span>
+                </div>
+              </div>
+              <p className="text-body-sm font-body-sm text-on-surface border-t border-outline-variant pt-2 mt-2 leading-tight">
+                Intelijen UMKM // Data pasar, sebelum keputusan
+              </p>
+            </div>
+
+            {/* Product Quick Indicator */}
+            <div className="bg-primary-container border-[2px] border-on-surface p-2.5 shadow-[2px_2px_0px_#111111]">
+              <div className="flex items-center justify-between text-label-data-sm font-bold uppercase mb-1">
+                <span>Produk Dipantau:</span>
+                <span className="w-2.5 h-2.5 bg-tertiary rounded-none animate-pulse"></span>
+              </div>
+              <p className="font-headline-sm text-sm font-bold text-on-surface truncate">Sambal Bawang Bu Krisna</p>
+              <p className="font-label-data-sm text-[11px] text-on-surface-variant mt-0.5">Pleburan & Banyumanik · Semarang</p>
+            </div>
+
+            {/* Nav Links */}
+            <nav className="space-y-1">
+              {navItems.map((item) => {
+                const isActive = currentPath === item.path;
+                return (
+                  <Link
+                    key={item.path}
+                    to={item.path}
+                    className={`flex items-center justify-between px-3 py-2.5 font-label-data-md border transition-all ${
+                      isActive
+                        ? 'bg-primary-container text-on-surface border-[2px] border-on-surface shadow-[2px_2px_0px_#111111] font-bold'
+                        : 'text-on-surface-variant border-transparent hover:bg-surface-container-high hover:border-on-surface hover:text-on-surface'
+                    }`}
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="material-symbols-outlined text-[20px]">{item.icon}</span>
+                      <span>{item.label}</span>
+                    </div>
+                    {item.badge && (
+                      <span className={`px-1.5 py-0.5 text-label-data-sm text-[10px] font-bold ${item.badgeClass}`}>
+                        {item.badge}
+                      </span>
+                    )}
+                  </Link>
+                );
+              })}
+
+              <a
+                href="#tambah-pemantauan"
+                onClick={(e) => {
+                  if (currentPath !== '/') {
+                    window.location.hash = 'tambah-pemantauan';
+                  }
+                }}
+                className="flex items-center gap-2 px-3 py-2.5 bg-surface-container-lowest text-on-surface font-label-data-md font-bold border-[2px] border-dashed border-on-surface hover:bg-primary-container transition-all mt-2"
+              >
+                <span className="material-symbols-outlined text-primary text-[18px]">add_circle</span>
+                <span>+ Tambah Pemantauan</span>
+              </a>
+            </nav>
+          </div>
+
+          {/* Telemetry Footer */}
+          <div className="pt-4 border-t-[2.5px] border-on-surface space-y-2 font-label-data-sm text-[11px]">
+            <div className="flex items-center gap-1.5 text-on-surface font-bold">
+              <span className="material-symbols-outlined text-[16px]">location_on</span>
+              <span>Semarang, Jawa Tengah</span>
+            </div>
+            <div className="flex items-center justify-between text-on-surface-variant">
+              <div className="flex items-center gap-1.5">
+                <span className="w-2 h-2 bg-tertiary rounded-none inline-block animate-ping"></span>
+                <span>Pipeline: Live</span>
+              </div>
+              <span className="bg-tertiary-container text-on-tertiary-container px-1 py-0.5 border border-on-surface font-bold text-[9px]">ONLINE</span>
+            </div>
+            <div className="text-[10px] text-outline pt-1">
+              SINKRONISASI: LIVE API v2.4
+            </div>
+          </div>
+        </aside>
+      );
+    }
+
+    // --- TOP BAR COMPONENT ---
+    function TopNav({ title = "TREN & OPINI // Intelijen UMKM", badge = "PIPELINE LIVE" }) {
+      return (
+        <header className="sticky top-0 z-30 flex items-center justify-between px-8 py-3 bg-surface border-b-[2.5px] border-on-surface shadow-[0_2px_0_#111111]">
+          <div className="flex items-center gap-4">
+            <span className="font-label-data-sm text-label-data-sm font-bold bg-primary-container px-2.5 py-0.5 border border-on-surface">
+              {badge}
+            </span>
+            <div className="flex items-center gap-2 text-label-data-sm font-label-data-sm text-on-surface">
+              <span className="text-on-surface-variant">Semarang Raya</span>
+              <span>/</span>
+              <span className="font-bold underline decoration-primary-container decoration-2 underline-offset-4">{title}</span>
+            </div>
+          </div>
+
+          <div className="flex items-center gap-2.5">
+            <div className="hidden lg:flex items-center gap-1.5 bg-surface-container-lowest border-[1.5px] border-on-surface px-2.5 py-1 text-label-data-sm font-bold">
+              <span className="w-2 h-2 rounded-full bg-tertiary animate-pulse"></span>
+              <span>4 Kanal Terhubung</span>
+            </div>
+            <button
+              onClick={() => alert("Data diperbarui secara realtime dari pipeline scraper!")}
+              className="px-3 py-1 bg-surface-container-low border-[1.5px] border-on-surface font-label-data-sm font-bold flex items-center gap-1 hover:bg-primary-container transition-all neo-btn"
+            >
+              <span className="material-symbols-outlined text-[16px]">refresh</span>
+              <span className="hidden sm:inline">Segarkan Data</span>
+            </button>
+          </div>
+        </header>
+      );
+    }
+
+    // ==========================================
+    // SCREEN 1: BERANDA / HOME DASHBOARD
+    // ==========================================
+    function HomeScreen() {
+      const [newProduct, setNewProduct] = useState("Keripik Tempe Crispy Daun Jeruk");
+      const [city, setCity] = useState("Semarang (Jawa Tengah)");
+      const [category, setCategory] = useState("Camilan & Makanan Ringan");
+      const [formSubmitted, setFormSubmitted] = useState(false);
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        setFormSubmitted(true);
+        setTimeout(() => setFormSubmitted(false), 3500);
+      };
+
+      return (
+        <div className="ml-72 flex-1 flex flex-col min-h-screen">
+          <TopNav title="Pusat Komando Intelijen" badge="V2.4 INTELIJEN" />
+          <main className="p-6 md:p-8 space-y-10 max-w-[1400px]">
+            {/* Hero Section */}
+            <section className="relative bg-surface-container-lowest border-[3px] border-on-surface p-6 md:p-8 shadow-[5px_5px_0px_#111111]" id="hero">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b-[2px] border-on-surface pb-4 mb-6">
+                <div className="flex items-center gap-2">
+                  <span className="px-2 py-0.5 bg-primary-container border-[1.5px] border-on-surface font-label-data-sm text-label-data-sm font-bold">
+                    [MARKET INTELLIGENCE UMKM // SEMARANG PIPELINE LIVE]
+                  </span>
+                  <span className="hidden sm:inline font-label-data-sm text-label-data-sm text-on-surface-variant font-medium">Node: ID-SRG-01</span>
+                </div>
+                <div className="flex items-center gap-2 font-label-data-sm text-label-data-sm font-bold bg-tertiary-container text-on-tertiary-container px-2.5 py-1 border-[1.5px] border-on-surface">
+                  <span className="w-2.5 h-2.5 bg-tertiary inline-block animate-ping"></span>
+                  <span>● PIPELINE LIVE · 4 SUMBER TERHUBUNG</span>
+                </div>
+              </div>
+              <div className="max-w-4xl">
+                <h2 className="text-headline-lg md:text-display-hero font-display-hero text-on-surface leading-[1.1] tracking-tight">
+                  Pasar sedang <span className="bg-primary-container text-on-surface px-3 py-0.5 border-[2.5px] border-on-surface inline-block shadow-[3px_3px_0px_#111111]">RAMAI</span> membicarakan produkmu.
+                </h2>
+                <p className="font-body-lg text-body-lg text-on-surface-variant mt-4 max-w-3xl leading-relaxed">
+                  Pantau sinyal real-time dari media sosial TikTok/IG, ulasan Google Maps cabang, tren konten YouTube kuliner, dan pergerakan harga kompetitor Shopee dalam satu pusat komando intelijen UMKM.
+                </p>
+              </div>
+              <div className="mt-6 pt-4 border-t-[2px] border-dashed border-on-surface flex flex-wrap items-center justify-between gap-4 font-label-data-sm text-label-data-sm">
+                <div className="flex items-center gap-4 text-on-surface-variant">
+                  <span>Fokus Pantauan: <strong className="text-on-surface">Sambal Bawang Bu Krisna</strong></span>
+                  <span>·</span>
+                  <span>Kategori: <strong className="text-on-surface">Kuliner Siap Saji & Oleh-Oleh</strong></span>
+                </div>
+                <div className="flex items-center gap-2 text-secondary">
+                  <span className="material-symbols-outlined text-secondary" style={{ fontVariationSettings: "'FILL' 1" }}>priority_high</span>
+                  <span className="font-bold">KONSENSUS: PERLU TINDAKAN PENGEMASAN (URGENT)</span>
+                </div>
+              </div>
+            </section>
+
+            {/* Metric KPI Cards */}
+            <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="bg-surface-container-lowest border-[2.5px] border-on-surface p-4 shadow-[3px_3px_0px_#111111]">
+                <div className="flex items-center justify-between border-b-[1.5px] border-on-surface pb-2 mb-3">
+                  <span className="font-label-data-sm text-label-data-sm font-bold text-on-surface-variant uppercase">[PRODUK DIPANTAU]</span>
+                  <span className="material-symbols-outlined text-on-surface">inventory_2</span>
+                </div>
+                <div className="text-headline-lg font-headline-lg text-on-surface">12 Produk</div>
+                <p className="font-label-data-sm text-label-data-sm text-on-surface-variant mt-1">Dipantau otomatis 24/7 di 4 kanal</p>
+                <div className="mt-3 pt-2 border-t border-surface-container-highest flex justify-between font-label-data-sm text-label-data-sm">
+                  <span className="text-tertiary font-bold">+2 ditambah minggu ini</span>
+                  <span>8 Aktif</span>
+                </div>
+              </div>
+
+              <div className="bg-surface-container-lowest border-[2.5px] border-on-surface p-4 shadow-[3px_3px_0px_#111111]">
+                <div className="flex items-center justify-between border-b-[1.5px] border-on-surface pb-2 mb-3">
+                  <span className="font-label-data-sm text-label-data-sm font-bold text-on-surface-variant uppercase">[SINYAL PASAR]</span>
+                  <span className="material-symbols-outlined text-primary">sensors</span>
+                </div>
+                <div className="text-headline-lg font-headline-lg text-on-surface">248 Sinyal</div>
+                <p className="font-label-data-sm text-label-data-sm text-on-surface-variant mt-1">Total mention & data point minggu ini</p>
+                <div className="mt-3 pt-2 border-t border-surface-container-highest flex justify-between font-label-data-sm text-label-data-sm">
+                  <span className="text-tertiary font-bold">▲ +34% vs pekan lalu</span>
+                  <span>18 Kritis</span>
+                </div>
+              </div>
+
+              <div className="bg-[#E8F5E9] border-[2.5px] border-on-surface p-4 shadow-[3px_3px_0px_#111111]">
+                <div className="flex items-center justify-between border-b-[1.5px] border-on-surface pb-2 mb-3">
+                  <span className="font-label-data-sm text-label-data-sm font-bold text-tertiary uppercase">[SENTIMEN PUBLIK]</span>
+                  <span className="material-symbols-outlined text-tertiary">thumb_up</span>
+                </div>
+                <div className="text-headline-lg font-headline-lg text-tertiary font-bold">+68% Positif</div>
+                <p className="font-label-data-sm text-label-data-sm text-on-surface mt-1">Dari 1.420 ulasan & video penikmat</p>
+                <div className="mt-3 pt-2 border-t border-[#C8E6C9] flex justify-between font-label-data-sm text-label-data-sm">
+                  <span className="font-bold text-tertiary">22% Netral</span>
+                  <span className="font-bold text-secondary">10% Negatif</span>
+                </div>
+              </div>
+
+              <div className="bg-primary-container border-[2.5px] border-on-surface p-4 shadow-[3px_3px_0px_#111111]">
+                <div className="flex items-center justify-between border-b-[1.5px] border-on-surface pb-2 mb-3">
+                  <span className="font-label-data-sm text-label-data-sm font-bold text-on-surface uppercase">[SUMBER AKTIF]</span>
+                  <span className="material-symbols-outlined text-on-surface">hub</span>
+                </div>
+                <div className="text-headline-lg font-headline-lg text-on-surface">4 Saluran</div>
+                <p className="font-label-data-sm text-label-data-sm text-on-surface mt-1">TikTok, IG, Maps, Shopee aktif</p>
+                <div className="mt-3 pt-2 border-t border-on-surface flex justify-between font-label-data-sm text-label-data-sm">
+                  <span className="font-bold text-on-surface">0 Gangguan</span>
+                  <span className="font-bold text-tertiary">Sync Realtime</span>
+                </div>
+              </div>
+            </section>
+
+            {/* Radar Prioritas / Alerts */}
+            <section className="space-y-4">
+              <div className="flex items-center justify-between border-b-[2.5px] border-on-surface pb-2">
+                <div className="flex items-center gap-3">
+                  <span className="px-2 py-0.5 bg-secondary text-on-secondary font-label-data-sm text-label-data-sm font-bold">RADAR PRIORITAS</span>
+                  <h3 className="text-headline-md font-headline-md text-on-surface">Yang Perlu Kamu Perhatikan</h3>
+                </div>
+                <span className="font-label-data-sm text-label-data-sm bg-surface-container-high border-[1.5px] border-on-surface px-2.5 py-1 font-bold">
+                  [Diurutkan dari urgensi tertinggi]
+                </span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+                {/* Alert 1 */}
+                <div className="bg-surface-container-lowest border-[2.5px] border-on-surface p-5 shadow-[4px_4px_0px_#111111] flex flex-col justify-between relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-28 h-6 bg-secondary text-on-secondary text-[10px] font-label-data-sm font-bold flex items-center justify-center uppercase tracking-wider">
+                    Tindakan Cepat
+                  </div>
+                  <div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="w-3 h-3 bg-secondary inline-block"></span>
+                      <span className="font-label-data-sm text-label-data-sm font-bold text-secondary uppercase">🔴 KRITIS // KELUHAN PACKAGING</span>
+                    </div>
+                    <h4 className="text-headline-sm font-headline-sm text-on-surface mb-1">Sentimen pelanggan menurun</h4>
+                    <p className="font-label-data-sm text-label-data-sm text-on-surface-variant font-bold">Produk: Sambal Bawang Level 5</p>
+                    <div className="my-3 p-2 bg-[#FFEBEE] border-[1.5px] border-secondary">
+                      <div className="flex items-center justify-between font-label-data-sm text-label-data-sm font-bold text-secondary">
+                        <span>Sentimen 42%</span>
+                        <span>▼ Turun 18% dlm 3 hari</span>
+                      </div>
+                    </div>
+                    <div className="bg-surface-container-low border-[1.5px] border-on-surface p-3 font-body-sm text-body-sm text-on-surface">
+                      <strong className="font-bold text-secondary block font-label-data-sm mb-1">“GARA-GARA BOTOL REMBES!”</strong>
+                      8 ulasan Shopee & 3 video TikTok komplain tutup botol bocor saat pengiriman ekspedisi luar kota (Jakarta & Surabaya).
+                    </div>
+                  </div>
+                  <div className="mt-4 pt-3 border-t-[1.5px] border-on-surface flex items-center justify-between">
+                    <span className="font-label-data-sm text-label-data-sm text-on-surface-variant">Shopee + TikTok</span>
+                    <Link to="/suara-pasar" className="px-3 py-1.5 bg-secondary text-on-secondary font-label-data-sm text-label-data-sm font-bold neo-btn inline-flex items-center gap-1">
+                      Lihat Bukti Ulasan →
+                    </Link>
+                  </div>
+                </div>
+
+                {/* Alert 2 */}
+                <div className="bg-surface-container-lowest border-[2.5px] border-on-surface p-5 shadow-[4px_4px_0px_#111111] flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="w-3 h-3 bg-primary-container inline-block border border-on-surface"></span>
+                      <span className="font-label-data-sm text-label-data-sm font-bold text-on-surface uppercase">🟡 PERLU DICEK // TREN ORGANIK</span>
+                    </div>
+                    <h4 className="text-headline-sm font-headline-sm text-on-surface mb-1">Produk mulai ramai di YouTube</h4>
+                    <p className="font-label-data-sm text-label-data-sm text-on-surface-variant font-bold">Produk: Keripik Tempe Crispy</p>
+                    <div className="my-3 p-2 bg-[#FFFDE7] border-[1.5px] border-on-surface">
+                      <div className="flex items-center justify-between font-label-data-sm text-label-data-sm font-bold text-on-surface">
+                        <span>38.400 Views</span>
+                        <span className="text-tertiary">▲ +145% dlm 24 Jam</span>
+                      </div>
+                    </div>
+                    <div className="bg-surface-container-low border-[1.5px] border-on-surface p-3 font-body-sm text-body-sm text-on-surface">
+                      <strong className="font-bold text-on-surface block font-label-data-sm mb-1">VIRAL REVIEW KULINER LOKAL</strong>
+                      Masuk video rekomendasi "Oleh-Oleh Kriuk Wajib Semarang" oleh kreator KulinerSemarangKuy (120k subs).
+                    </div>
+                  </div>
+                  <div className="mt-4 pt-3 border-t-[1.5px] border-on-surface flex items-center justify-between">
+                    <span className="font-label-data-sm text-label-data-sm text-on-surface-variant">YouTube Shorts</span>
+                    <Link to="/tren-youtube" className="px-3 py-1.5 bg-primary-container text-on-surface font-label-data-sm text-label-data-sm font-bold neo-btn inline-flex items-center gap-1">
+                      Analisis Video →
+                    </Link>
+                  </div>
+                </div>
+
+                {/* Alert 3 */}
+                <div className="bg-surface-container-lowest border-[2.5px] border-on-surface p-5 shadow-[4px_4px_0px_#111111] flex flex-col justify-between">
+                  <div>
+                    <div className="flex items-center gap-2 mb-2">
+                      <span className="w-3 h-3 bg-tertiary inline-block"></span>
+                      <span className="font-label-data-sm text-label-data-sm font-bold text-tertiary uppercase">🟢 INFO AMAN // REPUTASI CABANG</span>
+                    </div>
+                    <h4 className="text-headline-sm font-headline-sm text-on-surface mb-1">Rating ulasan Maps sangat stabil</h4>
+                    <p className="font-label-data-sm text-label-data-sm text-on-surface-variant font-bold">Tempat: Warung Pleburan (Pusat)</p>
+                    <div className="my-3 p-2 bg-[#E8F5E9] border-[1.5px] border-tertiary">
+                      <div className="flex items-center justify-between font-label-data-sm text-label-data-sm font-bold text-tertiary">
+                        <span>⭐ 4.8 / 5.0 Rating</span>
+                        <span>Total 342 Ulasan</span>
+                      </div>
+                    </div>
+                    <div className="bg-surface-container-low border-[1.5px] border-on-surface p-3 font-body-sm text-body-sm text-on-surface">
+                      <strong className="font-bold text-tertiary block font-label-data-sm mb-1">PUJIAN KECEPATAN & PORSI</strong>
+                      94% ulasan baru memuji kecepatan penyajian sambal dadak dan keramahan kasir saat makan siang padat.
+                    </div>
+                  </div>
+                  <div className="mt-4 pt-3 border-t-[1.5px] border-on-surface flex items-center justify-between">
+                    <span className="font-label-data-sm text-label-data-sm text-on-surface-variant">Google Local</span>
+                    <Link to="/google-maps" className="px-3 py-1.5 bg-surface-container-high text-on-surface font-label-data-sm text-label-data-sm font-bold neo-btn inline-flex items-center gap-1">
+                      Buka Semua Ulasan →
+                    </Link>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* Quick Marketplace Overview */}
+            <section className="space-y-4">
+              <div className="border-b-[3px] border-on-surface pb-3 flex flex-wrap items-end justify-between gap-2">
+                <div>
+                  <span className="px-2 py-0.5 bg-on-surface text-surface font-label-data-sm text-label-data-sm font-bold">INTELIJEN SHOPEE</span>
+                  <h3 className="text-headline-lg font-headline-lg text-on-surface mt-1">Perbandingan Harga Kompetitor Lokal</h3>
+                </div>
+                <span className="font-label-data-sm text-label-data-sm bg-primary-container px-2 py-1 border-[1.5px] border-on-surface font-bold">
+                  KOTA ACUAN: SEMARANG & SOLO
+                </span>
+              </div>
+
+              <div className="bg-surface-container-lowest border-[3px] border-on-surface shadow-[4px_4px_0px_#111111] overflow-x-auto">
+                <table className="w-full text-left border-collapse">
+                  <thead>
+                    <tr className="bg-surface-container-high border-b-[2.5px] border-on-surface font-label-data-sm text-label-data-sm font-bold">
+                      <th className="p-3 border-r-[2px] border-on-surface">PRODUK TERPANTAU</th>
+                      <th className="p-3 border-r-[2px] border-on-surface">TOKO / SELLER</th>
+                      <th className="p-3 border-r-[2px] border-on-surface">HARGA</th>
+                      <th className="p-3 border-r-[2px] border-on-surface">TERJUAL / BLN</th>
+                      <th className="p-3 border-r-[2px] border-on-surface">RATING</th>
+                      <th className="p-3">STATUS PASAR</th>
+                    </tr>
+                  </thead>
+                  <tbody className="font-body-sm text-body-sm divide-y-[2px] divide-on-surface">
+                    <tr className="bg-[#FFFDE7]">
+                      <td className="p-3 border-r-[2px] border-on-surface font-bold text-on-surface">
+                        ★ Sambal Bawang Asli Bu Krisna (Botol 200g)
+                        <span className="block font-label-data-sm text-tertiary font-bold">[PRODUK UTAMAMU]</span>
+                      </td>
+                      <td className="p-3 border-r-[2px] border-on-surface font-label-data-sm font-bold">BuKrisna_Official (Star+)</td>
+                      <td className="p-3 border-r-[2px] border-on-surface font-label-data-md font-bold text-on-surface">Rp 24.500</td>
+                      <td className="p-3 border-r-[2px] border-on-surface font-label-data-md font-bold">1.240 pcs</td>
+                      <td className="p-3 border-r-[2px] border-on-surface font-label-data-md font-bold">⭐ 4.8</td>
+                      <td className="p-3">
+                        <span className="px-2 py-0.5 bg-tertiary text-on-tertiary font-label-data-sm font-bold">LEADER KOTA</span>
+                      </td>
+                    </tr>
+                    <tr>
+                      <td className="p-3 border-r-[2px] border-on-surface font-bold text-on-surface">
+                        Sambal Bawang Pedas Gila Semarang 180g
+                      </td>
+                      <td className="p-3 border-r-[2px] border-on-surface font-label-data-sm">SambalJuaraSrg (Mall)</td>
+                      <td className="p-3 border-r-[2px] border-on-surface font-label-data-md font-bold text-on-surface">Rp 21.000</td>
+                      <td className="p-3 border-r-[2px] border-on-surface font-label-data-md font-bold">980 pcs</td>
+                      <td className="p-3 border-r-[2px] border-on-surface font-label-data-md font-bold">⭐ 4.6</td>
+                      <td className="p-3">
+                        <span className="px-2 py-0.5 bg-surface-container-high border border-on-surface font-label-data-sm font-bold">PERANG DISKON</span>
+                      </td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            {/* Form Tambah Pemantauan Baru */}
+            <section className="space-y-4" id="tambah-pemantauan">
+              <div className="border-b-[3px] border-on-surface pb-3 flex flex-wrap items-end justify-between gap-2">
+                <div>
+                  <span className="px-2 py-0.5 bg-on-surface text-surface font-label-data-sm text-label-data-sm font-bold">FORMULIR MODUL 06</span>
+                  <h3 className="text-headline-lg font-headline-lg text-on-surface mt-1">TAMBAH PEMANTAUAN BARU</h3>
+                  <p className="font-body-md text-on-surface-variant">Daftarkan produk UMKM baru untuk mulai dipantau oleh pipeline AI intelijen.</p>
+                </div>
+                <span className="font-label-data-sm text-label-data-sm bg-tertiary-container text-on-tertiary-container px-2 py-1 border-[1.5px] border-on-surface font-bold">
+                  SLOT TERSEDIA: 4 / 20 PRODUK
+                </span>
+              </div>
+
+              {formSubmitted && (
+                <div className="p-4 bg-tertiary-container text-on-tertiary-container border-[2px] border-tertiary flex items-center gap-2 font-bold font-label-data-sm">
+                  <span className="material-symbols-outlined">check_circle</span>
+                  <span>Produk "{newProduct}" berhasil didaftarkan ke crawler pipeline AI! Pemantauan aktif dalam 15 menit.</span>
+                </div>
+              )}
+
+              <div className="bg-surface-container-lowest border-[3px] border-on-surface p-6 shadow-[5px_5px_0px_#111111]">
+                <form onSubmit={handleSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                    <div>
+                      <label className="block font-label-data-sm text-label-data-sm font-bold uppercase mb-2 text-on-surface">
+                        [CARI] &gt;_ 01. Nama Produk UMKM
+                      </label>
+                      <input
+                        type="text"
+                        value={newProduct}
+                        onChange={(e) => setNewProduct(e.target.value)}
+                        required
+                        className="w-full px-3 py-2.5 bg-surface-container-lowest border-[2.5px] border-on-surface font-body-md text-body-md focus:shadow-[3px_3px_0px_#111111] focus:outline-none"
+                      />
+                      <p className="font-label-data-sm text-label-data-sm text-on-surface-variant mt-1.5">Gunakan nama yang sering dicari pembeli</p>
+                    </div>
+
+                    <div>
+                      <label className="block font-label-data-sm text-label-data-sm font-bold uppercase mb-2 text-on-surface">
+                        [LOKASI] &gt;_ 02. Kota Target Pantau
+                      </label>
+                      <select
+                        value={city}
+                        onChange={(e) => setCity(e.target.value)}
+                        className="w-full px-3 py-2.5 bg-surface-container-lowest border-[2.5px] border-on-surface font-body-md text-body-md focus:shadow-[3px_3px_0px_#111111] focus:outline-none"
+                      >
+                        <option>Semarang (Jawa Tengah)</option>
+                        <option>Solo / Surakarta</option>
+                        <option>Yogyakarta (DIY)</option>
+                        <option>Surabaya (Jawa Timur)</option>
+                        <option>DKI Jakarta</option>
+                      </select>
+                      <p className="font-label-data-sm text-label-data-sm text-on-surface-variant mt-1.5">Radius tracking 25 km dari pusat kota</p>
+                    </div>
+
+                    <div>
+                      <label className="block font-label-data-sm text-label-data-sm font-bold uppercase mb-2 text-on-surface">
+                        [SEKTOR] &gt;_ 03. Kategori UMKM
+                      </label>
+                      <select
+                        value={category}
+                        onChange={(e) => setCategory(e.target.value)}
+                        className="w-full px-3 py-2.5 bg-surface-container-lowest border-[2.5px] border-on-surface font-body-md text-body-md focus:shadow-[3px_3px_0px_#111111] focus:outline-none"
+                      >
+                        <option>Camilan & Makanan Ringan</option>
+                        <option>Kuliner Siap Saji / Warung</option>
+                        <option>Minuman Kekinian & Kopi</option>
+                        <option>Fashion & Kerajinan Lokal</option>
+                      </select>
+                      <p className="font-label-data-sm text-label-data-sm text-on-surface-variant mt-1.5">Menentukan database kata kunci</p>
+                    </div>
+                  </div>
+
+                  <div className="p-4 bg-surface-container-low border-[2px] border-dashed border-on-surface space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="font-label-data-sm text-label-data-sm font-bold uppercase text-on-surface">
+                        ⚡ Generator Kata Kunci Otomatis (Pipeline AI)
+                      </span>
+                      <button type="button" onClick={() => alert("Kata kunci telah disegarkan otomatis sesuai tren query mingguan!")} className="px-2 py-0.5 bg-surface-container-highest border border-on-surface font-label-data-sm text-label-data-sm font-bold hover:bg-surface-bright">
+                        [Segarkan Kata Kunci]
+                      </button>
+                    </div>
+                    <div className="flex flex-wrap gap-2 pt-1">
+                      <span className="px-2.5 py-1 bg-surface-container-lowest border border-on-surface font-label-data-sm text-label-data-sm font-bold">#keripiktempesemarang</span>
+                      <span className="px-2.5 py-1 bg-surface-container-lowest border border-on-surface font-label-data-sm text-label-data-sm font-bold">tempe crispy daun jeruk enak</span>
+                      <span className="px-2.5 py-1 bg-surface-container-lowest border border-on-surface font-label-data-sm text-label-data-sm font-bold">oleh oleh khas semarang renyah</span>
+                      <span className="px-2.5 py-1 bg-surface-container-lowest border border-on-surface font-label-data-sm text-label-data-sm font-bold">keripik tempe bu krisna</span>
+                    </div>
+                  </div>
+
+                  <div className="flex flex-wrap items-center justify-between gap-4 pt-4 border-t-[2px] border-on-surface">
+                    <div className="flex items-center gap-2">
+                      <input type="checkbox" id="auto-sync" defaultChecked className="w-4 h-4 bg-primary-container border-[2px] border-on-surface rounded-none" />
+                      <label htmlFor="auto-sync" className="font-label-data-sm text-label-data-sm font-bold cursor-pointer">
+                        Sinkronisasi otomatis ke Shopee Scraper, Maps & YouTube Monitor
+                      </label>
+                    </div>
+                    <div className="flex items-center gap-3">
+                      <button type="button" onClick={() => setNewProduct("")} className="px-4 py-2 bg-surface-container-high text-on-surface font-headline-sm text-sm neo-btn">
+                        RESET FORM
+                      </button>
+                      <button type="submit" className="px-6 py-2.5 bg-primary-container text-on-surface font-headline-sm text-sm font-bold neo-btn">
+                        MULAI PANTAU PRODUK INI →
+                      </button>
+                    </div>
+                  </div>
+                </form>
+              </div>
+            </section>
+
+            <footer className="bg-surface-container-lowest border-[2.5px] border-on-surface p-4 shadow-[3px_3px_0px_#111111] flex flex-wrap items-center justify-between gap-4">
+              <div className="flex items-center gap-3 font-label-data-sm text-label-data-sm">
+                <span className="px-2 py-0.5 bg-on-surface text-surface font-bold">[SYNC LIVE]</span>
+                <span>Data diperbarui otomatis setiap 30 menit. Pipeline Google Maps, Shopee, TikTok aktif normal.</span>
+              </div>
+              <div className="font-label-data-sm text-label-data-sm text-on-surface-variant">
+                Badan Intelijen UMKM Jawa Tengah · Terminal ID: #SEMARANG-CLUST-04
+              </div>
+            </footer>
+          </main>
+        </div>
+      );
+    }
+
+    // ==========================================
+    // SCREEN 2: SUARA PASAR (TIKTOK & INSTAGRAM)
+    // ==========================================
+    function SuaraPasarScreen() {
+      const [filterTab, setFilterTab] = useState("all");
+      const [activeKeyword, setActiveKeyword] = useState(null);
+
+      const feedData = [
+        {
+          id: 1,
+          platform: 'TT',
+          handle: '@dinda_foodies',
+          sub: '14.1K views · 2 jam lalu',
+          context: 'Komentar TikTok Video #KulinerSemarang',
+          sentiment: 'NEGATIF (-0.86)',
+          sentimentType: 'neg',
+          urgent: true,
+          topic: 'Packing Ekspedisi',
+          text: '"Enak banget sumpah sambalnya, TAPI tolong dong seller perbaiki seal tutup botolnya... pas nyampe Jakarta minyaknya udah tumpah blepotan di dalem bubble wrap. Botolnya gak pecah sih tapi kan sayang minyak bawangnya jadi kebuang setengah 😭"',
+          actionNote: 'Saran Solusi: Tawarkan kirim botol pengganti gratis + sertakan info perbaikan seal aluminium'
+        },
+        {
+          id: 2,
+          platform: 'TT',
+          handle: '@kulineran_semarang',
+          sub: '82.4K views · 1.420 simpan',
+          context: 'Video Utama TikTok FYP Kuliner',
+          sentiment: 'POSITIF (+0.92)',
+          sentimentType: 'pos',
+          viral: true,
+          topic: 'Rasa & Porsi Bawang',
+          text: '"Gila sih sambal bawang Bu Krisna ini beneran gak pelit minyak sama potongan bawang merahnya! Dicolok pake ayam goreng anget-anget tuh rasa gurih pedesnya nampol banget, gak ada langu sama sekali. Udah repurchase 3x buat stok di kosan."',
+          actionNote: 'Potensi Konversi: Menghasilkan lonjakan 64 order Shopee dalam kurun 6 jam pasca-posting'
+        },
+        {
+          id: 3,
+          platform: 'IG',
+          handle: '@mas_budi_semarang',
+          sub: 'Direct Comment · 5 jam lalu',
+          context: 'Postingan Feed IG Promo Weekend',
+          sentiment: 'PERTANYAAN (0.00)',
+          sentimentType: 'neutral',
+          topic: 'Info Cabang & Varian Cumi',
+          text: '"Mau tanya kalau cabang Banyumanik buka sampai jam berapa ya kalau malam Minggu? Terus apakah sambal cumi koreknya ada sistem PO atau langsung ready di etalase? Mau borong 10 botol."',
+          actionNote: 'Deteksi Cabang: Outlet Banyumanik (Buka: 10.00 - 22.00 WIB)'
+        },
+        {
+          id: 4,
+          platform: 'IG',
+          handle: '@jajanankotatua',
+          sub: '24.8K views · Kemarin',
+          context: 'Reels Review Wisata Kuliner Semarang',
+          sentiment: 'POSITIF (+0.88)',
+          sentimentType: 'pos',
+          topic: 'Oleh-oleh Khas',
+          text: '"Beli 5 botol buat oleh-oleh kantor Jakarta. Rasanya konsisten pedas gurih, gak asam pengawet sama sekali. Menurut gue ini sambal botolan paling legit di Semarang sekarang. Cocok ditandem sama telor dadar krispi."',
+          actionNote: 'Status: Belum di-repost ke IG Story Resmi Bu Krisna'
+        }
+      ];
+
+      const filteredFeed = feedData.filter(item => {
+        if (filterTab === 'urgent') return item.urgent;
+        if (filterTab === 'pos') return item.sentimentType === 'pos';
+        if (filterTab === 'queries') return item.sentimentType === 'neutral';
+        return true;
+      });
+
+      return (
+        <div className="ml-72 flex-1 flex flex-col min-h-screen bg-background">
+          <TopNav title="Suara Pasar // Sentimen Sosial" badge="MODUL 02" />
+          <main className="p-8 space-y-6 max-w-7xl mx-auto w-full">
+            {/* Header Banner */}
+            <section className="bg-surface-container-lowest border-[2.5px] border-on-surface p-6 neo-box relative overflow-hidden">
+              <div className="flex flex-col md:flex-row md:items-start justify-between gap-6 relative z-10">
+                <div className="space-y-2 max-w-3xl">
+                  <div className="flex items-center gap-2">
+                    <span className="px-2 py-0.5 bg-on-surface text-surface font-label-data-sm text-[11px] font-bold uppercase tracking-wider">
+                      [MODUL 02 // SUARA PASAR & SENTIMEN KONSUMEN]
+                    </span>
+                    <span className="px-2 py-0.5 bg-primary-container text-on-surface border border-on-surface font-label-data-sm text-[11px] font-bold">
+                      AUDIT TELEMETRI SOSIAL
+                    </span>
+                  </div>
+                  <h1 className="text-headline-lg font-headline-lg text-on-surface tracking-tight leading-tight">
+                    Apa kata mereka tentang <span className="bg-primary-container px-2 border-b-4 border-on-surface inline-block">Sambal Bawang Bu Krisna?</span>
+                  </h1>
+                  <p className="text-body-md font-body-md text-on-surface-variant max-w-2xl">
+                    Analisis NLP & sentimen percakapan organik dari video, ulasan, dan komentar TikTok & Instagram secara real-time. Membaca suara pasar tanpa filter sebelum mengambil keputusan formulasi atau ekspedisi.
+                  </p>
+                </div>
+                <div className="flex flex-wrap md:flex-col items-end gap-2.5 shrink-0">
+                  <button onClick={() => alert("Mengunduh laporan PDF analisis sentimen mingguan...")} className="flex items-center gap-2 px-4 py-2 bg-primary-container text-on-surface font-display-hero text-[13px] font-bold border-[2px] border-on-surface neo-box-sm neo-btn">
+                    <span className="material-symbols-outlined text-[18px]">download</span>
+                    <span>Export Laporan PDF</span>
+                  </button>
+                </div>
+              </div>
+              <div className="mt-4 pt-3 border-t-[1.5px] border-dashed border-on-surface flex flex-wrap items-center justify-between font-label-data-sm text-[11px] text-on-surface-variant">
+                <div className="flex items-center gap-4">
+                  <span>DATABASE: <strong className="text-on-surface">14.920 Token NLP</strong></span>
+                  <span>•</span>
+                  <span>MODEL: <strong className="text-on-surface">Indo-Sentiment v2.4 (F1: 94.2%)</strong></span>
+                  <span>•</span>
+                  <span>STATUS: <strong className="text-tertiary">TIKTOK & IG REELS AKTIF</strong></span>
+                </div>
+                <span className="text-[10px]">MONITORING ID: #SBK-SMG-2025</span>
+              </div>
+            </section>
+
+            {/* 4 Cards Row */}
+            <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="bg-surface-container-lowest border-[2.5px] border-on-surface p-4 neo-box flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between border-b-[2px] border-on-surface pb-2 mb-2 font-label-data-sm text-[11px] font-bold uppercase text-on-surface-variant">
+                    <span>SINYAL TERTANGKAP</span>
+                    <span className="material-symbols-outlined text-[18px]">forum</span>
+                  </div>
+                  <div className="text-headline-lg font-headline-lg text-on-surface">1.428</div>
+                  <div className="text-label-data-md font-label-data-md text-on-surface-variant font-bold mt-1">Mentions Organik</div>
+                </div>
+                <div className="mt-4 pt-2 border-t-[1.5px] border-outline-variant flex items-center justify-between text-label-data-sm text-[11px]">
+                  <span className="text-tertiary font-bold bg-tertiary-container px-1 border border-on-surface">+34% vs pekan lalu</span>
+                  <span className="text-outline text-[10px]">982 TT · 446 IG</span>
+                </div>
+              </div>
+
+              <div className="bg-surface-container-lowest border-[2.5px] border-on-surface p-4 neo-box flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between border-b-[2px] border-on-surface pb-2 mb-2 font-label-data-sm text-[11px] font-bold uppercase text-on-surface-variant">
+                    <span>SENTIMEN POSITIF NETTO</span>
+                    <span className="w-3 h-3 rounded-full bg-tertiary border border-on-surface"></span>
+                  </div>
+                  <div className="text-headline-lg font-headline-lg text-tertiary">68%</div>
+                  <div className="text-label-data-md font-label-data-md text-on-surface font-bold mt-1">Sentimen Positif</div>
+                </div>
+                <div className="mt-4 pt-2 border-t-[1.5px] border-outline-variant flex items-center justify-between text-label-data-sm text-[11px]">
+                  <span className="text-on-surface">Netral: 22% · Neg: 10%</span>
+                  <span className="bg-primary-container px-1 border border-on-surface font-bold text-[10px]">STATUS: KUAT</span>
+                </div>
+              </div>
+
+              <div className="bg-secondary-fixed border-[2.5px] border-on-surface p-4 neo-box flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between border-b-[2px] border-on-surface pb-2 mb-2 font-label-data-sm text-[11px] font-bold uppercase text-secondary">
+                    <span className="flex items-center gap-1"><span className="material-symbols-outlined text-[16px]">warning</span> ISU KRITIS</span>
+                    <span className="bg-secondary text-on-secondary px-1 text-[10px] font-bold">URGENT</span>
+                  </div>
+                  <div className="text-headline-sm font-headline-sm text-secondary font-bold leading-tight">Tutup Botol Rembes</div>
+                  <div className="text-label-data-sm text-on-surface-variant font-bold mt-1">38 Keluhan Terverifikasi</div>
+                </div>
+                <div className="mt-4 pt-2 border-t-[1.5px] border-on-surface text-body-sm text-[11px] text-on-surface font-medium">
+                  <strong>Rekomendasi:</strong> Pasang seal foil aluminium pada batch esok.
+                </div>
+              </div>
+
+              <div className="bg-primary-fixed border-[2.5px] border-on-surface p-4 neo-box flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between border-b-[2px] border-on-surface pb-2 mb-2 font-label-data-sm text-[11px] font-bold uppercase text-on-surface-variant">
+                    <span className="flex items-center gap-1"><span className="material-symbols-outlined text-[16px]">thumb_up</span> FAVORIT UTAMA</span>
+                    <span className="text-[10px] font-bold bg-on-surface text-primary-container px-1">TOP PICK</span>
+                  </div>
+                  <div className="text-headline-sm font-headline-sm text-on-surface font-bold leading-tight">Rasa Bawang Gurih Pas</div>
+                  <div className="text-label-data-sm text-on-surface-variant font-bold mt-1">814 Pujian Organik</div>
+                </div>
+                <div className="mt-4 pt-2 border-t-[1.5px] border-on-surface flex items-center justify-between text-label-data-sm text-[11px]">
+                  <span className="text-on-surface font-bold">Virality Tinggi</span>
+                  <span className="text-outline text-[10px]">TikTok Kuliner</span>
+                </div>
+              </div>
+            </section>
+
+            {/* Distribution & Tags */}
+            <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              <div className="lg:col-span-7 bg-surface-container-lowest border-[2.5px] border-on-surface p-5 neo-box">
+                <div className="flex items-center justify-between border-b-[2px] border-on-surface pb-3 mb-4">
+                  <h3 className="text-headline-sm font-headline-sm text-on-surface flex items-center gap-2">
+                    <span className="material-symbols-outlined">bar_chart</span>
+                    Distribusi Sentimen & Emosi Konsumen
+                  </h3>
+                  <span className="text-label-data-sm px-2 py-0.5 bg-surface-container-high border border-on-surface font-bold">
+                    N = 1.428 Mentions
+                  </span>
+                </div>
+
+                <div className="space-y-4">
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-label-data-sm text-[12px] font-bold">
+                      <span className="text-tertiary">Puas dengan Rasa & Kelezatan Bawang</span>
+                      <span>54% (771 posts)</span>
+                    </div>
+                    <div className="h-3.5 w-full bg-surface-container border-[1.5px] border-on-surface">
+                      <div className="h-full bg-tertiary" style={{ width: '54%' }}></div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-label-data-sm text-[12px] font-bold">
+                      <span>Value for Money / Porsi Banyak</span>
+                      <span>14% (200 posts)</span>
+                    </div>
+                    <div className="h-3.5 w-full bg-surface-container border-[1.5px] border-on-surface">
+                      <div className="h-full bg-primary-container" style={{ width: '14%' }}></div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-label-data-sm text-[12px] font-bold text-secondary">
+                      <span>Keluhan Tutup Botol Rembes Minyak [KRITIS]</span>
+                      <span>10% (143 posts)</span>
+                    </div>
+                    <div className="h-3.5 w-full bg-surface-container border-[1.5px] border-on-surface">
+                      <div className="h-full bg-secondary" style={{ width: '10%' }}></div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-label-data-sm text-[12px] font-bold">
+                      <span>Kecepatan Kirim Luar Kota</span>
+                      <span>8% (114 posts)</span>
+                    </div>
+                    <div className="h-3.5 w-full bg-surface-container border-[1.5px] border-on-surface">
+                      <div className="h-full bg-outline" style={{ width: '8%' }}></div>
+                    </div>
+                  </div>
+
+                  <div className="space-y-1">
+                    <div className="flex justify-between text-label-data-sm text-[12px] font-bold text-on-surface-variant">
+                      <span>Netral / Tanya Jam Buka & Stok Cumi</span>
+                      <span>14% (200 posts)</span>
+                    </div>
+                    <div className="h-3.5 w-full bg-surface-container border-[1.5px] border-on-surface">
+                      <div className="h-full bg-surface-variant" style={{ width: '14%' }}></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div className="lg:col-span-5 bg-surface-container-lowest border-[2.5px] border-on-surface p-5 neo-box flex flex-col justify-between">
+                <div>
+                  <div className="flex items-center justify-between border-b-[2px] border-on-surface pb-3 mb-4">
+                    <h3 className="text-headline-sm font-headline-sm text-on-surface flex items-center gap-2">
+                      <span className="material-symbols-outlined">tag</span>
+                      Radar Topik Percakapan
+                    </h3>
+                    <span className="text-label-data-sm font-label-data-sm text-outline">Realtime</span>
+                  </div>
+                  <p className="text-body-sm font-body-sm text-on-surface-variant mb-4">
+                    Klik tag untuk memfilter topik:
+                  </p>
+                  <div className="flex flex-wrap gap-2">
+                    {[
+                      { name: '#PedasNampol', count: '412', color: 'bg-surface-container-lowest text-on-surface' },
+                      { name: '#KemasanBocor', count: '289', color: 'bg-secondary-fixed text-secondary font-bold' },
+                      { name: '#BawangGorengMelimpah', count: '198', color: 'bg-tertiary-container text-on-tertiary-container' },
+                      { name: '#PengirimanLuarKota', count: '148', color: 'bg-primary-container text-on-surface' },
+                      { name: '#CocokBuatNasiHangat', count: '115', color: 'bg-surface-container-lowest' },
+                      { name: '#BisaKirimJakarta', count: '84', color: 'bg-surface-container-high' },
+                    ].map((tag) => (
+                      <button
+                        key={tag.name}
+                        onClick={() => setActiveKeyword(activeKeyword === tag.name ? null : tag.name)}
+                        className={`px-2.5 py-1 text-label-data-sm border-[1.5px] border-on-surface neo-box-sm transition-transform active:translate-x-0.5 active:translate-y-0.5 ${tag.color} ${activeKeyword === tag.name ? 'ring-2 ring-on-surface' : ''}`}
+                      >
+                        {tag.name} ({tag.count})
+                      </button>
+                    ))}
+                  </div>
+                </div>
+                <div className="mt-4 pt-3 border-t-[1.5px] border-dashed border-on-surface text-label-data-sm text-[11px] text-on-surface-variant flex justify-between">
+                  <span>Filter Aktif: <strong>{activeKeyword || 'Semua Topik'}</strong></span>
+                  {activeKeyword && <button onClick={() => setActiveKeyword(null)} className="underline text-secondary font-bold">Reset</button>}
+                </div>
+              </div>
+            </section>
+
+            {/* Live Feed & Response Generator */}
+            <section className="bg-surface-container-lowest border-[2.5px] border-on-surface p-6 neo-box space-y-5">
+              <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b-[2.5px] border-on-surface pb-4">
+                <div>
+                  <h2 className="text-headline-md font-headline-md text-on-surface flex items-center gap-2">
+                    <span className="material-symbols-outlined text-primary-container bg-on-surface p-1">stream</span>
+                    Live Feed: Percakapan & Bukti Konsumen
+                  </h2>
+                  <p className="text-body-sm text-on-surface-variant">Transkrip verbatim sinyal sosial terverifikasi dari TikTok dan Instagram.</p>
+                </div>
+                <div className="flex flex-wrap items-center gap-1.5 font-label-data-sm text-[12px]">
+                  <button onClick={() => setFilterTab('all')} className={`px-3 py-1.5 font-bold border-[1.5px] border-on-surface ${filterTab === 'all' ? 'bg-primary-container' : 'bg-surface-container-high'}`}>
+                    Semua Suara (1.428)
+                  </button>
+                  <button onClick={() => setFilterTab('urgent')} className={`px-3 py-1.5 font-bold border-[1.5px] border-on-surface ${filterTab === 'urgent' ? 'bg-secondary text-on-secondary' : 'bg-secondary-fixed text-secondary'}`}>
+                    Perlu Respon CS (18)
+                  </button>
+                  <button onClick={() => setFilterTab('pos')} className={`px-3 py-1.5 font-bold border-[1.5px] border-on-surface ${filterTab === 'pos' ? 'bg-primary-container' : 'bg-surface-container-high'}`}>
+                    Pujian (970)
+                  </button>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                {filteredFeed.map((item) => (
+                  <div key={item.id} className={`border-[2px] p-4 neo-box-sm ${item.urgent ? 'border-secondary bg-[#FFF9F9]' : 'border-on-surface bg-surface-container-lowest'}`}>
+                    <div className="flex flex-col md:flex-row md:items-start justify-between gap-2 mb-2">
+                      <div className="flex items-center gap-2.5">
+                        <div className="w-7 h-7 bg-on-surface text-surface flex items-center justify-center font-bold text-[12px] border border-on-surface">
+                          {item.platform}
+                        </div>
+                        <div>
+                          <div className="flex items-center gap-2">
+                            <span className="font-bold text-on-surface">{item.handle}</span>
+                            <span className="text-label-data-sm text-on-surface-variant font-mono text-[11px]">{item.sub}</span>
+                          </div>
+                          <span className="text-[10px] text-outline">{item.context}</span>
+                        </div>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <span className={`px-2 py-0.5 text-label-data-sm text-[10px] font-bold border border-on-surface ${
+                          item.sentimentType === 'neg' ? 'bg-secondary text-on-secondary' :
+                          item.sentimentType === 'pos' ? 'bg-tertiary text-on-tertiary' : 'bg-surface-container-high'
+                        }`}>
+                          {item.sentiment}
+                        </span>
+                        {item.urgent && (
+                          <span className="px-2 py-0.5 bg-secondary-fixed text-secondary text-label-data-sm text-[10px] font-bold border border-on-surface">
+                            🚨 BUTUH RESPON
+                          </span>
+                        )}
+                      </div>
+                    </div>
+                    <p className="text-body-md text-on-surface bg-surface-container-low p-3 border-l-4 border-on-surface my-2 italic">
+                      {item.text}
+                    </p>
+                    <div className="flex flex-wrap items-center justify-between gap-3 pt-2 mt-2">
+                      <span className="text-label-data-sm text-[11px] font-bold text-on-surface-variant">{item.actionNote}</span>
+                      <button
+                        onClick={() => alert(`Draft CS untuk ${item.handle} disiapkan: "Halo kak, kami mohon maaf atas kendala yang dialami. Kami siap mengirimkan botol baru gratis dengan seal aluminium ganda!"`)}
+                        className="px-3 py-1 bg-primary-container text-on-surface font-display-hero text-[12px] font-bold border-[1.5px] border-on-surface neo-box-sm neo-btn flex items-center gap-1"
+                      >
+                        <span className="material-symbols-outlined text-[16px]">smart_toy</span>
+                        Draft Balasan CS AI
+                      </button>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </section>
+
+            {/* 3 Rekomendasi Tindakan */}
+            <section className="bg-primary-container border-[3px] border-on-surface p-6 neo-box">
+              <div className="flex items-center gap-2.5 mb-4 pb-3 border-b-[2.5px] border-on-surface">
+                <span className="material-symbols-outlined text-[24px]">bolt</span>
+                <h3 className="text-headline-md font-headline-md text-on-surface uppercase">
+                  3 REKOMENDASI TINDAKAN DARI SUARA PASAR MINGGU INI
+                </h3>
+              </div>
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className="bg-surface-container-lowest border-[2px] border-on-surface p-4 flex flex-col justify-between neo-box-sm">
+                  <div>
+                    <div className="flex justify-between mb-2">
+                      <span className="px-2 py-0.5 bg-secondary text-on-secondary text-label-data-sm text-[10px] font-bold border border-on-surface">1. Operasional</span>
+                      <span className="text-[10px] text-secondary font-bold">DEADLINE: BESOK</span>
+                    </div>
+                    <h4 className="font-headline-sm text-sm font-bold mb-1">Gunakan Induction Sealer Foil</h4>
+                    <p className="text-body-sm text-on-surface-variant">Pasang seal aluminium induksi pada batch produksi esok pagi untuk mengatasi 100% komplain botol rembes ekspedisi.</p>
+                  </div>
+                  <button onClick={() => alert("Membuka katalog vendor mesin induksi seal...")} className="mt-3 text-left font-label-data-sm text-[11px] font-bold underline text-secondary">
+                    Cek Vendor Seal »
+                  </button>
+                </div>
+
+                <div className="bg-surface-container-lowest border-[2px] border-on-surface p-4 flex flex-col justify-between neo-box-sm">
+                  <div>
+                    <div className="flex justify-between mb-2">
+                      <span className="px-2 py-0.5 bg-tertiary text-on-tertiary text-label-data-sm text-[10px] font-bold border border-on-surface">2. Pemasaran</span>
+                      <span className="text-[10px] text-tertiary font-bold">HIGH ROI</span>
+                    </div>
+                    <h4 className="font-headline-sm text-sm font-bold mb-1">Klip Spark Ads TikTok</h4>
+                    <p className="text-body-sm text-on-surface-variant">Minta izin klip @kulineran_semarang detik 03 ("gak pelit bawang") sebagai hook materi iklan ads berbayar di Jateng.</p>
+                  </div>
+                  <button onClick={() => alert("Menyiapkan draf izin posting Spark Ads...")} className="mt-3 text-left font-label-data-sm text-[11px] font-bold underline text-tertiary">
+                    Draft Kontak Kreator »
+                  </button>
+                </div>
+
+                <div className="bg-surface-container-lowest border-[2px] border-on-surface p-4 flex flex-col justify-between neo-box-sm">
+                  <div>
+                    <div className="flex justify-between mb-2">
+                      <span className="px-2 py-0.5 bg-primary text-on-primary text-label-data-sm text-[10px] font-bold border border-on-surface">3. Penjualan</span>
+                      <span className="text-[10px] text-on-surface font-bold">KATALIS ORDER</span>
+                    </div>
+                    <h4 className="font-headline-sm text-sm font-bold mb-1">Bundling Bawang + Cumi</h4>
+                    <p className="text-body-sm text-on-surface-variant">84 pertanyaan menanyakan ketersediaan varian cumi. Rilis paket bundling 2 botol hemat 5% untuk meningkatkan AOV.</p>
+                  </div>
+                  <button onClick={() => alert("Mengatur konfigurasi promo kombo di Shopee...")} className="mt-3 text-left font-label-data-sm text-[11px] font-bold underline text-on-surface">
+                    Set Promo Shopee »
+                  </button>
+                </div>
+              </div>
+            </section>
+          </main>
+        </div>
+      );
+    }
+
+    // ==========================================
+    // SCREEN 3: GOOGLE MAPS TELEMETRY & CABANG
+    // ==========================================
+    function GoogleMapsScreen() {
+      const [replyText, setReplyText] = useState("Halo Kak Rina, kami mohon maaf atas ketidaknyamanan parkir siang ini. Kami sedang berkoordinasi menambah petugas juru parkir di jam makan siang agar lebih tertata. Sambal enak siap menyambut Kak Rina kembali!");
+      const [sent, setSent] = useState(false);
+
+      const handleSendReply = () => {
+        setSent(true);
+        setTimeout(() => setSent(false), 3000);
+      };
+
+      return (
+        <div className="ml-72 flex-1 flex flex-col min-h-screen bg-surface">
+          <TopNav title="Google Maps Telemetry & Gerai Fisik" badge="MODUL 03" />
+          <main className="p-6 md:p-8 space-y-6 max-w-7xl mx-auto w-full">
+            {/* Control Bar */}
+            <section className="flex flex-wrap items-center justify-between gap-4 p-3 bg-surface-container-low neo-box">
+              <div className="flex items-center flex-wrap gap-2 text-label-data-sm font-label-data-sm">
+                <span className="px-2 py-1 bg-on-surface text-surface uppercase font-bold">KONTROL SURVEILANS</span>
+                <span className="font-bold text-on-surface">SEMARANG RAYA</span>
+                <span className="bg-primary-container px-2 py-0.5 border border-on-surface font-bold">[3 OUTLET FISIK]</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <button onClick={() => alert("Mengekspor laporan rating Google Maps format CSV...")} className="flex items-center gap-1.5 px-3 py-1 bg-surface border-[1.5px] border-on-surface text-label-data-sm font-bold neo-btn">
+                  <span className="material-symbols-outlined text-sm">download</span>
+                  <span>Ekspor CSV</span>
+                </button>
+              </div>
+            </section>
+
+            {/* Overview Metric Bento */}
+            <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="bg-surface neo-box p-4 flex flex-col justify-between">
+                <div className="flex items-center justify-between pb-2 border-b border-on-surface text-label-data-sm text-on-surface-variant uppercase">
+                  <span>SKOR KONSOLIDASI</span>
+                  <span className="material-symbols-outlined text-primary" style={{ fontVariationSettings: "'FILL' 1" }}>star</span>
+                </div>
+                <div className="my-3">
+                  <div className="flex items-baseline gap-2">
+                    <span className="text-display-hero-mobile font-bold text-on-surface">4.8</span>
+                    <span className="text-headline-sm text-on-surface-variant">/ 5.0</span>
+                  </div>
+                  <div className="bg-on-surface text-primary-container px-2 py-0.5 mt-1 text-label-data-sm font-bold w-max">
+                    ★ ★ ★ ★ ★ EXCELLENT
+                  </div>
+                </div>
+                <div className="text-label-data-sm text-tertiary flex items-center gap-1 pt-2 border-t border-surface-container-high">
+                  <span className="material-symbols-outlined text-sm">trending_up</span>
+                  <span>+0.12 vs periode lalu</span>
+                </div>
+              </div>
+
+              <div className="bg-surface neo-box p-4 flex flex-col justify-between">
+                <div className="flex items-center justify-between pb-2 border-b border-on-surface text-label-data-sm text-on-surface-variant uppercase">
+                  <span>SENTIMEN POSITIF</span>
+                  <span className="material-symbols-outlined text-tertiary">thumb_up</span>
+                </div>
+                <div className="my-3">
+                  <div className="text-display-hero-mobile font-bold text-tertiary">88.4%</div>
+                  <div className="w-full bg-surface-container h-2 border border-on-surface overflow-hidden mt-1.5">
+                    <div className="bg-tertiary h-full" style={{ width: '88.4%' }}></div>
+                  </div>
+                </div>
+                <div className="text-label-data-sm text-on-surface-variant flex justify-between pt-2 border-t border-surface-container-high">
+                  <span>483 ulasan positif</span>
+                  <span className="text-secondary font-bold">12 komplain</span>
+                </div>
+              </div>
+
+              <div className="bg-surface neo-box p-4 flex flex-col justify-between">
+                <div className="flex items-center justify-between pb-2 border-b border-on-surface text-label-data-sm text-on-surface-variant uppercase">
+                  <span>TINGKAT RESPON</span>
+                  <span className="material-symbols-outlined text-on-surface">chat_bubble</span>
+                </div>
+                <div className="my-3">
+                  <div className="text-display-hero-mobile font-bold text-on-surface">94.2%</div>
+                  <div className="bg-primary-container px-1.5 py-0.5 border border-on-surface text-label-data-sm font-bold w-max mt-1">
+                    WAKTU RESPON &lt; 3 JAM
+                  </div>
+                </div>
+                <div className="text-label-data-sm text-tertiary pt-2 border-t border-surface-container-high">
+                  514 dari 546 telah dibalas
+                </div>
+              </div>
+
+              <div className="bg-surface neo-box p-4 flex flex-col justify-between">
+                <div className="flex items-center justify-between pb-2 border-b border-on-surface text-label-data-sm text-on-surface-variant uppercase">
+                  <span>TOTAL ULASAN</span>
+                  <span className="material-symbols-outlined text-on-surface">reviews</span>
+                </div>
+                <div className="my-3">
+                  <div className="text-display-hero-mobile font-bold text-on-surface">546</div>
+                  <div className="text-label-data-sm text-on-surface-variant">Terkumpul di 3 koordinat cabang</div>
+                </div>
+                <div className="text-label-data-sm text-on-surface pt-2 border-t border-surface-container-high">
+                  Semarang Raya Coverage
+                </div>
+              </div>
+            </section>
+
+            {/* Cabang Comparison Cards */}
+            <section className="space-y-3">
+              <h3 className="text-headline-sm font-headline-sm uppercase tracking-tight">Matriks Kinerja Cabang Fisik</h3>
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                {/* Branch 1 */}
+                <div className="bg-surface neo-box flex flex-col justify-between">
+                  <div>
+                    <div className="p-3 bg-surface-container-low border-b-[2px] border-on-surface flex items-center justify-between">
+                      <span className="font-bold flex items-center gap-1.5"><span className="material-symbols-outlined text-secondary">storefront</span> Gerai Pleburan (Pusat)</span>
+                      <span className="px-2 py-0.5 bg-primary-container border border-on-surface text-[10px] font-bold">FLAGSHIP</span>
+                    </div>
+                    <div className="p-4 space-y-3">
+                      <p className="text-body-sm text-on-surface-variant">Jl. Singosari Raya No. 42, Pleburan (Dekat UNDIP)</p>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="p-2 bg-surface-container border border-on-surface">
+                          <span className="text-[10px] text-on-surface-variant block">RATING</span>
+                          <span className="text-headline-sm font-bold">4.8</span> <span className="text-tertiary text-xs">★ (342)</span>
+                        </div>
+                        <div className="p-2 bg-surface-container border border-on-surface">
+                          <span className="text-[10px] text-on-surface-variant block">PEAK HOURS</span>
+                          <span className="font-bold text-xs">11:30 - 13:45</span>
+                        </div>
+                      </div>
+                      <div className="p-2 bg-surface-container-low border-l-4 border-tertiary text-body-sm">
+                        <strong className="text-tertiary block text-xs">KEUNGGULAN:</strong>
+                        Kecepatan penyajian paket ayam sambal bawang konsisten walau jam makan siang padat.
+                      </div>
+                      <div className="p-2 bg-surface-container-low border-l-4 border-secondary text-body-sm">
+                        <strong className="text-secondary block text-xs">EVALUASI:</strong>
+                        Lahan parkir mobil meluap ke bahu jalan raya saat akhir pekan.
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-surface-container-lowest border-t border-dashed border-on-surface flex justify-between text-label-data-sm text-[11px]">
+                    <span>Respon Operator:</span>
+                    <strong className="text-tertiary">96% (1.8 jam)</strong>
+                  </div>
+                </div>
+
+                {/* Branch 2 */}
+                <div className="bg-surface neo-box flex flex-col justify-between">
+                  <div>
+                    <div className="p-3 bg-surface-container-low border-b-[2px] border-on-surface flex items-center justify-between">
+                      <span className="font-bold flex items-center gap-1.5"><span className="material-symbols-outlined">storefront</span> Mitra Banyumanik</span>
+                      <span className="px-2 py-0.5 bg-surface-container-high border border-on-surface text-[10px] font-bold">KEMITRAAN</span>
+                    </div>
+                    <div className="p-4 space-y-3">
+                      <p className="text-body-sm text-on-surface-variant">Jl. Sukun Raya No. 18, Banyumanik, Semarang Atas</p>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="p-2 bg-surface-container border border-on-surface">
+                          <span className="text-[10px] text-on-surface-variant block">RATING</span>
+                          <span className="text-headline-sm font-bold">4.6</span> <span className="text-tertiary text-xs">★ (118)</span>
+                        </div>
+                        <div className="p-2 bg-surface-container border border-on-surface">
+                          <span className="text-[10px] text-on-surface-variant block">PEAK HOURS</span>
+                          <span className="font-bold text-xs">18:00 - 20:30</span>
+                        </div>
+                      </div>
+                      <div className="p-2 bg-surface-container-low border-l-4 border-tertiary text-body-sm">
+                        <strong className="text-tertiary block text-xs">KEUNGGULAN:</strong>
+                        Porsi cabe rawit segar khas otentik, area makan beratap sejuk untuk keluarga.
+                      </div>
+                      <div className="p-2 bg-surface-container-low border-l-4 border-primary text-body-sm">
+                        <strong className="text-on-surface block text-xs">PERINGATAN:</strong>
+                        Varian level 5 sering habis di atas jam 19.30 malam.
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-surface-container-lowest border-t border-dashed border-on-surface flex justify-between text-label-data-sm text-[11px]">
+                    <span>Respon Operator:</span>
+                    <strong className="text-tertiary">91% (3.4 jam)</strong>
+                  </div>
+                </div>
+
+                {/* Branch 3 */}
+                <div className="bg-surface neo-box flex flex-col justify-between">
+                  <div>
+                    <div className="p-3 bg-surface-container-low border-b-[2px] border-on-surface flex items-center justify-between">
+                      <span className="font-bold flex items-center gap-1.5"><span className="material-symbols-outlined">flight_takeoff</span> Kios Bandara A. Yani</span>
+                      <span className="px-2 py-0.5 bg-tertiary-container text-on-tertiary-container border border-on-surface text-[10px] font-bold">OLEH-OLEH</span>
+                    </div>
+                    <div className="p-4 space-y-3">
+                      <p className="text-body-sm text-on-surface-variant">Lantai 2 Keberangkatan Domestik Bandara</p>
+                      <div className="grid grid-cols-2 gap-2">
+                        <div className="p-2 bg-surface-container border border-on-surface">
+                          <span className="text-[10px] text-on-surface-variant block">RATING</span>
+                          <span className="text-headline-sm font-bold">4.9</span> <span className="text-tertiary text-xs">★ (86)</span>
+                        </div>
+                        <div className="p-2 bg-surface-container border border-on-surface">
+                          <span className="text-[10px] text-on-surface-variant block">PEAK HOURS</span>
+                          <span className="font-bold text-xs">06:00 - 09:00</span>
+                        </div>
+                      </div>
+                      <div className="p-2 bg-surface-container-low border-l-4 border-tertiary text-body-sm">
+                        <strong className="text-tertiary block text-xs">KEUNGGULAN:</strong>
+                        Kemasan vacuum pouch segel dobel aman dibawa ke kabin pesawat.
+                      </div>
+                      <div className="p-2 bg-surface-container-low border-l-4 border-on-surface-variant text-body-sm">
+                        <strong className="text-on-surface block text-xs">PERMINTAAN:</strong>
+                        Pelanggan meminta paket bundling isi 3 botol dengan tas khas oleh-oleh.
+                      </div>
+                    </div>
+                  </div>
+                  <div className="p-3 bg-surface-container-lowest border-t border-dashed border-on-surface flex justify-between text-label-data-sm text-[11px]">
+                    <span>Respon Operator:</span>
+                    <strong className="text-tertiary">98% (1.1 jam)</strong>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* Interactive Review Feed with AI Response tool */}
+            <section className="space-y-4">
+              <h3 className="text-headline-sm font-headline-sm uppercase">Umpan Ulasan Google Maps & Tindakan Cepat</h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+                {/* Review 1 - Needs Response */}
+                <div className="bg-surface neo-box p-4 space-y-3 border-secondary">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <span className="font-bold text-on-surface">Rina Nurlita</span>
+                      <span className="ml-2 px-1.5 py-0.2 bg-secondary text-on-secondary text-[10px] font-bold">BUTUH RESPON</span>
+                      <div className="text-label-data-sm text-on-surface-variant text-[11px]">Gerai Pleburan · Hari ini 12:45 WIB</div>
+                    </div>
+                    <span className="text-secondary font-bold">★ ★ ☆ ☆ ☆</span>
+                  </div>
+                  <p className="text-body-md text-on-surface">
+                    "Sambal dan ayam gorengnya enak banget tidak ada komplain, TAPI parkir mobilnya ampun susahnya. Muter 3 kali di Singosari tetap gak dapat parkir. Tolong sediakan tukang parkir yang bisa bantu atur mobil keluar masuk."
+                  </p>
+
+                  {/* AI Response Box */}
+                  <div className="p-3 bg-surface-container-high border-2 border-secondary space-y-2">
+                    <span className="text-label-data-sm font-bold text-secondary flex items-center gap-1">
+                      <span className="material-symbols-outlined text-sm">smart_toy</span>
+                      Draft AI Balasan Santun
+                    </span>
+                    <textarea
+                      value={replyText}
+                      onChange={(e) => setReplyText(e.target.value)}
+                      rows="3"
+                      className="w-full text-body-sm p-2 bg-surface border border-on-surface resize-none focus:outline-none"
+                    ></textarea>
+                    {sent ? (
+                      <div className="text-tertiary font-bold text-label-data-sm flex items-center gap-1">
+                        <span className="material-symbols-outlined text-sm">check_circle</span>
+                        Balasan terkirim ke Google Maps API!
+                      </div>
+                    ) : (
+                      <div className="flex justify-end gap-2">
+                        <button onClick={handleSendReply} className="px-3 py-1 bg-primary-container border border-on-surface text-label-data-sm font-bold neo-btn">
+                          Kirim Respon ke Maps
+                        </button>
+                      </div>
+                    )}
+                  </div>
+                </div>
+
+                {/* Review 2 - Local Guide */}
+                <div className="bg-surface neo-box p-4 space-y-3">
+                  <div className="flex items-start justify-between">
+                    <div>
+                      <span className="font-bold text-on-surface">Dimas Anggoro</span>
+                      <span className="ml-2 px-1.5 py-0.2 bg-primary-container border border-on-surface text-[10px] font-bold">LOCAL GUIDE LVL 7</span>
+                      <div className="text-label-data-sm text-on-surface-variant text-[11px]">Gerai Pleburan · Kemarin 13:20 WIB</div>
+                    </div>
+                    <span className="text-primary font-bold">★ ★ ★ ★ ★</span>
+                  </div>
+                  <p className="text-body-md text-on-surface">
+                    "Udah langganan dari jaman kuliah sampai sekarang kantor di Simpang Lima. Sambal bawang Bu Krisna itu khas banget, aroma bawang matang sempurna bukan langu mentah. Bebek kremes + level 3 juara dunia!"
+                  </p>
+                  <div className="p-2.5 bg-surface-container-low border border-on-surface text-body-sm">
+                    <span className="font-bold text-tertiary block text-xs">Respon Official:</span>
+                    "Matur nuwun Mas Dimas! Senang terus menemani makan siang sejak masa kuliah. Ditunggu kunjungan berikutnya nggeh!"
+                  </div>
+                </div>
+              </div>
+            </section>
+          </main>
+        </div>
+      );
+    }
+
+    // ==========================================
+    // SCREEN 4: TREN YOUTUBE
+    // ==========================================
+    function YouTubeScreen() {
+      const [filterCategory, setFilterCategory] = useState("all");
+
+      const videoList = [
+        {
+          id: 1,
+          title: "Sambal Bawang Bu Krisna: Pedasnya Bikin Keringetan Nampol!",
+          creator: "KulinerSemarangKuy",
+          subs: "42.5K Subs",
+          format: "Shorts",
+          time: "1 hari lalu",
+          views: "128.400",
+          speed: "+34.200/hr",
+          engagement: "9.8%",
+          summary: "Pujian: Tekstur bawang utuh renyah, minyak aromatik gurih. Kritik: Tutup botol licin berminyak saat unboxing.",
+          img: "https://lh3.googleusercontent.com/aida-public/AB6AXuCE0-9qB_fZHqxvNSuzAcI53jAxKaInp1rMYoGZ5gt6WwFtCt0MB9mXulBhO4vrJWjDZ5O6WzJsRzv_yR9yHKi_GCo_2vLpVfrgAf2tY0zPanhNhcaFb2KWa5IwaYO3p39Cq9-_RHuYmFHv84ggD8gMZSgTrwTSMkUh0w2xYU7Gc1YYVDMQjNapVFzYvC_y0W6YSTg4F_BWyBtnQut0HpHKVdpeLXPcqjxp2_JvTvK-0x9Sb_z3mFMs9g"
+        },
+        {
+          id: 2,
+          title: "BATTLE 5 SAMBAL BOTOL TERNAMA JATENG! SIAPA JUARANYA?",
+          creator: "Mas Doni Mukbang",
+          subs: "185K Subs",
+          format: "Long-form",
+          time: "3 hari lalu",
+          views: "84.100",
+          speed: "+12.100/hr",
+          engagement: "7.2%",
+          summary: "Bu Krisna ditempatkan di Peringkat #1 Kategori Sambal Bawang Asli. Garam pas tanpa aftertaste pengawet.",
+          img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBAW6pd8EGmMHlfe_K4R37UQx0FWZ-vhizkkMfNMogPnQdZLLMhStj6zkfXf7-fmszZYR8bfXQOPttsdNIToiqZZbkLGoek8SmKaOpEAiH8_5HYCtEdS1fj_TfizH50BKcaQD6AiSHHn0Mn_x-6CcBFOV99sjroMkFRQs5yRsvcI4_mDu_pp5IgATaZvRT6vZGN52d31mcBPONUebHCQZp7mwmziCXj64L1E-6SEqqEUX6J88Vt-B3uEg"
+        },
+        {
+          id: 3,
+          title: "Hack Nasi Telur Ceplok Pakai Sambal Bu Krisna 🤤",
+          creator: "Dapur Anak Kos Solo",
+          subs: "14.8K Subs",
+          format: "Shorts",
+          time: "4 hari lalu",
+          views: "67.900",
+          speed: "+9.500/hr",
+          engagement: "11.4%",
+          summary: "Inspirasi konsumsi cepat. Kolom komentar penuh pertanyaan pengiriman Jabodetabek via e-commerce.",
+          img: "https://lh3.googleusercontent.com/aida-public/AB6AXuBI609N6FtPmTqPZA9SyeCK18A57X4xhN9S6eMNNN0-W8LRfBF3IAtZqKPUnA1qOrqawzxe0BNLLl_BWQgdVxKKQqXsNvDXVV9qDoJT2LEKXxAnYMdtKWaa-ul45WIgqljq1BA-_aGs813l5aIHMk72mJaR2rBsSk-9Q621yWlIMLCy1Ow8FiA1DbQTs6HHpyX7CoNJCTKlnfhX_SPlN-Gl9dwpFudkQeyzYzhb3s1BqhCzJoz0X_SbzQ"
+        }
+      ];
+
+      return (
+        <div className="ml-72 flex-1 flex flex-col min-h-screen bg-[#FFF8EB]">
+          <TopNav title="Tren YouTube & Audiens Video" badge="MODUL 04" />
+          <main className="p-8 space-y-8 max-w-7xl mx-auto w-full">
+            {/* Hero */}
+            <section className="border-[2.5px] border-on-surface bg-surface-container-lowest p-6 neo-box">
+              <div className="flex flex-col md:flex-row justify-between gap-6 pb-6 border-b-[2px] border-on-surface">
+                <div>
+                  <span className="px-2.5 py-0.5 bg-secondary text-on-secondary font-label-data-sm text-[11px] font-bold border border-on-surface uppercase mb-3 inline-block">
+                    [INTELIJEN VIDEO YOUTUBE // PIPELINE V2.4]
+                  </span>
+                  <h2 className="text-headline-lg font-headline-lg text-on-surface leading-tight">
+                    Perhatian Publik di YouTube Melonjak <span className="bg-primary-container px-2 border-2 border-on-surface inline-block">[+145%]</span> Minggu Ini.
+                  </h2>
+                  <p className="font-body-lg text-on-surface-variant mt-2 max-w-3xl">
+                    Analisis video panjang & YouTube Shorts yang mereview dan merekomendasikan kuliner pedas di Jawa Tengah & nasional.
+                  </p>
+                </div>
+                <div className="p-4 bg-[#FFF9E5] border-[2px] border-on-surface shadow-[2px_2px_0px_#111111] shrink-0 text-center">
+                  <span className="text-label-data-sm font-bold text-on-surface-variant block">STATUS AUDIENS</span>
+                  <span className="text-headline-md font-bold text-secondary uppercase">HYPER-ENGAGED</span>
+                  <span className="text-label-data-sm text-tertiary font-bold block mt-1">Ratio Komen 1:18 Views</span>
+                </div>
+              </div>
+
+              <div className="pt-4 flex flex-wrap items-center justify-between gap-4 font-label-data-sm text-[12px]">
+                <div className="flex items-center gap-2">
+                  <span className="font-bold text-on-surface-variant">[FILTER] &gt;_</span>
+                  <button onClick={() => setFilterCategory('all')} className={`px-3 py-1 border border-on-surface font-bold ${filterCategory === 'all' ? 'bg-primary-container' : 'bg-surface'}`}>Semua (18)</button>
+                  <button onClick={() => setFilterCategory('Shorts')} className={`px-3 py-1 border border-on-surface font-bold ${filterCategory === 'Shorts' ? 'bg-primary-container' : 'bg-surface'}`}>Shorts (12)</button>
+                  <button onClick={() => setFilterCategory('Long-form')} className={`px-3 py-1 border border-on-surface font-bold ${filterCategory === 'Long-form' ? 'bg-primary-container' : 'bg-surface'}`}>Long-form (6)</button>
+                </div>
+                <span className="font-bold text-on-surface">Urutan: Laju Views 24 Jam ▼</span>
+              </div>
+            </section>
+
+            {/* 4 KPIs */}
+            <section className="grid grid-cols-1 md:grid-cols-4 gap-4">
+              <div className="border-[2.5px] border-on-surface bg-surface-container-lowest p-4 neo-box">
+                <span className="text-label-data-sm font-bold text-on-surface-variant uppercase block">[INDEKS VIRALITAS]</span>
+                <div className="text-headline-lg font-bold text-on-surface mt-1">84.2 <span className="text-sm font-normal text-on-surface-variant">/ 100</span></div>
+                <span className="text-label-data-sm text-tertiary font-bold bg-[#E8F5E9] px-1.5 py-0.5 border border-tertiary inline-block mt-2">Kategori: Sangat Tinggi</span>
+              </div>
+
+              <div className="border-[2.5px] border-on-surface bg-surface-container-lowest p-4 neo-box">
+                <span className="text-label-data-sm font-bold text-on-surface-variant uppercase block">[TOTAL VIEWS]</span>
+                <div className="text-headline-lg font-bold text-on-surface mt-1">482.500</div>
+                <span className="text-label-data-sm font-bold bg-primary-container px-1.5 py-0.5 border border-on-surface inline-block mt-2">▲ +145% MoM</span>
+              </div>
+
+              <div className="border-[2.5px] border-on-surface bg-surface-container-lowest p-4 neo-box">
+                <span className="text-label-data-sm font-bold text-on-surface-variant uppercase block">[SUPPLY VIDEO]</span>
+                <div className="text-headline-lg font-bold text-on-surface mt-1">18 Video</div>
+                <span className="text-label-data-sm font-bold bg-surface-container-high px-1.5 py-0.5 border border-on-surface inline-block mt-2">12 Shorts · 6 Long</span>
+              </div>
+
+              <div className="border-[2.5px] border-on-surface bg-surface-container-lowest p-4 neo-box">
+                <span className="text-label-data-sm font-bold text-on-surface-variant uppercase block">[SENTIMEN AUDIENS]</span>
+                <div className="text-headline-lg font-bold text-tertiary mt-1">91% Positif</div>
+                <span className="text-label-data-sm text-tertiary font-bold bg-[#E8F5E9] px-1.5 py-0.5 border border-tertiary inline-block mt-2">2.840 Komentar Analisis</span>
+              </div>
+            </section>
+
+            {/* Video Table */}
+            <section className="border-[2.5px] border-on-surface bg-surface-container-lowest neo-box overflow-x-auto">
+              <div className="p-3 bg-[#FFF9E5] border-b-[2px] border-on-surface font-headline-sm font-bold">
+                DIREKTORI VIDEO TERPANTAU
+              </div>
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-surface-container-low border-b-[2px] border-on-surface font-label-data-sm text-xs font-bold">
+                    <th className="p-3 border-r border-on-surface">VIDEO & KREATOR</th>
+                    <th className="p-3 border-r border-on-surface">FORMAT</th>
+                    <th className="p-3 border-r border-on-surface">VIEWS TOTAL</th>
+                    <th className="p-3 border-r border-on-surface">LAJU 24 JAM</th>
+                    <th className="p-3 border-r border-on-surface">TAKEAWAY UTAMA</th>
+                    <th className="p-3 text-center">AKSI</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y-[1.5px] divide-on-surface font-body-sm text-sm">
+                  {videoList.filter(v => filterCategory === 'all' || v.format === filterCategory).map((v) => (
+                    <tr key={v.id} className="hover:bg-surface-container">
+                      <td className="p-3 border-r border-on-surface">
+                        <div className="flex items-start gap-3">
+                          <img src={v.img} alt={v.title} className="w-20 h-12 object-cover border border-on-surface shrink-0" />
+                          <div>
+                            <div className="font-bold text-on-surface leading-tight">{v.title}</div>
+                            <div className="text-label-data-sm text-on-surface-variant mt-0.5">{v.creator} ({v.subs})</div>
+                          </div>
+                        </div>
+                      </td>
+                      <td className="p-3 border-r border-on-surface font-label-data-sm">
+                        <span className={`px-2 py-0.5 border border-on-surface font-bold ${v.format === 'Shorts' ? 'bg-secondary text-on-secondary' : 'bg-surface-container-high'}`}>
+                          {v.format}
+                        </span>
+                      </td>
+                      <td className="p-3 border-r border-on-surface font-label-data-md font-bold">{v.views}</td>
+                      <td className="p-3 border-r border-on-surface">
+                        <span className="px-1.5 py-0.5 bg-[#E8F5E9] text-tertiary border border-tertiary font-label-data-sm font-bold">
+                          {v.speed}
+                        </span>
+                      </td>
+                      <td className="p-3 border-r border-on-surface max-w-sm text-xs">{v.summary}</td>
+                      <td className="p-3 text-center">
+                        <button onClick={() => alert(`Memuat telemetri lengkap untuk video: "${v.title}"`)} className="px-2.5 py-1 bg-surface border border-on-surface text-label-data-sm font-bold neo-btn">
+                          Bedah Video
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </section>
+
+            {/* Top Commentary Themes */}
+            <section className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+              <div className="lg:col-span-8 border-[2.5px] border-on-surface bg-surface-container-lowest p-6 neo-box">
+                <div className="border-b-[2px] border-on-surface pb-3 mb-4 flex justify-between items-center">
+                  <h3 className="font-headline-sm text-on-surface font-bold">Top 3 Kluster Komentar Penonton YouTube</h3>
+                  <span className="px-2 py-0.5 bg-primary-container text-on-surface border border-on-surface font-label-data-sm font-bold">2.840 Komentar</span>
+                </div>
+                <div className="space-y-3 font-body-sm">
+                  <div className="p-3 bg-[#FFF9E5] border border-on-surface neo-box-sm">
+                    <div className="flex justify-between font-bold">
+                      <span>1. Tanya Ketahanan Suhu Ruang & Kirim Luar Kota</span>
+                      <span className="text-secondary">42% Frekuensi</span>
+                    </div>
+                    <p className="italic text-on-surface-variant mt-1">"Min kalau kirim ke Tangerang atau Surabaya botolnya rawan rembes gak? Tahan berapa hari di perjalanan ekspedisi?"</p>
+                  </div>
+                  <div className="p-3 bg-surface-container-low border border-on-surface neo-box-sm">
+                    <div className="flex justify-between font-bold">
+                      <span>2. Pujian Tekstur Bawang Utuh & Minyak Gurih</span>
+                      <span className="text-tertiary">36% Frekuensi</span>
+                    </div>
+                    <p className="italic text-on-surface-variant mt-1">"Jarang nemu sambal botol yang bawangnya beneran kres renyah, minyaknya wangi pas dituang ke nasi hangat."</p>
+                  </div>
+                  <div className="p-3 bg-surface-container-low border border-on-surface neo-box-sm">
+                    <div className="flex justify-between font-bold">
+                      <span>3. Permintaan Varian Tingkat Kepedasan (Level Mild)</span>
+                      <span className="text-on-surface">18% Frekuensi</span>
+                    </div>
+                    <p className="italic text-on-surface-variant mt-1">"Enak aromanya tapi buat anak kos yang lambungnya sensitif ini kepedasan. Tolong adain level sedang dong bu!"</p>
+                  </div>
+                </div>
+              </div>
+
+              {/* Creator Opportunity Radar */}
+              <div className="lg:col-span-4 border-[2.5px] border-on-surface bg-surface-container-lowest p-6 neo-box flex flex-col justify-between">
+                <div>
+                  <div className="border-b-[2px] border-on-surface pb-3 mb-3">
+                    <span className="text-label-data-sm font-bold text-secondary uppercase">[KREATOR REKOMENDASI]</span>
+                    <h4 className="font-headline-sm font-bold mt-1">KulinerSemarangKuy</h4>
+                    <span className="text-xs text-on-surface-variant">42.5K Subs · Affinity: 94/100</span>
+                  </div>
+                  <p className="text-body-sm text-on-surface-variant">
+                    Kreator lokal dengan engagement rate 9.8%. Shorts ulasannya kemarin tembus 128k views tanpa biaya endorsement.
+                  </p>
+                </div>
+                <button onClick={() => alert("Menyiapkan pesan kolaborasi hampers produk untuk KulinerSemarangKuy...")} className="mt-4 w-full py-2 bg-primary-container text-on-surface font-headline-sm text-sm font-bold border-[2px] border-on-surface neo-btn">
+                  Kirim DM & Hampers Kolaborasi →
+                </button>
+              </div>
+            </section>
+          </main>
+        </div>
+      );
+    }
+
+    // ==========================================
+    // SCREEN 5: SNAPSHOT & ARSIP LAPORAN
+    // ==========================================
+    function SnapshotScreen() {
+      const [snapshots, setSnapshots] = useState([
+        { id: "#SNP-2025-W20", date: "12 Mei 2025 · 23:59 WIB", type: "Otomatis Mingguan", product: "Sambal Bawang Bu Krisna", summary: "Sentimen melonjak pasca video review viral di TikTok kuliner.", sentiment: "+68% Positif", rating: "⭐ 4.8" },
+        { id: "#SNP-2025-W19", date: "05 Mei 2025 · 23:59 WIB", type: "Otomatis Mingguan", product: "Sambal Bawang Bu Krisna", summary: "Penerapan segel baru aluminium pada kemasan botol kaca.", sentiment: "+58% Netral", rating: "⭐ 4.6" },
+        { id: "#SNP-2025-ALERT-01", date: "22 Apr 2025 · 14:15 WIB", type: "Insiden Kritis", product: "Sambal Bawang Bu Krisna", summary: "Krisis ulasan Shopee: Botol bocor saat kiriman ekspedisi luar kota.", sentiment: "-42% Negatif", rating: "⭐ 3.9", alert: true },
+        { id: "#SNP-2025-W18", date: "28 Apr 2025 · 23:59 WIB", type: "Otomatis Mingguan", product: "Keripik Tempe Crispy", summary: "Harga bahan baku kedelai stabil; minat rasa daun jeruk melonjak.", sentiment: "+72% Positif", rating: "⭐ 4.9" },
+      ]);
+
+      const handleCreateManual = () => {
+        const newId = `#SNP-2025-M${Math.floor(10 + Math.random() * 90)}`;
+        const newSnap = {
+          id: newId,
+          date: "Hari ini · Baru saja",
+          type: "Manual Operator",
+          product: "Sambal Bawang Bu Krisna",
+          summary: "Snapshot manual operator: Evaluasi batch seal baru dan monitoring promo Shopee.",
+          sentiment: "+70% Positif",
+          rating: "⭐ 4.8"
+        };
+        setSnapshots([newSnap, ...snapshots]);
+        alert(`Snapshot ${newId} berhasil dibuat dan diarsipkan!`);
+      };
+
+      return (
+        <div className="ml-72 flex-1 flex flex-col min-h-screen bg-surface">
+          <TopNav title="Snapshot & Arsip Laporan Intelijen" badge="MODUL 01 & 02" />
+          <main className="p-8 space-y-8 max-w-[1540px] w-full">
+            {/* Hero */}
+            <section className="border-[2.5px] border-on-surface bg-surface-container-lowest p-6 neo-box relative overflow-hidden">
+              <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-6 relative z-10">
+                <div className="max-w-4xl space-y-2">
+                  <div className="inline-flex items-center gap-2 px-2.5 py-0.5 border border-on-surface bg-primary-container text-on-surface font-label-data-sm text-[11px] uppercase font-bold shadow-[2px_2px_0px_#111111]">
+                    <span className="material-symbols-outlined text-[14px]">archive</span>
+                    [ARSIP INTELIJEN // REKAP HISTORIS PASAR]
+                  </div>
+                  <h1 className="font-display-hero text-headline-lg lg:text-[38px] leading-tight text-on-surface uppercase font-extrabold">
+                    Rekam Jejak <span className="bg-primary-container px-2 py-0.5 border-[2px] border-on-surface shadow-[2px_2px_0_#111111]">[SINYAL PASAR]</span> & Evaluasi Mingguan.
+                  </h1>
+                  <p className="font-body-lg text-on-surface-variant text-[15px] max-w-3xl">
+                    Kumpulan snapshot otomatis mingguan dan insiden pasar penting untuk membandingkan sentimen, pergerakan kompetitor Shopee, dan lonjakan tren sebelum mengambil keputusan bisnis.
+                  </p>
+                </div>
+                <div className="flex gap-2">
+                  <button onClick={handleCreateManual} className="flex items-center gap-2 px-4 py-2 bg-primary-container text-on-surface font-headline-sm text-sm font-bold border-[2.5px] border-on-surface neo-box-sm neo-btn">
+                    <span className="material-symbols-outlined">add_box</span>
+                    + Buat Snapshot Manual
+                  </button>
+                </div>
+              </div>
+            </section>
+
+            {/* Quick KPI Stats */}
+            <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+              <div className="border-[2.5px] border-on-surface bg-surface-container-lowest p-4 neo-box">
+                <span className="text-label-data-sm font-bold text-on-surface-variant uppercase block">[TOTAL SNAPSHOT]</span>
+                <div className="text-headline-lg font-extrabold text-on-surface mt-1">{snapshots.length + 10} <span className="text-sm font-normal">Berkas</span></div>
+                <p className="text-label-data-sm text-on-surface-variant mt-1">12 Otomatis · 2 Manual</p>
+              </div>
+
+              <div className="border-[2.5px] border-on-surface bg-surface-container-lowest p-4 neo-box">
+                <span className="text-label-data-sm font-bold text-on-surface-variant uppercase block">[TREN 30 HARI]</span>
+                <div className="text-headline-lg font-extrabold text-tertiary mt-1">+14% MoM</div>
+                <p className="text-label-data-sm text-on-surface-variant mt-1">Dari 54% ke 68% Positif</p>
+              </div>
+
+              <div className="border-[2.5px] border-on-surface bg-surface-container-lowest p-4 neo-box">
+                <span className="text-label-data-sm font-bold text-on-surface-variant uppercase block">[ISU DISELESAIKAN]</span>
+                <div className="text-headline-lg font-extrabold text-on-surface mt-1">3 Masalah</div>
+                <p className="text-label-data-sm text-on-surface-variant mt-1">Termasuk komplain botol bocor</p>
+              </div>
+
+              <div className="border-[2.5px] border-on-surface bg-surface-container-lowest p-4 neo-box">
+                <span className="text-label-data-sm font-bold text-on-surface-variant uppercase block">[STATUS PASAR]</span>
+                <div className="text-headline-lg font-extrabold text-tertiary mt-1">AMAN</div>
+                <p className="text-label-data-sm text-on-surface-variant mt-1">Skor Konsensus: 8.4 / 10</p>
+              </div>
+            </section>
+
+            {/* Featured Latest Snapshot Inspection (#W20) */}
+            <section className="border-[2.5px] border-on-surface bg-surface-container-lowest neo-box">
+              <div className="bg-surface-container-high px-6 py-3.5 border-b-[2.5px] border-on-surface flex flex-wrap items-center justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <span className="px-2 py-0.5 bg-secondary text-on-secondary font-label-data-sm text-[11px] font-bold border border-on-surface">
+                    SNAPSHOT TERBARU
+                  </span>
+                  <h2 className="font-headline-sm text-on-surface font-extrabold uppercase">
+                    Modul 01 // Snapshot Mingguan #W20 · Periode 06 - 12 Mei 2025
+                  </h2>
+                </div>
+                <span className="font-label-data-sm bg-primary-container px-2 py-0.5 border border-on-surface font-bold text-xs">
+                  ID: #SNP-2025-W20
+                </span>
+              </div>
+
+              <div className="p-6 space-y-6">
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+                  <div className="border-[2px] border-on-surface bg-surface-container-low p-3.5">
+                    <span className="text-label-data-sm text-on-surface-variant block uppercase text-[11px]">Sentimen TikTok & IG</span>
+                    <div className="font-headline-lg text-[26px] font-bold text-on-surface">68% <span className="text-xs font-normal">Positif</span></div>
+                    <span className="text-label-data-sm text-[11px] text-tertiary font-bold">▲ +10% vs #W19</span>
+                  </div>
+
+                  <div className="border-[2px] border-on-surface bg-surface-container-low p-3.5">
+                    <span className="text-label-data-sm text-on-surface-variant block uppercase text-[11px]">Google Maps Ulasan</span>
+                    <div className="font-headline-lg text-[26px] font-bold text-on-surface">⭐ 4.8</div>
+                    <span className="text-label-data-sm text-[11px] text-tertiary font-bold">+28 ulasan bintang 5</span>
+                  </div>
+
+                  <div className="border-[2px] border-on-surface bg-surface-container-low p-3.5">
+                    <span className="text-label-data-sm text-on-surface-variant block uppercase text-[11px]">Penjualan Shopee</span>
+                    <div className="font-headline-lg text-[26px] font-bold text-on-surface">1.240 <span className="text-xs font-normal">pcs/bln</span></div>
+                    <span className="text-label-data-sm text-[11px] text-tertiary font-bold">+12% MoM</span>
+                  </div>
+
+                  <div className="border-[2px] border-on-surface bg-surface-container-low p-3.5">
+                    <span className="text-label-data-sm text-on-surface-variant block uppercase text-[11px]">YouTube Buzz</span>
+                    <div className="font-headline-lg text-[26px] font-bold text-on-surface">42.500 <span className="text-xs font-normal">views</span></div>
+                    <span className="text-label-data-sm text-[11px] text-on-surface font-bold">18 video dideteksi</span>
+                  </div>
+                </div>
+
+                {/* Callout Analyst Notes */}
+                <div className="border-[2.5px] border-on-surface bg-primary-container p-5 neo-box-sm space-y-3">
+                  <div className="flex items-center justify-between border-b-[2px] border-on-surface pb-2 font-headline-sm text-sm font-bold uppercase">
+                    <span>Catatan Analis Intelijen AI & Konsensus Lapangan</span>
+                    <span className="bg-surface-container-lowest px-2 py-0.5 border border-on-surface text-xs">CONFIDENCE: 94.2%</span>
+                  </div>
+                  <div className="font-body-md text-sm space-y-2">
+                    <p><strong>01. Resolusi Komplain Kemasan:</strong> Keluhan tutup botol rembes mereda drastis setelah penerapan segel aluminium induksi pada 2 Mei. Rasio komplain turun dari 18% ke 0.8%.</p>
+                    <p><strong>02. Lonjakan Organik:</strong> Video review @kulineran_semarang menginjeksi +22% pencarian kata kunci "Sambal Bawang Bu Krisna" di Shopee.</p>
+                    <p><strong>03. Strategi Operasional:</strong> Pertahankan paket kombo pedas dan perbanyak pasokan botol toples di outlet Banyumanik.</p>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* Differential Engine Preview (#W19 vs #W20) */}
+            <section className="border-[2.5px] border-on-surface bg-surface-container-lowest neo-box p-6 space-y-4">
+              <div className="border-b-[2px] border-on-surface pb-3 flex justify-between items-center">
+                <h3 className="font-headline-sm font-bold uppercase">Modul 03 // Pembanding Sebelum & Sesudah Solusi Kemasan</h3>
+                <span className="text-xs font-bold bg-tertiary-fixed text-on-tertiary-fixed px-2 py-0.5 border border-on-surface">VERIFIED DIFF</span>
+              </div>
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center">
+                <div className="lg:col-span-5 border-[2px] border-on-surface bg-surface-container-low p-4">
+                  <span className="text-xs font-bold text-secondary uppercase block mb-1">KONDISI SEBELUMNYA (#W19)</span>
+                  <h4 className="font-bold text-sm mb-2">Tutup Plastik Ulir Standar</h4>
+                  <ul className="text-xs space-y-1.5 text-on-surface-variant font-label-data-sm">
+                    <li>• Rasio ulasan bocor: <strong>18% Komplain</strong></li>
+                    <li>• Rating Shopee: <strong>⭐ 4.2 / 5.0</strong></li>
+                    <li>• Retur pengiriman: <strong>14 Paket / Pekan</strong></li>
+                  </ul>
+                </div>
+
+                <div className="lg:col-span-2 flex flex-col items-center justify-center text-center">
+                  <span className="material-symbols-outlined text-[32px] text-primary">east</span>
+                  <span className="text-[10px] font-bold bg-primary-container px-2 py-0.5 border border-on-surface mt-1">SEGEL INDUKSI BARU</span>
+                </div>
+
+                <div className="lg:col-span-5 border-[2.5px] border-on-surface bg-surface-container-lowest p-4 neo-box-sm">
+                  <span className="text-xs font-bold text-tertiary uppercase block mb-1">KONDISI TERKINI (#W20)</span>
+                  <h4 className="font-bold text-sm mb-2 text-tertiary">Seal Aluminium Panas</h4>
+                  <ul className="text-xs space-y-1.5 text-on-surface font-label-data-sm">
+                    <li>• Rasio ulasan bocor: <strong className="text-tertiary">0% Minggu Ini (-18%)</strong></li>
+                    <li>• Rating Shopee: <strong className="text-tertiary">⭐ 4.8 / 5.0 (+0.6)</strong></li>
+                    <li>• Retur pengiriman: <strong className="text-tertiary">0 Kasus Retur</strong></li>
+                  </ul>
+                </div>
+              </div>
+            </section>
+
+            {/* Archive Table */}
+            <section className="border-[2.5px] border-on-surface bg-surface-container-lowest neo-box overflow-x-auto">
+              <div className="bg-surface-container-high px-6 py-3 border-b-[2px] border-on-surface font-headline-sm font-bold flex justify-between">
+                <span>RIWAYAT SNAPSHOT & ARSIP TERJADWAL</span>
+                <span className="text-xs font-normal text-on-surface-variant">Menampilkan {snapshots.length} Arsip</span>
+              </div>
+              <table className="w-full text-left border-collapse">
+                <thead>
+                  <tr className="bg-surface-container-low border-b-[2px] border-on-surface font-label-data-sm text-xs font-bold">
+                    <th className="p-3 border-r border-on-surface">ID & TANGGAL</th>
+                    <th className="p-3 border-r border-on-surface">TIPE</th>
+                    <th className="p-3 border-r border-on-surface">RANGKUMAN SINYAL</th>
+                    <th className="p-3 border-r border-on-surface">SENTIMEN</th>
+                    <th className="p-3 text-center">AKSI</th>
+                  </tr>
+                </thead>
+                <tbody className="divide-y-[1.5px] divide-on-surface font-body-sm text-xs">
+                  {snapshots.map((s) => (
+                    <tr key={s.id} className={s.alert ? "bg-secondary-fixed/30" : "hover:bg-surface-container"}>
+                      <td className="p-3 border-r border-on-surface font-mono font-bold">
+                        <div>{s.id}</div>
+                        <div className="text-[10px] text-on-surface-variant font-normal">{s.date}</div>
+                      </td>
+                      <td className="p-3 border-r border-on-surface">
+                        <span className={`px-2 py-0.5 border border-on-surface font-bold text-[10px] ${s.alert ? "bg-secondary text-on-secondary" : "bg-surface-container"}`}>
+                          {s.type}
+                        </span>
+                      </td>
+                      <td className="p-3 border-r border-on-surface max-w-md">
+                        <p className="font-medium text-on-surface">{s.summary}</p>
+                      </td>
+                      <td className="p-3 border-r border-on-surface">
+                        <span className={`px-2 py-0.5 font-bold ${s.alert ? "bg-secondary text-on-secondary" : "bg-tertiary text-on-tertiary"}`}>
+                          {s.sentiment}
+                        </span>
+                      </td>
+                      <td className="p-3 text-center">
+                        <button onClick={() => alert(`Membuka snapshot lengkap: ${s.id}`)} className="px-2.5 py-1 bg-surface border border-on-surface font-bold neo-btn">
+                          [Buka Dokumen]
+                        </button>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </section>
+          </main>
+        </div>
+      );
+    }
+
+    // ==========================================
+    // MAIN APP ROUTER COMPONENT
+    // ==========================================
+    function App() {
+      return (
+        <MemoryRouter initialEntries={["/"]}>
+          <div className="flex min-h-screen bg-background text-on-surface">
+            <SideNav />
+            <Routes>
+              <Route path="/" element={<HomeScreen />} />
+              <Route path="/suara-pasar" element={<SuaraPasarScreen />} />
+              <Route path="/google-maps" element={<GoogleMapsScreen />} />
+              <Route path="/tren-youtube" element={<YouTubeScreen />} />
+              <Route path="/snapshot" element={<SnapshotScreen />} />
+              <Route path="*" element={<HomeScreen />} />
+            </Routes>
+          </div>
+        </MemoryRouter>
+      );
+    }
+
+    // Render to root
+    const rootElement = document.getElementById("root");
+    const root = createRoot(rootElement);
+    root.render(<App />);
+  </script>
+</body>
+</html>

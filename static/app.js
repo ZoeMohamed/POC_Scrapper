@@ -125,7 +125,19 @@ function bindControls() {
   $("topic-tabs").addEventListener("click", (event) => { const button = event.target.closest("button[data-topic-id]"); if (button) selectTopic(button.dataset.topicId); });
   $("source-nav").addEventListener("click", (event) => { const button = event.target.closest("button[data-source]"); if (button) chooseSource(button.dataset.source); });
   $("overview-view").addEventListener("click", (event) => { const button = event.target.closest("button[data-source-jump]"); if (button) chooseSource(button.dataset.sourceJump); });
-  $("add-topic-button").addEventListener("click", openDialog); $("close-dialog").addEventListener("click", closeDialog); $("cancel-topic").addEventListener("click", closeDialog); $("suggest-button").addEventListener("click", suggestTopic);
+  $("add-topic-button").addEventListener("click", openDialog);
+  $("sidebar-add-topic-btn")?.addEventListener("click", openDialog);
+  $("top-refresh-btn")?.addEventListener("click", async () => {
+    showToast("Menyegarkan data telemetri dari pipeline scraper…");
+    await refreshTrend({ clear: false });
+  });
+  document.addEventListener("click", (event) => {
+    const btn = event.target.closest(".cs-draft-btn");
+    if (!btn) return;
+    const author = btn.dataset.author || "pelanggan";
+    showToast(`Draft AI Balasan disiapkan untuk ${author}: "Halo kak, mohon maaf atas kendala tersebut. Tim kami siap mengirim pengganti dengan segel ganda!"`);
+  });
+  $("close-dialog").addEventListener("click", closeDialog); $("cancel-topic").addEventListener("click", closeDialog); $("suggest-button").addEventListener("click", suggestTopic);
   $("topic-name").addEventListener("input", () => { state.suggestion = null; $("suggestion-box").hidden = true; $("save-topic").disabled = true; });
   $("topic-form").addEventListener("submit", createTopic); $("topic-dialog").addEventListener("click", (event) => { if (event.target === $("topic-dialog")) closeDialog(); });
   $("type-filters").addEventListener("click", async (event) => { const button = event.target.closest("button[data-type]"); if (!button) return; state.videoType = button.dataset.type; document.querySelectorAll("#type-filters button").forEach((item) => item.classList.toggle("active", item === button)); await loadVideos(); });

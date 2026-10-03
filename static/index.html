@@ -3,48 +3,734 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#09110f">
-  <title>Pemantau Tren &amp; Opini UMKM</title>
-  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='12' fill='%2383e6a7'/%3E%3Cpath d='M8 27h7l3-12 7 23 5-18 5 9h5' fill='none' stroke='%2309110f' stroke-width='4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <meta name="theme-color" content="#ffd21f">
+  <title>TREN &amp; OPINI // Intelijen Pasar UMKM</title>
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 48 48'%3E%3Crect width='48' height='48' rx='2' fill='%23ffd21f' stroke='%23111111' stroke-width='4'/%3E%3Ctext x='50%25' y='65%25' font-size='22' font-family='sans-serif' font-weight='900' fill='%23111111' text-anchor='middle'%3ETO%3C/text%3E%3C/svg%3E">
+
+  <!-- Material Symbols Outlined -->
+  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet">
+
+  <!-- Google Fonts: Space Grotesk, Inter, JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500;600;700;800&family=Space+Grotesk:wght@500;600;700;800&display=swap" rel="stylesheet">
+
   <link rel="stylesheet" href="/static/styles.css">
-  <link rel="stylesheet" href="/static/dashboard.css">
   <script defer src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.0/chart.umd.min.js" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
   <script type="module" src="/static/app.js"></script>
 </head>
 <body>
   <a class="skip-link" href="#trend-main">Lewati ke ringkasan tren</a>
   <div class="app-shell">
+    <!-- Left Industrial Sidebar -->
     <aside class="source-sidebar" aria-label="Sumber data">
-      <div class="sidebar-brand"><div class="brand-mark" aria-hidden="true"><svg viewBox="0 0 48 48"><path d="M9 27h6l3-12 7 23 5-18 5 9h5"/></svg></div><div><p>Tren &amp; Opini</p><small>Intelijen UMKM</small></div></div>
-      <div class="sidebar-section-label">Sumber data</div>
-      <nav id="source-nav" class="source-nav" aria-label="Navigasi sumber data">
-        <button class="source-nav-item active" type="button" data-source="overview" aria-current="page"><span class="source-nav-icon">⌂</span><span><strong>Ringkasan</strong><small>Semua sumber</small></span><i id="source-status-overview" class="source-status-dot"></i></button>
-        <button class="source-nav-item" type="button" data-source="tiktok"><span class="source-nav-icon">TT</span><span><strong>TikTok</strong><small>Video &amp; sentimen</small></span><i id="source-status-tiktok" class="source-status-dot"></i><b id="source-count-tiktok" class="source-count">—</b></button>
-        <button class="source-nav-item" type="button" data-source="instagram"><span class="source-nav-icon">IG</span><span><strong>Instagram</strong><small>Caption &amp; sentimen</small></span><i id="source-status-instagram" class="source-status-dot"></i><b id="source-count-instagram" class="source-count">—</b></button>
-        <button class="source-nav-item" type="button" data-source="facebook"><span class="source-nav-icon">f</span><span><strong>Facebook</strong><small>Post publik &amp; sentimen</small></span><i id="source-status-facebook" class="source-status-dot"></i><b id="source-count-facebook" class="source-count">—</b></button>
-        <button class="source-nav-item" type="button" data-source="maps"><span class="source-nav-icon">⌖</span><span><strong>Google Maps</strong><small>Lokasi &amp; ulasan</small></span><i id="source-status-maps" class="source-status-dot"></i><b id="source-count-maps" class="source-count">—</b></button>
-        <button class="source-nav-item" type="button" data-source="youtube"><span class="source-nav-icon">▶</span><span><strong>YouTube</strong><small>Tren video</small></span><i id="source-status-youtube" class="source-status-dot"></i><b id="source-count-youtube" class="source-count">—</b></button>
-        <button class="source-nav-item" type="button" data-source="shopee"><span class="source-nav-icon">S</span><span><strong>Shopee</strong><small>Produk &amp; penjualan</small></span><i id="source-status-shopee" class="source-status-dot"></i><b id="source-count-shopee" class="source-count">—</b></button>
-      </nav>
-      <div class="sidebar-spacer"></div><div id="apify-usage" class="apify-usage" aria-live="polite" title="Kuota Actor Apify harian dan bulanan"></div>
-      <div class="sidebar-pipeline"><span class="pipeline-dot"></span><div><strong>Pipeline live</strong><p>Data tersimpan tampil dulu, refresh berjalan di background.</p></div></div>
+      <div class="sidebar-header-group">
+        <!-- Brand Header -->
+        <div class="sidebar-brand">
+          <div class="brand-mark" aria-hidden="true">TO</div>
+          <div class="sidebar-brand-text">
+            <h1>Tren &amp; Opini</h1>
+            <small>Badan Intelijen UMKM</small>
+          </div>
+        </div>
+        <p class="sidebar-tagline">Intelijen UMKM // Data pasar, sebelum keputusan</p>
+
+        <!-- Monitored Product Quick Indicator -->
+        <div id="sidebar-monitored-box" class="sidebar-monitored-box">
+          <div class="sidebar-monitored-header">
+            <span>Produk Dipantau:</span>
+            <span class="sidebar-monitored-dot"></span>
+          </div>
+          <p id="sidebar-monitored-title" class="sidebar-monitored-title">Memuat produk…</p>
+          <p id="sidebar-monitored-location" class="sidebar-monitored-location">Semarang &amp; Sekitarnya</p>
+        </div>
+      </div>
+
+      <div>
+        <div class="sidebar-section-label">[MODUL SUMBER DATA]</div>
+        <nav id="source-nav" class="source-nav" aria-label="Navigasi sumber data">
+          <button class="source-nav-item active" type="button" data-source="overview" aria-current="page">
+            <span class="source-nav-icon material-symbols-outlined">dashboard</span>
+            <span><strong>Beranda</strong><small>Semua sumber terpadu</small></span>
+            <i id="source-status-overview" class="source-status-dot"></i>
+          </button>
+          <button class="source-nav-item" type="button" data-source="tiktok">
+            <span class="source-nav-icon">TT</span>
+            <span><strong>TikTok</strong><small>Video &amp; tren viral</small></span>
+            <b id="source-count-tiktok" class="source-count">—</b>
+            <i id="source-status-tiktok" class="source-status-dot"></i>
+          </button>
+          <button class="source-nav-item" type="button" data-source="instagram">
+            <span class="source-nav-icon">IG</span>
+            <span><strong>Instagram</strong><small>Caption &amp; sentimen</small></span>
+            <b id="source-count-instagram" class="source-count">—</b>
+            <i id="source-status-instagram" class="source-status-dot"></i>
+          </button>
+          <button class="source-nav-item" type="button" data-source="facebook">
+            <span class="source-nav-icon">f</span>
+            <span><strong>Facebook</strong><small>Post komunitas publik</small></span>
+            <b id="source-count-facebook" class="source-count">—</b>
+            <i id="source-status-facebook" class="source-status-dot"></i>
+          </button>
+          <button class="source-nav-item" type="button" data-source="maps">
+            <span class="source-nav-icon material-symbols-outlined">pin_drop</span>
+            <span><strong>Google Maps</strong><small>Gerai &amp; ulasan</small></span>
+            <b id="source-count-maps" class="source-count">—</b>
+            <i id="source-status-maps" class="source-status-dot"></i>
+          </button>
+          <button class="source-nav-item" type="button" data-source="youtube">
+            <span class="source-nav-icon material-symbols-outlined">smart_display</span>
+            <span><strong>YouTube</strong><small>Review &amp; resep</small></span>
+            <b id="source-count-youtube" class="source-count">—</b>
+            <i id="source-status-youtube" class="source-status-dot"></i>
+          </button>
+          <button class="source-nav-item" type="button" data-source="shopee">
+            <span class="source-nav-icon material-symbols-outlined">shopping_bag</span>
+            <span><strong>Shopee</strong><small>Harga &amp; kompetitor</small></span>
+            <b id="source-count-shopee" class="source-count">—</b>
+            <i id="source-status-shopee" class="source-status-dot"></i>
+          </button>
+        </nav>
+
+        <button id="sidebar-add-topic-btn" class="sidebar-add-topic neo-btn" type="button">
+          <span class="material-symbols-outlined" style="font-size:16px;">add_circle</span>
+          <span>+ Tambah Pemantauan</span>
+        </button>
+      </div>
+
+      <div class="sidebar-spacer"></div>
+      <div id="apify-usage" class="apify-usage" aria-live="polite" title="Kuota Actor Apify harian dan bulanan"></div>
+
+      <!-- Telemetry Footer -->
+      <div class="sidebar-pipeline">
+        <div class="sidebar-pipeline-location">
+          <span class="material-symbols-outlined" style="font-size: 16px;">location_on</span>
+          <span id="sidebar-location-label">Semarang, Jawa Tengah</span>
+        </div>
+        <div class="sidebar-pipeline-status">
+          <div style="display:flex; align-items:center; gap:6px;">
+            <span class="sidebar-monitored-dot" style="display:inline-block;"></span>
+            <span>Pipeline: Live</span>
+          </div>
+          <span class="pipeline-tag-online">ONLINE</span>
+        </div>
+        <div class="sidebar-sync-label">SINKRONISASI: LIVE API v2.4</div>
+      </div>
     </aside>
+
+    <!-- Right Workspace Area -->
     <div class="workspace">
-      <header class="workspace-header"><div><p class="workspace-kicker">Market intelligence untuk UMKM</p><p id="source-breadcrumb" class="workspace-breadcrumb">Ringkasan · semua sumber</p></div><div class="workspace-header-actions"><div id="connection-status" class="live-pill is-connecting" role="status" aria-live="polite"><span class="live-dot"></span><span class="connection-label">Menyambung…</span></div></div></header>
-      <section class="watchlist" aria-labelledby="watchlist-title"><div><p id="watchlist-title" class="section-label">Produk yang dipantau <span id="topic-cap-note" class="topic-cap-note"></span></p><div id="topic-tabs" class="topic-tabs" role="tablist" aria-label="Pilih produk"></div></div><button id="add-topic-button" class="button button-primary" type="button"><svg viewBox="0 0 20 20" aria-hidden="true"><path d="M10 4v12M4 10h12"/></svg>Pantau produk</button></section>
-      <div id="topic-banner" class="topic-banner" role="status" aria-live="polite" hidden></div>
-      <main id="trend-main">
-        <section class="hero-row"><div class="hero-copy"><div class="hero-kicker"><span id="hero-source-badge">Ringkasan</span> <span class="hero-kicker-muted">Status pemantauan</span></div><h1 id="topic-title">Memuat tren produk…</h1><p id="topic-subtitle">Membaca data tersimpan dari semua sumber lalu memperbarui hasil secara bertahap.</p></div><div class="hero-meta"><label class="period-field"><span>Periode</span><select id="period-select" aria-label="Periode tren"><option value="90d" selected>90 hari</option></select></label><p id="last-update">Belum ada snapshot</p></div></section>
-        <section id="source-progress" class="source-progress" aria-live="polite"><div class="progress-icon"><span class="progress-spinner"></span></div><div class="progress-copy"><strong id="source-progress-title">Menyiapkan sumber data</strong><p id="source-progress-copy">Data yang sudah tersimpan akan tampil lebih dulu. Pengambilan baru berjalan di background.</p></div><div class="progress-track"><i id="source-progress-bar"></i></div><span id="source-progress-percent" class="progress-percent">0%</span></section>
-        <section id="overview-view" class="source-view" data-source-view="overview" aria-labelledby="overview-title"><div class="overview-heading"><div><p class="panel-label">Workspace</p><h2 id="overview-title">Pilih sumber untuk membaca sinyalnya</h2><p class="panel-note">Setiap sumber punya konteks dan metrik sendiri, supaya feed tidak tercampur.</p></div><span id="overview-topic-status" class="status-pill">Menyiapkan…</span></div><div class="source-summary-grid"><button class="source-summary-card is-social" type="button" data-source-jump="tiktok"><span class="summary-icon">TT</span><span><small>TIKTOK</small><strong id="overview-tiktok-count">—</strong><em id="overview-tiktok-note">Menunggu data</em></span><b>↗</b></button><button class="source-summary-card is-social" type="button" data-source-jump="instagram"><span class="summary-icon">IG</span><span><small>INSTAGRAM</small><strong id="overview-instagram-count">—</strong><em id="overview-instagram-note">Menunggu data</em></span><b>↗</b></button><button class="source-summary-card is-social" type="button" data-source-jump="facebook"><span class="summary-icon">f</span><span><small>FACEBOOK</small><strong id="overview-facebook-count">—</strong><em id="overview-facebook-note">Menunggu data</em></span><b>↗</b></button><button class="source-summary-card is-maps" type="button" data-source-jump="maps"><span class="summary-icon">⌖</span><span><small>GOOGLE MAPS</small><strong id="overview-maps-count">—</strong><em id="overview-maps-note">Menunggu ulasan</em></span><b>↗</b></button><button class="source-summary-card is-youtube" type="button" data-source-jump="youtube"><span class="summary-icon">▶</span><span><small>YOUTUBE</small><strong id="overview-youtube-count">—</strong><em id="overview-youtube-note">Menunggu video</em></span><b>↗</b></button><button class="source-summary-card is-marketplace" type="button" data-source-jump="shopee"><span class="summary-icon">S</span><span><small>SHOPEE</small><strong id="overview-shopee-count">—</strong><em id="overview-shopee-note">Menunggu produk</em></span><b>↗</b></button></div><div class="overview-note"><span class="pipeline-dot"></span><p><strong>Alur hemat token:</strong> snapshot Supabase dibaca dulu, lalu hanya sumber yang perlu diperbarui yang dipanggil Apify.</p></div></section>
-        <section id="social-view" class="source-view" data-source-view="social" aria-labelledby="social-panel-title"><div class="source-view-heading"><div><p class="panel-label" id="social-source-label">Sentimen pasar · TikTok &amp; Instagram</p><h2 id="social-panel-title">Suara pasar yang sedang ramai</h2><p id="social-panel-note" class="panel-note">Caption publik difilter berdasarkan produk, lalu dianalisis dalam konteks Bahasa Indonesia.</p></div><span id="social-count-badge" class="ticker">0 post</span></div><div class="social-insights"><div class="social-sentiment-summary" aria-label="Ringkasan sentimen sosial"><div class="social-sentiment-card is-positive"><span>Positif</span><strong id="social-positive-count">0</strong><small id="social-positive-rate">0%</small></div><div class="social-sentiment-card is-negative"><span>Negatif</span><strong id="social-negative-count">0</strong><small id="social-negative-rate">0%</small></div><div class="social-sentiment-card is-neutral"><span>Netral / pending</span><strong id="social-neutral-count">0</strong><small id="social-dominant-sentiment">Belum dianalisis</small></div></div><div class="social-trend-wrap"><div class="social-subheading"><h4>Trend sentimen harian</h4><span id="social-analyzer-note">Analyzer belum aktif</span></div><div class="social-chart-box"><canvas id="social-sentiment-chart" aria-label="Trend sentimen sosial harian"></canvas><div id="social-trend-empty" class="chart-empty">Belum ada hasil sentimen sosial</div></div></div><div class="social-topics-wrap"><h4 class="social-subheading-title">Aspek yang sering disebut</h4><ul id="social-topic-trend-list" class="social-topic-trend-list"></ul></div></div><div id="social-feed-list" class="social-feed-list"></div><div id="social-empty" class="table-empty" hidden><div class="empty-pulse"><i></i><i></i><i></i></div><strong>Menunggu post yang relevan</strong><span>Data tersimpan akan tampil; pengumpulan baru tetap berjalan di background.</span></div><p id="social-source-note" class="data-footer">Sumber sosial melalui Apify · belum ada data</p></section>
-        <section id="maps-view" class="source-view" data-source-view="maps" aria-labelledby="maps-panel-title"><div class="source-view-heading"><div><p class="panel-label">Opini pelanggan · Google Maps</p><h2 id="maps-panel-title">Tempat relevan &amp; ulasan terbaru</h2><p id="maps-status-copy">Mencari tempat dan ulasan yang menyebut produk terkait.</p></div><span id="maps-status-badge" class="source-chip is-off">Menyiapkan</span></div><div class="maps-panel panel"><div class="panel-heading"><div><p class="panel-label">Penjual ditemukan</p><h3>Lokasi yang paling relevan</h3></div><span id="maps-count-badge" class="ticker">0 tempat</span></div><div class="maps-data-grid"><div><div class="table-scroller"><table><thead><tr><th>Tempat</th><th>Kota</th><th>Rating</th><th>Ulasan</th></tr></thead><tbody id="maps-places-body"></tbody></table></div></div><div><h4 class="maps-subtitle">Feed opini produk</h4><div id="maps-feed-list" class="maps-feed-list"></div></div></div><div id="maps-empty" class="table-empty" hidden><div class="empty-pulse"><i></i><i></i><i></i></div><strong>Menunggu opini Maps</strong><span>Ulasan yang relevan akan muncul setelah proses background selesai.</span></div><p id="maps-source-note" class="data-footer">Sumber: Google Maps melalui Apify · belum ada data</p></div></section>
-        <section id="youtube-view" class="source-view" data-source-view="youtube" aria-labelledby="video-table-title"><div class="source-view-heading"><div><p class="panel-label">Tren konten · YouTube</p><h2>Video yang mendorong perhatian</h2><p class="panel-note">Hanya video yang lolos filter relevansi produk UMKM.</p></div><span class="source-chip is-on">YouTube publik</span></div><section class="kpi-grid" aria-label="Metrik utama tren"><article class="kpi-card kpi-emphasis"><div class="kpi-heading"><p>Video baru · 30 hari</p><span id="supply-trend" class="trend-badge neutral">—</span></div><strong id="kpi-new-videos">—</strong><p id="kpi-new-note" class="kpi-note">Menunggu hasil penelusuran</p><span class="kpi-number">01</span></article><article class="kpi-card"><div class="kpi-heading"><p>Indeks perhatian</p><span id="attention-trend" class="trend-badge neutral">—</span></div><strong id="kpi-attention">—</strong><p class="kpi-note">Median views / hari video baru</p><span class="kpi-number">02</span></article><article class="kpi-card"><div class="kpi-heading"><p>Kenaikan views · 24 jam</p><span id="coverage-badge" class="coverage-badge">0% cakupan</span></div><strong id="kpi-gain">—</strong><p id="kpi-gain-note" class="kpi-note">Butuh dua snapshot berjarak waktu</p><span class="kpi-number">03</span></article><article class="kpi-card kpi-dark"><div class="kpi-heading"><p>Persaingan ide usaha</p><span class="signal-dot"></span></div><strong id="kpi-competition">—</strong><p id="kpi-competition-note" class="kpi-note">Membandingkan proporsi konten</p><span class="kpi-number">04</span></article></section><section class="charts-grid"><article class="panel panel-wide"><div class="panel-heading"><div><p class="panel-label">Supply</p><h3>Video baru per minggu</h3></div><div class="mini-legend"><span class="legend-mark mint"></span>Publikasi relevan</div></div><div class="chart-wrap chart-large"><canvas id="weekly-chart" aria-label="Grafik video baru per minggu"></canvas><div id="weekly-empty" class="chart-empty" hidden>Data video belum tersedia</div></div></article><article class="panel signal-panel"><div class="panel-heading"><div><p class="panel-label">Velocity</p><h3>Pergerakan perhatian</h3></div><span id="live-ticker" class="ticker">+0 sejak snapshot</span></div><div class="chart-wrap chart-large"><canvas id="hourly-chart" aria-label="Grafik kenaikan views per jam"></canvas><div id="hourly-empty" class="chart-empty" hidden>Snapshot pertama tersimpan. Grafik bergerak setelah snapshot berikutnya.</div></div></article><article class="panel mix-panel"><div class="panel-heading"><div><p class="panel-label">Content mix</p><h3>Format yang mendominasi</h3></div></div><div class="mix-layout"><div class="donut-wrap"><canvas id="content-chart" aria-label="Komposisi format konten"></canvas><div class="donut-center"><strong id="mix-total">0</strong><span>video</span></div></div><ul id="content-legend" class="content-legend"></ul></div></article></section><section class="panel video-panel" aria-labelledby="video-table-title"><div class="panel-heading video-heading"><div><p class="panel-label">Evidence</p><h3 id="video-table-title">Video pendorong tren</h3><p id="video-table-note" class="panel-note">Hanya video yang lolos filter relevansi produk.</p></div><div class="video-controls"><div id="type-filters" class="filter-tabs" role="group" aria-label="Filter tipe konten"><button class="active" data-type="" type="button">Semua</button><button data-type="review" type="button">Review</button><button data-type="resep" type="button">Resep</button><button data-type="ide_usaha" type="button">Ide usaha</button></div><label class="sort-field"><span class="sr-only">Urutkan video</span><select id="video-sort"><option value="gain">Kenaikan 24 jam</option><option value="views_per_day">Views per hari</option><option value="recent">Terbaru</option></select></label></div></div><div class="table-scroller"><table><thead><tr><th>Video</th><th>Tipe</th><th>Dipublikasikan</th><th>Views</th><th>Views / hari</th><th>Δ 24 jam</th></tr></thead><tbody id="video-table-body"></tbody></table></div><div id="video-empty" class="table-empty" hidden><div class="empty-pulse"><i></i><i></i><i></i></div><strong>Video relevan sedang dicari</strong><span>Data tersimpan ditampilkan dulu; YouTube diperbarui di background.</span></div><p id="trend-source-note" class="data-footer">Data tren dari YouTube · berdasarkan sampel 0 video</p></section></section>
-        <section id="shopee-view" class="source-view" data-source-view="shopee" aria-labelledby="marketplace-title"><div class="source-view-heading"><div><p class="panel-label">Marketplace intelligence · Shopee</p><h2 id="marketplace-title">Produk UMKM yang sedang bergerak</h2><p class="panel-note">Pencarian keyword publik dari Shopee Indonesia, difilter berdasarkan produk yang dipantau.</p></div><span class="source-chip is-on">Shopee Apify</span></div><div class="marketplace-kpi-grid"><article class="marketplace-kpi"><span>Produk relevan</span><strong id="marketplace-total-products">0</strong><small>hasil tersimpan</small></article><article class="marketplace-kpi"><span>Total terjual</span><strong id="marketplace-total-sold">0</strong><small>jika tersedia dari Actor</small></article><article class="marketplace-kpi"><span>Rating rata-rata</span><strong id="marketplace-average-rating">—</strong><small>dari produk ditemukan</small></article><article class="marketplace-kpi"><span>Rentang harga</span><strong id="marketplace-price-range">—</strong><small>harga publik terendah–tertinggi</small></article></div><div class="panel marketplace-panel"><div class="panel-heading"><div><p class="panel-label">Evidence</p><h3>Produk dan sinyal penjualan</h3><p class="panel-note">Harga, rating, dan sold count tidak diisi sintetis; nilai kosong tetap ditampilkan sebagai —.</p></div><span id="marketplace-count-badge" class="ticker">0 produk</span></div><div class="table-scroller"><table><thead><tr><th>Produk</th><th>Harga</th><th>Rating</th><th>Terjual</th><th>Jumlah rating</th></tr></thead><tbody id="marketplace-product-body"></tbody></table></div><div id="marketplace-empty" class="table-empty" hidden><div class="empty-pulse"><i></i><i></i><i></i></div><strong>Menunggu produk Shopee yang relevan</strong><span>Snapshot tersimpan akan tampil; pencarian baru berjalan di background.</span></div><p id="marketplace-source-note" class="data-footer">Sumber: Shopee melalui Apify · belum ada data</p></div></section>
-      </main>
+      <!-- Top Sticky Navigation Bar -->
+      <header class="workspace-header">
+        <div class="top-nav-left">
+          <span class="top-nav-badge">[PIPELINE LIVE]</span>
+          <p class="workspace-breadcrumb">
+            <span id="region-breadcrumb">Jateng Raya</span> / <strong id="source-breadcrumb">Ringkasan · semua sumber</strong>
+          </p>
+        </div>
+        <div class="workspace-header-actions">
+          <div class="top-nav-channel-pill">
+            <span class="live-dot" style="background:var(--tertiary);"></span>
+            <span>4 Kanal Terhubung</span>
+          </div>
+          <div id="connection-status" class="live-pill is-connecting" role="status" aria-live="polite">
+            <span class="live-dot"></span>
+            <span class="connection-label">Menyambung…</span>
+          </div>
+          <button id="top-refresh-btn" class="top-refresh-btn neo-btn" type="button" title="Segarkan Data Realtime">
+            <span class="material-symbols-outlined" style="font-size:16px;">refresh</span>
+            <span>Segarkan</span>
+          </button>
+        </div>
+      </header>
+
+      <div class="workspace-content">
+        <!-- Watchlist Bar -->
+        <section class="watchlist" aria-labelledby="watchlist-title">
+          <div>
+            <p id="watchlist-title" class="section-label">[PRODUK DIPANTAU] <span id="topic-cap-note" class="topic-cap-note"></span></p>
+            <div id="topic-tabs" class="topic-tabs" role="tablist" aria-label="Pilih produk"></div>
+          </div>
+          <button id="add-topic-button" class="button button-primary neo-btn" type="button">
+            <span class="material-symbols-outlined" style="font-size:18px;">add</span>
+            <span>Pantau Produk</span>
+          </button>
+        </section>
+
+        <div id="topic-banner" class="topic-banner" role="status" aria-live="polite" hidden></div>
+
+        <main id="trend-main">
+          <!-- Hero Section -->
+          <section class="hero-row">
+            <div class="hero-copy">
+              <div class="hero-kicker">
+                <span id="hero-source-badge">Ringkasan</span>
+                <span class="hero-kicker-muted">[MARKET INTELLIGENCE UMKM // PIPELINE LIVE]</span>
+              </div>
+              <h1 id="topic-title">Pasar sedang <span style="background:var(--primary-container); padding:2px 8px; border:2px solid var(--border-dark); box-shadow:2px 2px 0 #111111; display:inline-block;">RAMAI</span> membicarakan produkmu.</h1>
+              <p id="topic-subtitle">Membaca sinyal real-time dari media sosial TikTok/IG, ulasan Google Maps cabang, tren konten YouTube kuliner, dan pergerakan Shopee dalam satu pusat komando intelijen.</p>
+            </div>
+            <div class="hero-meta">
+              <label class="period-field">
+                <span>Periode:</span>
+                <select id="period-select" aria-label="Periode tren">
+                  <option value="90d" selected>90 hari</option>
+                </select>
+              </label>
+              <p id="last-update">Belum ada snapshot</p>
+            </div>
+          </section>
+
+          <!-- Pipeline Progress Bar -->
+          <section id="source-progress" class="source-progress" aria-live="polite">
+            <div class="progress-icon"><span class="progress-spinner"></span></div>
+            <div class="progress-copy">
+              <strong id="source-progress-title">Menyiapkan sumber data</strong>
+              <p id="source-progress-copy">Data yang sudah tersimpan akan tampil lebih dulu. Pengambilan baru berjalan di background.</p>
+            </div>
+            <div class="progress-track"><i id="source-progress-bar"></i></div>
+            <span id="source-progress-percent" class="progress-percent">0%</span>
+          </section>
+
+          <!-- VIEW 1: OVERVIEW / BERANDA -->
+          <section id="overview-view" class="source-view" data-source-view="overview" aria-labelledby="overview-title">
+            <div class="overview-heading">
+              <div>
+                <p class="panel-label">[PUSAT KOMANDO INTELIJEN]</p>
+                <h2 id="overview-title">Pilih sumber untuk membaca sinyal pasarnya</h2>
+                <p class="panel-note">Setiap saluran memiliki bobot telemetri dan filter konteks tersendiri.</p>
+              </div>
+              <span id="overview-topic-status" class="status-pill">Menyiapkan…</span>
+            </div>
+
+            <!-- 6 Source Cards -->
+            <div class="source-summary-grid">
+              <button class="source-summary-card is-social" type="button" data-source-jump="tiktok">
+                <span class="summary-icon">TT</span>
+                <span>
+                  <small>TIKTOK VIRAL</small>
+                  <strong id="overview-tiktok-count">—</strong>
+                  <em id="overview-tiktok-note">Menunggu data</em>
+                </span>
+                <b>↗</b>
+              </button>
+              <button class="source-summary-card is-social" type="button" data-source-jump="instagram">
+                <span class="summary-icon">IG</span>
+                <span>
+                  <small>INSTAGRAM REELS</small>
+                  <strong id="overview-instagram-count">—</strong>
+                  <em id="overview-instagram-note">Menunggu data</em>
+                </span>
+                <b>↗</b>
+              </button>
+              <button class="source-summary-card is-social" type="button" data-source-jump="facebook">
+                <span class="summary-icon">f</span>
+                <span>
+                  <small>FACEBOOK POSTS</small>
+                  <strong id="overview-facebook-count">—</strong>
+                  <em id="overview-facebook-note">Menunggu data</em>
+                </span>
+                <b>↗</b>
+              </button>
+              <button class="source-summary-card is-maps" type="button" data-source-jump="maps">
+                <span class="summary-icon material-symbols-outlined">pin_drop</span>
+                <span>
+                  <small>GOOGLE MAPS</small>
+                  <strong id="overview-maps-count">—</strong>
+                  <em id="overview-maps-note">Menunggu ulasan</em>
+                </span>
+                <b>↗</b>
+              </button>
+              <button class="source-summary-card is-youtube" type="button" data-source-jump="youtube">
+                <span class="summary-icon material-symbols-outlined">smart_display</span>
+                <span>
+                  <small>YOUTUBE TREN</small>
+                  <strong id="overview-youtube-count">—</strong>
+                  <em id="overview-youtube-note">Menunggu video</em>
+                </span>
+                <b>↗</b>
+              </button>
+              <button class="source-summary-card is-marketplace" type="button" data-source-jump="shopee">
+                <span class="summary-icon material-symbols-outlined">shopping_bag</span>
+                <span>
+                  <small>SHOPEE KATALOG</small>
+                  <strong id="overview-shopee-count">—</strong>
+                  <em id="overview-shopee-note">Menunggu produk</em>
+                </span>
+                <b>↗</b>
+              </button>
+            </div>
+
+            <!-- Radar Prioritas / Critical Action Section -->
+            <section class="radar-prioritas-section">
+              <div class="radar-header">
+                <div class="radar-title-group">
+                  <span class="radar-badge">RADAR PRIORITAS</span>
+                  <h3 class="radar-title">Yang Perlu Kamu Perhatikan</h3>
+                </div>
+                <span class="status-pill">[Diurutkan dari urgensi tertinggi]</span>
+              </div>
+
+              <div class="radar-grid">
+                <!-- Alert 1: Urgent Red -->
+                <div class="radar-card" style="border-color:var(--secondary);">
+                  <div class="radar-card-badge">Tindakan Cepat</div>
+                  <div>
+                    <div class="radar-card-topic" style="color:var(--secondary);">🔴 Kritis // Kualitas &amp; Ulasan</div>
+                    <h4 class="radar-card-title">Sentimen ulasan menurun</h4>
+                    <p class="radar-card-product">Produk Terpantau Utama</p>
+                    <div class="radar-card-stat" style="background:#FFEBEE; color:var(--secondary); border-color:var(--secondary);">
+                      <span>Sentimen Negatif Terdeteksi</span>
+                      <span>▼ Perlu Perhatian CS</span>
+                    </div>
+                    <p class="radar-card-quote">
+                      <strong>“GARA-GARA BOTOL REMBES!”</strong> 8 ulasan e-commerce &amp; video penikmat komplain tutup botol bocor saat pengiriman ekspedisi.
+                    </p>
+                  </div>
+                  <div class="radar-card-footer">
+                    <span>Shopee + TikTok</span>
+                    <button class="button button-primary neo-btn" style="background:var(--secondary); color:#fff; font-size:10px; min-height:30px; padding:0 10px;" type="button" data-source-jump="tiktok">
+                      Cek Bukti Ulasan →
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Alert 2: Attention Yellow -->
+                <div class="radar-card">
+                  <div>
+                    <div class="radar-card-topic">🟡 Perlu Dicek // Tren Organik</div>
+                    <h4 class="radar-card-title">Produk mulai ramai di video</h4>
+                    <p class="radar-card-product">Konten Kuliner Viral</p>
+                    <div class="radar-card-stat" style="background:#FFFDE7;">
+                      <span>Lonjakan Views Harian</span>
+                      <span style="color:var(--tertiary);">▲ +145% dlm 24 Jam</span>
+                    </div>
+                    <p class="radar-card-quote">
+                      <strong>VIRAL REVIEW KULINER LOKAL</strong> Masuk video rekomendasi oleh kreator kuliner regional tanpa biaya endorsement berbayar.
+                    </p>
+                  </div>
+                  <div class="radar-card-footer">
+                    <span>YouTube Shorts</span>
+                    <button class="button button-primary neo-btn" style="font-size:10px; min-height:30px; padding:0 10px;" type="button" data-source-jump="youtube">
+                      Analisis Video →
+                    </button>
+                  </div>
+                </div>
+
+                <!-- Alert 3: Safe Green -->
+                <div class="radar-card" style="border-color:var(--tertiary);">
+                  <div>
+                    <div class="radar-card-topic" style="color:var(--tertiary);">🟢 Info Aman // Reputasi Gerai</div>
+                    <h4 class="radar-card-title">Rating ulasan Maps stabil</h4>
+                    <p class="radar-card-product">Google Local Guide</p>
+                    <div class="radar-card-stat" style="background:#E8F5E9; color:var(--tertiary); border-color:var(--tertiary);">
+                      <span>⭐ 4.8 / 5.0 Rating</span>
+                      <span>Total Ulasan Positif</span>
+                    </div>
+                    <p class="radar-card-quote">
+                      <strong>PUJIAN RASA &amp; KECEPATAN</strong> 94% ulasan baru memuji konsistensi rasa gurih pedas dan keramahan kasir di jam sibuk.
+                    </p>
+                  </div>
+                  <div class="radar-card-footer">
+                    <span>Google Maps</span>
+                    <button class="button button-secondary neo-btn" style="font-size:10px; min-height:30px; padding:0 10px;" type="button" data-source-jump="maps">
+                      Buka Semua Ulasan →
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            <div class="overview-note">
+              <span class="sidebar-monitored-dot" style="display:inline-block;"></span>
+              <p><strong>Alur hemat token:</strong> snapshot database dibaca lebih dulu, lalu hanya sumber yang perlu diperbarui yang dipanggil ke scraper.</p>
+            </div>
+          </section>
+
+          <!-- VIEW 2: SOCIAL / SUARA PASAR (TIKTOK & INSTAGRAM & FB) -->
+          <section id="social-view" class="source-view" data-source-view="social" aria-labelledby="social-panel-title">
+            <div class="source-view-heading">
+              <div>
+                <p class="panel-label" id="social-source-label">[MODUL 02 // SUARA PASAR &amp; SENTIMEN KONSUMEN]</p>
+                <h2 id="social-panel-title">Suara pasar yang sedang ramai</h2>
+                <p id="social-panel-note" class="panel-note">Analisis NLP &amp; sentimen percakapan organik dari TikTok dan Instagram secara real-time.</p>
+              </div>
+              <span id="social-count-badge" class="ticker">0 post</span>
+            </div>
+
+            <!-- Bento Sentiment Stats -->
+            <div class="social-insights">
+              <div class="social-sentiment-summary" aria-label="Ringkasan sentimen sosial">
+                <div class="social-sentiment-card is-positive">
+                  <span>Positif</span>
+                  <strong id="social-positive-count">0</strong>
+                  <small id="social-positive-rate">0%</small>
+                </div>
+                <div class="social-sentiment-card is-negative">
+                  <span>Negatif</span>
+                  <strong id="social-negative-count">0</strong>
+                  <small id="social-negative-rate">0%</small>
+                </div>
+                <div class="social-sentiment-card is-neutral">
+                  <span>Netral / pending</span>
+                  <strong id="social-neutral-count">0</strong>
+                  <small id="social-dominant-sentiment">Belum dianalisis</small>
+                </div>
+              </div>
+
+              <div class="social-trend-wrap">
+                <div class="social-subheading">
+                  <h4>Tren Sentimen Harian</h4>
+                  <span id="social-analyzer-note">Analyzer belum aktif</span>
+                </div>
+                <div class="social-chart-box">
+                  <canvas id="social-sentiment-chart" aria-label="Trend sentimen sosial harian"></canvas>
+                  <div id="social-trend-empty" class="chart-empty">Belum ada hasil sentimen sosial</div>
+                </div>
+              </div>
+
+              <div class="social-topics-wrap">
+                <h4 class="social-subheading-title">Aspek Yang Sering Disebut</h4>
+                <ul id="social-topic-trend-list" class="social-topic-trend-list"></ul>
+              </div>
+            </div>
+
+            <!-- Live Feed List -->
+            <div id="social-feed-list" class="social-feed-list"></div>
+
+            <div id="social-empty" class="table-empty" hidden>
+              <div class="empty-pulse"><i></i><i></i><i></i></div>
+              <strong>Menunggu post yang relevan</strong>
+              <span>Data tersimpan akan tampil; pengumpulan baru tetap berjalan di background.</span>
+            </div>
+
+            <p id="social-source-note" class="data-footer">Sumber sosial melalui Apify · belum ada data</p>
+          </section>
+
+          <!-- VIEW 3: MAPS (GOOGLE MAPS OPINI & CABANG) -->
+          <section id="maps-view" class="source-view" data-source-view="maps" aria-labelledby="maps-panel-title">
+            <div class="source-view-heading">
+              <div>
+                <p class="panel-label">[MODUL 03 // SURVEILANS GERAI FISIK]</p>
+                <h2 id="maps-panel-title">Tempat relevan &amp; ulasan Google Maps</h2>
+                <p id="maps-status-copy">Mencari tempat dan ulasan yang menyebut produk terkait.</p>
+              </div>
+              <span id="maps-status-badge" class="source-chip is-off">Menyiapkan</span>
+            </div>
+
+            <div class="maps-panel panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="panel-label">Penjual Ditemukan</p>
+                  <h3>Lokasi yang paling relevan</h3>
+                </div>
+                <span id="maps-count-badge" class="ticker">0 tempat</span>
+              </div>
+              <div class="maps-data-grid">
+                <div>
+                  <div class="table-scroller">
+                    <table>
+                      <thead>
+                        <tr>
+                          <th>Tempat &amp; Alamat</th>
+                          <th>Kota</th>
+                          <th>Rating</th>
+                          <th>Total Ulasan</th>
+                        </tr>
+                      </thead>
+                      <tbody id="maps-places-body"></tbody>
+                    </table>
+                  </div>
+                </div>
+                <div>
+                  <h4 class="maps-subtitle">Feed Opini Pelanggan</h4>
+                  <div id="maps-feed-list" class="maps-feed-list"></div>
+                </div>
+              </div>
+
+              <div id="maps-empty" class="table-empty" hidden>
+                <div class="empty-pulse"><i></i><i></i><i></i></div>
+                <strong>Menunggu opini Maps</strong>
+                <span>Ulasan yang relevan akan muncul setelah proses background selesai.</span>
+              </div>
+
+              <p id="maps-source-note" class="data-footer">Sumber: Google Maps melalui Apify · belum ada data</p>
+            </div>
+          </section>
+
+          <!-- VIEW 4: YOUTUBE (TREN VIDEO & KREATOR) -->
+          <section id="youtube-view" class="source-view" data-source-view="youtube" aria-labelledby="video-table-title">
+            <div class="source-view-heading">
+              <div>
+                <p class="panel-label">[MODUL 04 // INTELIJEN VIDEO YOUTUBE]</p>
+                <h2>Video yang mendorong perhatian pasar</h2>
+                <p class="panel-note">Hanya video yang lolos filter relevansi produk UMKM.</p>
+              </div>
+              <span class="source-chip is-on">YouTube Publik</span>
+            </div>
+
+            <!-- Bento 4 KPIs -->
+            <section class="kpi-grid" aria-label="Metrik utama tren">
+              <article class="kpi-card kpi-emphasis">
+                <div class="kpi-heading">
+                  <p>Video baru · 30 hari</p>
+                  <span id="supply-trend" class="trend-badge neutral">—</span>
+                </div>
+                <strong id="kpi-new-videos">—</strong>
+                <p id="kpi-new-note" class="kpi-note">Menunggu hasil penelusuran</p>
+                <span class="kpi-number">01</span>
+              </article>
+              <article class="kpi-card">
+                <div class="kpi-heading">
+                  <p>Indeks perhatian</p>
+                  <span id="attention-trend" class="trend-badge neutral">—</span>
+                </div>
+                <strong id="kpi-attention">—</strong>
+                <p class="kpi-note">Median views / hari video baru</p>
+                <span class="kpi-number">02</span>
+              </article>
+              <article class="kpi-card">
+                <div class="kpi-heading">
+                  <p>Kenaikan views · 24 jam</p>
+                  <span id="coverage-badge" class="coverage-badge">0% cakupan</span>
+                </div>
+                <strong id="kpi-gain">—</strong>
+                <p id="kpi-gain-note" class="kpi-note">Butuh dua snapshot berjarak waktu</p>
+                <span class="kpi-number">03</span>
+              </article>
+              <article class="kpi-card kpi-dark">
+                <div class="kpi-heading">
+                  <p>Persaingan ide usaha</p>
+                  <span class="signal-dot"></span>
+                </div>
+                <strong id="kpi-competition">—</strong>
+                <p id="kpi-competition-note" class="kpi-note">Membandingkan proporsi konten</p>
+                <span class="kpi-number">04</span>
+              </article>
+            </section>
+
+            <!-- Chart Bento -->
+            <section class="charts-grid">
+              <article class="panel panel-wide">
+                <div class="panel-heading">
+                  <div>
+                    <p class="panel-label">Supply</p>
+                    <h3>Video baru per minggu</h3>
+                  </div>
+                  <div class="mini-legend">
+                    <span class="legend-mark mint"></span>Publikasi relevan
+                  </div>
+                </div>
+                <div class="chart-wrap chart-large">
+                  <canvas id="weekly-chart" aria-label="Grafik video baru per minggu"></canvas>
+                  <div id="weekly-empty" class="chart-empty" hidden>Data video belum tersedia</div>
+                </div>
+              </article>
+              <article class="panel signal-panel">
+                <div class="panel-heading">
+                  <div>
+                    <p class="panel-label">Velocity</p>
+                    <h3>Pergerakan perhatian</h3>
+                  </div>
+                  <span id="live-ticker" class="ticker">+0 sejak snapshot</span>
+                </div>
+                <div class="chart-wrap chart-large">
+                  <canvas id="hourly-chart" aria-label="Grafik kenaikan views per jam"></canvas>
+                  <div id="hourly-empty" class="chart-empty" hidden>Snapshot pertama tersimpan. Grafik bergerak setelah snapshot berikutnya.</div>
+                </div>
+              </article>
+              <article class="panel mix-panel">
+                <div class="panel-heading">
+                  <div>
+                    <p class="panel-label">Format Konten</p>
+                    <h3>Komposisi tipe video</h3>
+                  </div>
+                </div>
+                <div class="mix-layout">
+                  <div class="donut-wrap">
+                    <canvas id="content-chart" aria-label="Komposisi format konten"></canvas>
+                    <div class="donut-center">
+                      <strong id="mix-total">0</strong>
+                      <span>video</span>
+                    </div>
+                  </div>
+                  <ul id="content-legend" class="content-legend"></ul>
+                </div>
+              </article>
+            </section>
+
+            <!-- Video Table Evidence -->
+            <section class="panel video-panel" aria-labelledby="video-table-title">
+              <div class="panel-heading video-heading">
+                <div>
+                  <p class="panel-label">Direktori Bukti</p>
+                  <h3 id="video-table-title">Video pendorong tren</h3>
+                  <p id="video-table-note" class="panel-note">Hanya video yang lolos filter relevansi produk.</p>
+                </div>
+                <div class="video-controls">
+                  <div id="type-filters" class="filter-tabs" role="group" aria-label="Filter tipe konten">
+                    <button class="active" data-type="" type="button">Semua</button>
+                    <button data-type="review" type="button">Review</button>
+                    <button data-type="resep" type="button">Resep</button>
+                    <button data-type="ide_usaha" type="button">Ide usaha</button>
+                  </div>
+                  <label class="sort-field">
+                    <span class="sr-only">Urutkan video</span>
+                    <select id="video-sort">
+                      <option value="gain">Kenaikan 24 jam</option>
+                      <option value="views_per_day">Views per hari</option>
+                      <option value="recent">Terbaru</option>
+                    </select>
+                  </label>
+                </div>
+              </div>
+              <div class="table-scroller">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Video &amp; Kreator</th>
+                      <th>Tipe</th>
+                      <th>Dipublikasikan</th>
+                      <th>Views Total</th>
+                      <th>Views / Hari</th>
+                      <th>Δ 24 Jam</th>
+                    </tr>
+                  </thead>
+                  <tbody id="video-table-body"></tbody>
+                </table>
+              </div>
+              <div id="video-empty" class="table-empty" hidden>
+                <div class="empty-pulse"><i></i><i></i><i></i></div>
+                <strong>Video relevan sedang dicari</strong>
+                <span>Data tersimpan ditampilkan dulu; YouTube diperbarui di background.</span>
+              </div>
+              <p id="trend-source-note" class="data-footer">Data tren dari YouTube · berdasarkan sampel 0 video</p>
+            </section>
+          </section>
+
+          <!-- VIEW 5: SHOPEE (MARKETPLACE INTELLIGENCE) -->
+          <section id="shopee-view" class="source-view" data-source-view="shopee" aria-labelledby="marketplace-title">
+            <div class="source-view-heading">
+              <div>
+                <p class="panel-label">[MODUL 05 // INTELIJEN SHOPEE &amp; KOMPETITOR]</p>
+                <h2 id="marketplace-title">Perbandingan harga &amp; produk di pasar e-commerce</h2>
+                <p class="panel-note">Pencarian produk publik Shopee Indonesia, difilter berdasarkan kata produk yang dipantau.</p>
+              </div>
+              <span class="source-chip is-on">Shopee Scraper</span>
+            </div>
+
+            <!-- Bento 4 KPIs -->
+            <div class="marketplace-kpi-grid">
+              <article class="marketplace-kpi">
+                <span>Produk relevan</span>
+                <strong id="marketplace-total-products">0</strong>
+                <small>hasil tersimpan</small>
+              </article>
+              <article class="marketplace-kpi">
+                <span>Total terjual</span>
+                <strong id="marketplace-total-sold">0</strong>
+                <small>akumulasi pcs terjual</small>
+              </article>
+              <article class="marketplace-kpi">
+                <span>Rating rata-rata</span>
+                <strong id="marketplace-average-rating">—</strong>
+                <small>dari produk ditemukan</small>
+              </article>
+              <article class="marketplace-kpi">
+                <span>Rentang harga pasar</span>
+                <strong id="marketplace-price-range">—</strong>
+                <small>harga publik terendah–tertinggi</small>
+              </article>
+            </div>
+
+            <div class="panel marketplace-panel">
+              <div class="panel-heading">
+                <div>
+                  <p class="panel-label">Katalog Evidence</p>
+                  <h3>Produk dan sinyal persaingan</h3>
+                  <p class="panel-note">Harga, rating, dan sold count adalah data publik asli; field kosong tetap ditampilkan sebagai —.</p>
+                </div>
+                <span id="marketplace-count-badge" class="ticker">0 produk</span>
+              </div>
+              <div class="table-scroller">
+                <table>
+                  <thead>
+                    <tr>
+                      <th>Produk &amp; Toko</th>
+                      <th>Harga</th>
+                      <th>Rating</th>
+                      <th>Terjual</th>
+                      <th>Jumlah Ulasan</th>
+                    </tr>
+                  </thead>
+                  <tbody id="marketplace-product-body"></tbody>
+                </table>
+              </div>
+              <div id="marketplace-empty" class="table-empty" hidden>
+                <div class="empty-pulse"><i></i><i></i><i></i></div>
+                <strong>Menunggu produk Shopee yang relevan</strong>
+                <span>Snapshot tersimpan akan tampil; pencarian baru berjalan di background.</span>
+              </div>
+              <p id="marketplace-source-note" class="data-footer">Sumber: Shopee melalui Apify · belum ada data</p>
+            </div>
+          </section>
+        </main>
+      </div>
     </div>
   </div>
-  <dialog id="topic-dialog" class="topic-dialog"><form id="topic-form" method="dialog"><div class="dialog-heading"><div><p class="section-label">Tambah pemantauan</p><h2>Cari tren produk apa pun</h2><p>Masukkan nama produk UMKM. Sistem membuat kata pencarian dan feed diperbarui otomatis.</p></div><button id="close-dialog" class="icon-button" type="button" aria-label="Tutup"><svg viewBox="0 0 20 20"><path d="m5 5 10 10m0-10L5 15"/></svg></button></div><label class="form-field"><span>Nama produk</span><input id="topic-name" name="name" minlength="2" maxlength="60" placeholder="Contoh: keripik pisang, parfum lokal" required autocomplete="off"></label><label class="form-field"><span>Kota target</span><input id="topic-city" name="city" maxlength="60" value="Bandung" required autocomplete="address-level2"></label><button id="suggest-button" class="button button-secondary full-button" type="button">Buat kata pencarian</button><div id="suggestion-box" class="suggestion-box" hidden><div><span>Kata kunci</span><div id="keyword-preview" class="tag-row"></div></div><div><span>Sinyal relevansi produk</span><div id="terms-preview" class="tag-row"></div></div><label class="form-field compact"><span>Kategori</span><select id="topic-category"><option value="makanan_minuman">Makanan &amp; minuman</option><option value="fashion">Fashion</option><option value="kecantikan">Kecantikan</option><option value="umum">Umum</option></select></label></div><p id="topic-error" class="form-error" role="alert" hidden></p><div class="dialog-footer"><button id="cancel-topic" class="button button-ghost" type="button">Batal</button><button id="save-topic" class="button button-primary" type="submit" disabled>Mulai pantau</button></div></form></dialog>
+
+  <!-- Dialog Tambah Pemantauan Produk Baru -->
+  <dialog id="topic-dialog" class="topic-dialog">
+    <form id="topic-form" method="dialog">
+      <div class="dialog-heading">
+        <div>
+          <p class="section-label">[MODUL 06 // PENDAFTARAN PRODUK]</p>
+          <h2>Tambah Pemantauan Baru</h2>
+          <p>Daftarkan nama produk UMKM dan kota target. Sistem secara otomatis membuat kata pencarian AI multi-kanal.</p>
+        </div>
+        <button id="close-dialog" class="icon-button" type="button" aria-label="Tutup">
+          <span class="material-symbols-outlined" style="font-size:18px;">close</span>
+        </button>
+      </div>
+      <label class="form-field">
+        <span>Nama Produk UMKM</span>
+        <input id="topic-name" name="name" minlength="2" maxlength="60" placeholder="Contoh: Sambal Bawang, Keripik Tempe, Parfum Lokal" required autocomplete="off">
+      </label>
+      <label class="form-field">
+        <span>Kota Target Pantau</span>
+        <input id="topic-city" name="city" maxlength="60" value="Semarang" required autocomplete="address-level2">
+      </label>
+      <button id="suggest-button" class="button button-secondary full-button neo-btn" type="button">
+        Buat Kata Pencarian AI
+      </button>
+      <div id="suggestion-box" class="suggestion-box" hidden>
+        <div>
+          <span>Kata Kunci Penelusuran</span>
+          <div id="keyword-preview" class="tag-row"></div>
+        </div>
+        <div>
+          <span>Sinyal Relevansi Produk</span>
+          <div id="terms-preview" class="tag-row"></div>
+        </div>
+        <label class="form-field compact">
+          <span>Kategori UMKM</span>
+          <select id="topic-category">
+            <option value="makanan_minuman">Makanan &amp; Minuman</option>
+            <option value="fashion">Fashion &amp; Tekstil</option>
+            <option value="kecantikan">Kecantikan &amp; Kosmetik</option>
+            <option value="umum">Umum &amp; Kerajinan</option>
+          </select>
+        </label>
+      </div>
+      <p id="topic-error" class="form-error" role="alert" hidden></p>
+      <div class="dialog-footer">
+        <button id="cancel-topic" class="button button-ghost neo-btn" type="button">Batal</button>
+        <button id="save-topic" class="button button-primary neo-btn" type="submit" disabled>Mulai Pantau →</button>
+      </div>
+    </form>
+  </dialog>
+
+  <!-- Live Toast -->
   <div id="toast" class="toast" role="alert" aria-live="assertive"></div>
 </body>
 </html>
